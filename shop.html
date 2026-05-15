@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop – Ironbound</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="img/logo-placeholder.svg" alt="Ironbound Logo" class="logo-img" />
+        <span class="logo-text">IRONBOUND</span>
+      </div>
+      <nav class="main-nav" id="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link active">Shop</a>
+        <a href="promotion.html" class="nav-link">Promotionen</a>
+        <a href="shop.html#versus" class="nav-link">Versus</a>
+        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+      </nav>
+      <div class="header-right">
+        <a href="shop.html" class="icon-link">🔍</a>
+        <a href="#" class="icon-link">🛒</a>
+        <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SUCHLEISTE -->
+    <section class="search-bar-section">
+      <div class="container search-bar-wrap">
+        <span class="breadcrumb">Startseite › Shop</span>
+        <div class="search-row">
+          <input type="text" id="search-input" placeholder="🔍  Suche nach Waffe, Epoche, Kategorie…" class="search-input" />
+          <button class="btn btn-primary" id="search-btn">Suchen</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTER CHIPS -->
+    <section class="filter-section">
+      <div class="container">
+        <div class="filter-chips" id="filter-chips">
+          <button class="chip active" data-filter="alle">Alle</button>
+          <button class="chip" data-filter="schwerter">Schwerter</button>
+          <button class="chip" data-filter="schusswaffen">Schusswaffen</button>
+          <button class="chip" data-filter="einsteiger">Einsteiger</button>
+          <button class="chip" data-filter="digital">🎮 Digital Twin</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOP LAYOUT -->
+    <section class="shop-layout section">
+      <div class="container shop-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+          <div class="sidebar-section">
+            <strong>Kategorie</strong>
+            <label><input type="checkbox" checked /> Schwerter</label>
+            <label><input type="checkbox" checked /> Schusswaffen</label>
+            <label><input type="checkbox" /> Messer</label>
+            <label><input type="checkbox" /> Bögen</label>
+            <label><input type="checkbox" /> Stangenwaffen</label>
+          </div>
+          <div class="sidebar-section">
+            <strong>Preis (CHF)</strong>
+            <input type="range" min="0" max="1000" value="600" class="price-range" id="price-range" />
+            <div class="range-labels"><span>0</span><span id="price-val">600</span></div>
+          </div>
+          <div class="sidebar-section">
+            <strong>Skill-Level</strong>
+            <label><input type="checkbox" checked /> Einsteiger</label>
+            <label><input type="checkbox" checked /> Fortgeschritten</label>
+            <label><input type="checkbox" /> Profi</label>
+          </div>
+          <div class="sidebar-section">
+            <strong>Digital Twin</strong>
+            <label><input type="checkbox" /> Nur mit Twin 🎮</label>
+          </div>
+        </aside>
+
+        <!-- PRODUKTRASTER -->
+        <div class="product-area">
+          <div class="product-topbar">
+            <span class="result-count">6 Produkte gefunden</span>
+            <select class="sort-select">
+              <option>Relevanz</option>
+              <option>Preis aufsteigend</option>
+              <option>Preis absteigend</option>
+              <option>Neuheiten</option>
+            </select>
+          </div>
+
+          <div class="product-grid" id="product-grid">
+
+            <div class="product-card" data-filter="schwerter einsteiger digital">
+              <div class="product-img-wrap">
+                <img src="img/prod1-placeholder.svg" alt="Gladius Romanus" class="product-img" />
+                <span class="twin-badge">🎮 Twin</span>
+              </div>
+              <div class="product-info">
+                <div class="product-name">Gladius Romanus</div>
+                <div class="product-cat">Schwerter · Einsteiger</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 249</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-card" data-filter="schusswaffen profi">
+              <div class="product-img-wrap">
+                <img src="img/prod2-placeholder.svg" alt="M4 Replika" class="product-img" />
+              </div>
+              <div class="product-info">
+                <div class="product-name">M4 Replika</div>
+                <div class="product-cat">Schusswaffen · Profi</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:100%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 599</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-card" data-filter="schusswaffen einsteiger digital">
+              <div class="product-img-wrap">
+                <img src="img/prod3-placeholder.svg" alt="Langbogen 60&quot;" class="product-img" />
+                <span class="twin-badge">🎮 Twin</span>
+              </div>
+              <div class="product-info">
+                <div class="product-name">Langbogen 60"</div>
+                <div class="product-cat">Bögen · Einsteiger</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 189</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-card" data-filter="messer fortgeschritten">
+              <div class="product-img-wrap">
+                <img src="img/prod4-placeholder.svg" alt="Kampfmesser" class="product-img" />
+              </div>
+              <div class="product-info">
+                <div class="product-name">Kampfmesser</div>
+                <div class="product-cat">Messer · Fortgeschritten</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 149</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-card" data-filter="schusswaffen fortgeschritten digital">
+              <div class="product-img-wrap">
+                <img src="img/prod5-placeholder.svg" alt="Armbrust Pro" class="product-img" />
+                <span class="twin-badge">🎮 Twin</span>
+              </div>
+              <div class="product-info">
+                <div class="product-name">Armbrust Pro</div>
+                <div class="product-cat">Bögen · Fortgeschritten</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 399</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="product-card" data-filter="schwerter einsteiger">
+              <div class="product-img-wrap">
+                <img src="img/prod6-placeholder.svg" alt="Speer Replika" class="product-img" />
+              </div>
+              <div class="product-info">
+                <div class="product-name">Speer Replika</div>
+                <div class="product-cat">Stangenwaffen · Einsteiger</div>
+                <div class="skill-bar"><div class="skill-fill" style="width:25%"></div></div>
+                <div class="product-footer">
+                  <span class="product-price">CHF 99</span>
+                  <button class="btn btn-small btn-primary">+ Warenkorb</button>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /product-grid -->
+
+          <div class="pagination">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+          </div>
+        </div><!-- /product-area -->
+
+      </div><!-- /shop-container -->
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <strong>Ironbound</strong>
+        <a href="#">Über uns</a>
+        <a href="#">Impressum</a>
+      </div>
+      <div class="footer-col">
+        <strong>Navigation</strong>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="promotion.html">Promotionen</a>
+      </div>
+      <div class="footer-col">
+        <strong>Rechtliches</strong>
+        <a href="#">Datenschutz</a>
+        <a href="#">Altersprüfung 18+</a>
+        <a href="#">AGB</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ironbound — Die Spitze der Waffenkunst.</span>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/shop.js"></script>
+
+</body>
+</html>

@@ -1,15 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ironbound – Die Spitze der Waffenkunst</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <h1>My awesome page</h1>
-    <script src="/assets/js/script.js"></script>
+
+  <!-- ═══════════════════════════════════════════════
+       HEADER / NAVIGATION
+  ═══════════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="img/logo-placeholder.svg" alt="Ironbound Logo" class="logo-img" />
+        <span class="logo-text">IRONBOUND</span>
+      </div>
+      <nav class="main-nav" id="main-nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="promotion.html" class="nav-link">Promotionen</a>
+        <a href="shop.html#versus" class="nav-link">Versus</a>
+        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+      </nav>
+      <div class="header-right">
+        <a href="shop.html" class="icon-link" aria-label="Suche">🔍</a>
+        <a href="#" class="icon-link" aria-label="Warenkorb">🛒</a>
+        <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════
+         HERO SECTION
+    ═══════════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="hero-img-wrap">
+        <img src="img/hero-placeholder.svg" alt="Ironbound Hero" class="hero-img" />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content container">
+        <h1 class="hero-title">Die Spitze der<br>Waffenkunst.</h1>
+        <p class="hero-sub">Seriöser Online-Shop für historische Waffen, Trainingsrepliken und moderne Präzisionsmodelle — jetzt mit digitalem Gegenstück im Spiel.</p>
+        <div class="hero-btns">
+          <a href="shop.html" class="btn btn-primary">→ Zum Sortiment</a>
+          <a href="#about" class="btn btn-outline">Mehr erfahren</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         ÜBER DEN SHOP
+    ═══════════════════════════════════════════════ -->
+    <section class="about section" id="about">
+      <div class="container">
+        <h2>Überschrift 1</h2>
+        <p class="body-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata san.</p>
+
+        <h3>Überschrift 2</h3>
+        <p class="body-text">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et d.</p>
+
+        <!-- TWO-COLUMN BLOCK -->
+        <div class="two-col-block">
+          <div class="col-text-block">
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo consetetur sadipscing elitr, sed diam r sit amet.</p>
+          </div>
+          <div class="col-form-block">
+            <h3 class="form-title">Newsletter anmelden</h3>
+            <!-- FORMULAR (auch auf Promotion Page vollständig) -->
+            <form id="newsletter-form" novalidate>
+              <div class="form-group">
+                <label for="nf-vorname">Vorname</label>
+                <input type="text" id="nf-vorname" name="vorname" placeholder="Max" />
+                <span class="error-msg" id="err-nf-vorname"></span>
+              </div>
+              <div class="form-group">
+                <label for="nf-nachname">Nachname</label>
+                <input type="text" id="nf-nachname" name="nachname" placeholder="Mustermann" />
+                <span class="error-msg" id="err-nf-nachname"></span>
+              </div>
+              <div class="form-group">
+                <label for="nf-email">E-Mail</label>
+                <input type="text" id="nf-email" name="email" placeholder="max@example.ch" />
+                <span class="error-msg" id="err-nf-email"></span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Absenden</button>
+              <div class="form-success" id="nf-success">✔ Erfolgreich angemeldet!</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         SORTIMENT / KATEGORIEN
+    ═══════════════════════════════════════════════ -->
+    <section class="sortiment section" id="sortiment">
+      <div class="container">
+        <h2>Unser Sortiment</h2>
+        <div class="category-grid">
+          <a href="shop.html?kat=schwerter" class="cat-card">
+            <span class="cat-icon">⚔️</span>
+            <span class="cat-label">Schwerter &amp; Klingen</span>
+          </a>
+          <a href="shop.html?kat=schusswaffen" class="cat-card">
+            <span class="cat-icon">🔫</span>
+            <span class="cat-label">Schusswaffen</span>
+          </a>
+          <a href="shop.html?kat=messer" class="cat-card">
+            <span class="cat-icon">🔪</span>
+            <span class="cat-label">Messer</span>
+          </a>
+          <a href="shop.html?kat=bogen" class="cat-card">
+            <span class="cat-icon">🏹</span>
+            <span class="cat-label">Bögen &amp; Armbrüste</span>
+          </a>
+          <a href="shop.html?kat=stangenwaffen" class="cat-card">
+            <span class="cat-icon">🪃</span>
+            <span class="cat-label">Stangenwaffen</span>
+          </a>
+          <a href="shop.html?kat=zubehoer" class="cat-card">
+            <span class="cat-icon">🎯</span>
+            <span class="cat-label">Zubehör &amp; Munition</span>
+          </a>
+          <a href="shop.html?kat=digital" class="cat-card cat-card--highlight">
+            <span class="cat-icon">🎮</span>
+            <span class="cat-label">Digital Twin</span>
+          </a>
+          <a href="shop.html?kat=historisch" class="cat-card">
+            <span class="cat-icon">📜</span>
+            <span class="cat-label">Historisch</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         AKTUELLE PROMOTIONEN (Image Slider)
+    ═══════════════════════════════════════════════ -->
+    <section class="promotions section" id="promotions">
+      <div class="container">
+        <h2>Aktuelle Promotionen</h2>
+        <div class="slider-wrap">
+          <button class="slider-btn slider-btn--prev" id="slider-prev" aria-label="Zurück">&#8592;</button>
+          <div class="slider-track" id="slider-track">
+            <div class="slide active">
+              <img src="img/promo1-placeholder.svg" alt="Promo 1" />
+              <div class="slide-label">10% Rabatt auf alle Schwerter</div>
+            </div>
+            <div class="slide">
+              <img src="img/promo2-placeholder.svg" alt="Promo 2" />
+              <div class="slide-label">Digital Twin Aktion — Code inklusive</div>
+            </div>
+            <div class="slide">
+              <img src="img/promo3-placeholder.svg" alt="Promo 3" />
+              <div class="slide-label">Neuheiten: Präzisionsmodelle 2025</div>
+            </div>
+          </div>
+          <button class="slider-btn slider-btn--next" id="slider-next" aria-label="Weiter">&#8594;</button>
+          <div class="slider-dots" id="slider-dots">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <strong>Ironbound</strong>
+        <a href="#">Über uns</a>
+        <a href="#">Impressum</a>
+      </div>
+      <div class="footer-col">
+        <strong>Navigation</strong>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="promotion.html">Promotionen</a>
+      </div>
+      <div class="footer-col">
+        <strong>Rechtliches</strong>
+        <a href="#">Datenschutz</a>
+        <a href="#">Altersprüfung 18+</a>
+        <a href="#">AGB</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ironbound — Die Spitze der Waffenkunst.</span>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/slider.js"></script>
+  <script src="js/validate.js"></script>
+  <script>
+    // Init newsletter form validation
+    initFormValidation('newsletter-form', {
+      'nf-vorname':  { required: true, minLength: 2 },
+      'nf-nachname': { required: true, minLength: 2 },
+      'nf-email':    { required: true, email: true },
+    }, 'nf-success');
+  </script>
+
 </body>
 </html>

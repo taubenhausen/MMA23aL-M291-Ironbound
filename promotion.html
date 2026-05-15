@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promotionen – Ironbound</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="img/logo-placeholder.svg" alt="Ironbound Logo" class="logo-img" />
+        <span class="logo-text">IRONBOUND</span>
+      </div>
+      <nav class="main-nav" id="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Shop</a>
+        <a href="promotion.html" class="nav-link active">Promotionen</a>
+        <a href="shop.html#versus" class="nav-link">Versus</a>
+        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+      </nav>
+      <div class="header-right">
+        <a href="shop.html" class="icon-link">🔍</a>
+        <a href="#" class="icon-link">🛒</a>
+        <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- PROMOTION BANNER -->
+    <section class="promo-banner">
+      <img src="img/promo-banner-placeholder.svg" alt="Promotion Banner" class="promo-banner-img" />
+      <div class="promo-banner-overlay">
+        <div class="container">
+          <h1>Aktuelle Aktion</h1>
+          <p>Melde dich jetzt an und sichere dir <strong>10% Rabatt</strong> sowie einen exklusiven Digital-Twin-Code!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULAR + GAME -->
+    <section class="promo-main section">
+      <div class="container promo-two-col">
+
+        <!-- FORMULAR -->
+        <div class="promo-form-wrap">
+          <h2>Anmeldung Promotion</h2>
+          <form id="promo-form" novalidate>
+
+            <div class="form-group">
+              <label for="p-vorname">Vorname *</label>
+              <input type="text" id="p-vorname" name="vorname" placeholder="Max" />
+              <span class="error-msg" id="err-p-vorname"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="p-nachname">Nachname *</label>
+              <input type="text" id="p-nachname" name="nachname" placeholder="Mustermann" />
+              <span class="error-msg" id="err-p-nachname"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="p-email">E-Mail *</label>
+              <input type="text" id="p-email" name="email" placeholder="max@example.ch" />
+              <span class="error-msg" id="err-p-email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="p-interesse">Waffen-Interesse *</label>
+              <select id="p-interesse" name="interesse">
+                <option value="">— bitte wählen —</option>
+                <option value="schwerter">Schwerter &amp; Klingen</option>
+                <option value="schusswaffen">Schusswaffen</option>
+                <option value="bogen">Bögen &amp; Armbrüste</option>
+                <option value="messer">Messer</option>
+                <option value="stangenwaffen">Stangenwaffen</option>
+                <option value="digital">Digital Twin Gaming</option>
+              </select>
+              <span class="error-msg" id="err-p-interesse"></span>
+            </div>
+
+            <div class="form-group form-group--checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="p-agb" name="agb" />
+                Ich akzeptiere die <a href="#" class="link">AGB</a> und bestätige, mindestens 18 Jahre alt zu sein.
+              </label>
+              <span class="error-msg" id="err-p-agb"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="promo-submit">Jetzt anmelden</button>
+            <div class="form-success" id="promo-success">✔ Anmeldung gespeichert! Dein Code kommt per E-Mail.</div>
+          </form>
+        </div>
+
+        <!-- GAME -->
+        <div class="game-wrap" id="digital-twin">
+          <h2>Versus Runner</h2>
+          <p class="game-sub">Teste dein Wissen — weiche Hindernissen aus und sammle Punkte!</p>
+          <div class="game-meta">
+            <span>Score: <strong id="game-score">0</strong></span>
+            <span>Highscore: <strong id="game-highscore">0</strong></span>
+          </div>
+          <canvas id="game-canvas" width="600" height="200" aria-label="Versus Runner Spielfeld"></canvas>
+          <p class="game-hint">Steuerung: <kbd>Leertaste</kbd> oder <strong>Tippen</strong> = Sprung</p>
+          <div class="game-controls">
+            <button class="btn btn-primary" id="game-start">▶ Starten</button>
+            <button class="btn btn-outline" id="game-pause">⏸ Pause</button>
+            <button class="btn btn-outline" id="game-reset">↺ Neustart</button>
+          </div>
+          <div class="game-over-msg" id="game-over-msg">Game Over! Dein Score: <span id="final-score">0</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INFO BOX -->
+    <section class="promo-info section">
+      <div class="container promo-info-grid">
+        <div class="info-box">
+          <h3>Was ist im Paket?</h3>
+          <ul>
+            <li>✔ 10% Rabatt auf die erste Bestellung</li>
+            <li>✔ Exklusiver Digital-Twin-Redeem-Code</li>
+            <li>✔ Frühzeitiger Zugang zu Neuheiten</li>
+            <li>✔ Monatlicher Ironbound-Newsletter</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h3>Teilen</h3>
+          <div class="share-btns">
+            <a href="#" class="btn btn-outline">Facebook</a>
+            <a href="#" class="btn btn-outline">Twitter / X</a>
+            <button class="btn btn-outline" id="copy-link">🔗 Link kopieren</button>
+          </div>
+          <span class="copy-confirm" id="copy-confirm">Link kopiert!</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col">
+        <strong>Ironbound</strong>
+        <a href="#">Über uns</a>
+        <a href="#">Impressum</a>
+      </div>
+      <div class="footer-col">
+        <strong>Navigation</strong>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="promotion.html">Promotionen</a>
+      </div>
+      <div class="footer-col">
+        <strong>Rechtliches</strong>
+        <a href="#">Datenschutz</a>
+        <a href="#">Altersprüfung 18+</a>
+        <a href="#">AGB</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ironbound — Die Spitze der Waffenkunst.</span>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/validate.js"></script>
+  <script src="js/game.js"></script>
+  <script>
+    initFormValidation('promo-form', {
+      'p-vorname':   { required: true, minLength: 2 },
+      'p-nachname':  { required: true, minLength: 2 },
+      'p-email':     { required: true, email: true },
+      'p-interesse': { required: true, select: true },
+      'p-agb':       { required: true, checkbox: true },
+    }, 'promo-success');
+
+    // Copy link
+    document.getElementById('copy-link').addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        const c = document.getElementById('copy-confirm');
+        c.style.display = 'inline';
+        setTimeout(() => c.style.display = 'none', 2000);
+      });
+    });
+  </script>
+
+</body>
+</html>
