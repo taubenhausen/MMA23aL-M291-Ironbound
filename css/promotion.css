@@ -1,0 +1,490 @@
+/* ============================================================
+   promotion.css — IRONBOUND Aktions-Seite
+   ============================================================ */
+
+
+/* ── PROMO BANNER ──────────────────────────────────────────────
+   Hintergrundeffekt: Gradient (CSS-Anforderung)
+   Animation: Titel-Text (Anforderung: animiertes Teaser-Element)
+   ─────────────────────────────────────────────────────────── */
+.promo-banner {
+  position: relative;
+  padding: 60px 0;
+  border-bottom: 1px solid var(--farbe-rahmen);
+  overflow: hidden;
+}
+
+/* Hintergrundeffekt: mehrschichtiger Gradient */
+.promo-banner-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #0a0a10 0%, #1a1005 50%, #0a0a10 100%);
+}
+
+.promo-banner-inhalt {
+  position: relative;
+  z-index: 1;
+}
+
+.promo-titel {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.promo-untertitel {
+  color: var(--farbe-text-grau);
+  font-size: 1.1rem;
+  max-width: 560px;
+}
+
+.promo-untertitel strong {
+  color: var(--farbe-gold);
+}
+
+/* CSS-Animation: Pulsieren (Anforderung: animiertes Teaser-Element) */
+@keyframes pulsieren {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.pulsieren {
+  animation: pulsieren 3s ease-in-out infinite;
+}
+
+
+/* ── PROMO HAUPTBEREICH ────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.promo-main {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--farbe-rahmen);
+}
+
+.promo-zwei-spalten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* Formular-Bereich */
+.promo-formular-bereich {
+  background-color: var(--farbe-karte);
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 6px;
+  /* Rahmeneffekt: Schatten (CSS-Anforderung) */
+  box-shadow: var(--schatten);
+  padding: 36px;
+}
+
+.promo-formular-bereich h2 {
+  margin-bottom: 24px;
+}
+
+.form-zeile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* AGB-Checkbox */
+.agb-label {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--farbe-text-grau);
+  line-height: 1.5;
+}
+
+.agb-label input[type="checkbox"] {
+  accent-color: var(--farbe-gold);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.text-gold {
+  color: var(--farbe-gold);
+}
+
+/* Fehlermeldung DB */
+.fehler-meldung-db {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background-color: rgba(204, 68, 68, 0.12);
+  border: 1px solid var(--farbe-fehler);
+  border-radius: 3px;
+  color: #e07070;
+  font-size: 0.9rem;
+}
+
+/* Vorteile-Liste */
+.promo-info-bereich h2 {
+  margin-bottom: 24px;
+}
+
+.vorteile-liste {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vorteile-liste li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.vorteil-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(74, 138, 90, 0.2);
+  border: 1px solid var(--farbe-erfolg);
+  border-radius: 50%;
+  color: #7ec892;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.vorteile-liste strong {
+  display: block;
+  color: var(--farbe-weiss);
+  margin-bottom: 2px;
+}
+
+.vorteile-liste p {
+  color: var(--farbe-text-grau);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+
+/* ── DIGITAL TWIN SEKTION ──────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.digital-twin {
+  padding: 80px 0;
+  background-color: var(--farbe-dunkel);
+  border-bottom: 1px solid var(--farbe-rahmen);
+}
+
+.twin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.twin-erklaerung p {
+  color: var(--farbe-text-grau);
+  margin-bottom: 28px;
+  line-height: 1.8;
+}
+
+/* Schritte: Nummern mit Pfeilen */
+.twin-schritte {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.schritt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.schritt-nummer {
+  width: 36px;
+  height: 36px;
+  background-color: var(--farbe-gold);
+  color: #111;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.schritt-text {
+  font-size: 0.8rem;
+  color: var(--farbe-text-grau);
+  max-width: 80px;
+}
+
+.schritt-pfeil {
+  color: var(--farbe-gold);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.partner-label {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--farbe-text-grau);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.partner-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.partner-badge {
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border: 1px solid var(--farbe-rahmen);
+  color: var(--farbe-text-grau);
+  letter-spacing: 1px;
+  border-radius: 2px;
+  /* Hover-Effekt */
+  transition: border-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.partner-badge:hover {
+  border-color: var(--farbe-gold);
+  color: var(--farbe-gold);
+}
+
+/* Twin Visualisierung */
+.twin-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.twin-box {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.twin-physisch,
+.twin-digital {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 32px;
+  border: 1px solid var(--farbe-rahmen);
+  /* Rahmeneffekt: Schatten */
+  box-shadow: var(--schatten-karte);
+  background-color: var(--farbe-karte);
+}
+
+.twin-digital {
+  border-color: var(--farbe-gold);
+}
+
+.twin-icon {
+  font-size: 2rem;
+}
+
+.twin-label {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  color: var(--farbe-text-grau);
+  text-transform: uppercase;
+}
+
+/* Verbindungslinie mit Puls-Animation */
+.twin-verbindung {
+  width: 80px;
+  padding: 0;
+}
+
+.verbindungs-linie {
+  height: 2px;
+  background-color: var(--farbe-rahmen);
+  position: relative;
+  overflow: hidden;
+}
+
+/* CSS-Animation: Puls bewegt sich durch die Linie */
+@keyframes puls-bewegen {
+  from { left: -20px; }
+  to   { left: 100%; }
+}
+
+.verbindungs-puls {
+  position: absolute;
+  top: -2px;
+  left: -20px;
+  width: 20px;
+  height: 6px;
+  background-color: var(--farbe-gold);
+  border-radius: 3px;
+  animation: puls-bewegen 1.5s linear infinite;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   GAME-SEKTION
+   Min. 30 Zeilen CSS (Anforderung)
+   ══════════════════════════════════════════════════════════════ */
+.game-sektion {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+}
+
+.game-beschreibung {
+  color: var(--farbe-text-grau);
+  margin-bottom: 24px;
+  max-width: 600px;
+}
+
+/* HUD: Score-Anzeige */
+.game-hud {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+  border-bottom: 1px solid var(--farbe-rahmen);
+}
+
+.hud-element {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hud-wert {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--farbe-gold);
+  letter-spacing: 3px;
+  font-family: monospace;
+}
+
+.hud-label {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--farbe-text-grau);
+  text-transform: uppercase;
+}
+
+/* Canvas: Spielfeld */
+#game-canvas {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  background-color: #0a0a0e;
+  border: 1px solid var(--farbe-rahmen);
+  /* Rahmeneffekt: Schatten */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  cursor: crosshair;
+  border-radius: 3px;
+}
+
+.game-steuerung {
+  font-size: 0.85rem;
+  color: var(--farbe-text-grau);
+  margin: 12px 0 16px;
+}
+
+.game-steuerung strong {
+  color: var(--farbe-text);
+}
+
+/* Game-Buttons */
+.game-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* Game-Over Meldung: standardmässig versteckt */
+.game-over-meldung {
+  display: none;
+  padding: 14px 20px;
+  background-color: rgba(204, 68, 68, 0.12);
+  border: 1px solid var(--farbe-fehler);
+  border-radius: 3px;
+  color: #e07070;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ── RESPONSIVE ────────────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+
+  .promo-titel {
+    font-size: 2.2rem;
+  }
+
+  .promo-zwei-spalten {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .twin-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .twin-box {
+    flex-direction: column;
+  }
+
+  .twin-verbindung {
+    width: 2px;
+    height: 60px;
+  }
+
+  .verbindungs-linie {
+    width: 2px;
+    height: 100%;
+  }
+
+  @keyframes puls-bewegen {
+    from { top: -20px; left: 0; }
+    to   { top: 100%; left: 0; }
+  }
+
+  .verbindungs-puls {
+    width: 6px;
+    height: 20px;
+    top: -20px;
+    left: -2px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .form-zeile {
+    grid-template-columns: 1fr;
+  }
+
+  .twin-schritte {
+    flex-direction: column;
+  }
+
+  .schritt-pfeil {
+    transform: rotate(90deg);
+    margin: 0;
+  }
+
+}

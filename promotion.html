@@ -1,77 +1,114 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Promotionen – Ironbound</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aktionen & Digital Twin – IRONBOUND</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/promotion.css">
 </head>
+
 <body>
 
-  <header class="site-header">
+  <!-- ============================================================
+       HEADER — identisch auf allen Seiten
+  ============================================================ -->
+  <header class="site-header" id="site-header">
     <div class="header-inner">
-      <div class="logo">
-        <img src="img/logo-placeholder.svg" alt="Ironbound Logo" class="logo-img" />
-        <span class="logo-text">IRONBOUND</span>
-      </div>
-      <nav class="main-nav" id="main-nav">
+
+      <a href="index.html" class="logo">IRONBOUND</a>
+
+      <nav class="nav-links" id="nav-links">
         <a href="index.html" class="nav-link">Home</a>
-        <a href="shop.html" class="nav-link">Shop</a>
-        <a href="promotion.html" class="nav-link active">Promotionen</a>
-        <a href="shop.html#versus" class="nav-link">Versus</a>
+        <a href="shop.html" class="nav-link">Arsenal</a>
+        <a href="promotion.html" class="nav-link aktiv">Aktionen</a>
         <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
       </nav>
-      <div class="header-right">
-        <a href="shop.html" class="icon-link">🔍</a>
-        <a href="#" class="icon-link">🛒</a>
-        <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+
+      <button class="hamburger-btn" id="hamburger-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
     </div>
   </header>
 
-  <main>
 
-    <!-- PROMOTION BANNER -->
-    <section class="promo-banner">
-      <img src="img/promo-banner-placeholder.svg" alt="Promotion Banner" class="promo-banner-img" />
-      <div class="promo-banner-overlay">
-        <div class="container">
-          <h1>Aktuelle Aktion</h1>
-          <p>Melde dich jetzt an und sichere dir <strong>10% Rabatt</strong> sowie einen exklusiven Digital-Twin-Code!</p>
-        </div>
-      </div>
-    </section>
+  <!-- ============================================================
+       PROMOTION BANNER
+       CSS-Animation: Teaser-Element (Anforderung)
+  ============================================================ -->
+  <section class="promo-banner">
+    <!-- Hintergrundeffekt: Gradient (CSS-Anforderung) -->
+    <div class="promo-banner-bg"></div>
+    <div class="container promo-banner-inhalt">
+      <p class="abschnitt-label">/ Aktuelle Aktion</p>
+      <!-- Animation: Titel pulsiert -->
+      <h1 class="promo-titel pulsieren">Exklusiv für Mitglieder.</h1>
+      <p class="promo-untertitel">
+        Melde dich jetzt an und erhalte <strong>10% Rabatt</strong> +
+        einen exklusiven Digital-Twin-Code.
+      </p>
+    </div>
+  </section>
 
-    <!-- FORMULAR + GAME -->
-    <section class="promo-main section">
-      <div class="container promo-two-col">
 
-        <!-- FORMULAR -->
-        <div class="promo-form-wrap">
-          <h2>Anmeldung Promotion</h2>
+  <!-- ============================================================
+       ANMELDEFORMULAR + DIGITAL TWIN INFO
+       Zwei-Spalten-Layout
+  ============================================================ -->
+  <section class="promo-main" id="anmeldung">
+    <div class="container">
+
+      <div class="promo-zwei-spalten">
+
+        <!-- LINKE SEITE: Anmeldeformular ──────────────────────── -->
+        <div class="promo-formular-bereich">
+
+          <span class="abschnitt-label">/ Anmeldung</span>
+          <h2>Zugang sichern.</h2>
+
+          <!--
+            novalidate: HTML5-Validierung AUS
+            id: JS verarbeitet dieses Formular
+            JS sendet via fetch() an PHP-Datei auf dem Server
+          -->
           <form id="promo-form" novalidate>
 
-            <div class="form-group">
-              <label for="p-vorname">Vorname *</label>
-              <input type="text" id="p-vorname" name="vorname" placeholder="Max" />
-              <span class="error-msg" id="err-p-vorname"></span>
+            <!-- Vorname + Nachname nebeneinander -->
+            <div class="form-zeile">
+
+              <div class="form-gruppe">
+                <label for="p-vorname">Vorname *</label>
+                <input type="text" id="p-vorname" name="vorname" placeholder="Max">
+                <span class="fehler-text" id="fehler-p-vorname"></span>
+              </div>
+
+              <div class="form-gruppe">
+                <label for="p-nachname">Nachname *</label>
+                <input type="text" id="p-nachname" name="nachname" placeholder="Mustermann">
+                <span class="fehler-text" id="fehler-p-nachname"></span>
+              </div>
+
             </div>
 
-            <div class="form-group">
-              <label for="p-nachname">Nachname *</label>
-              <input type="text" id="p-nachname" name="nachname" placeholder="Mustermann" />
-              <span class="error-msg" id="err-p-nachname"></span>
-            </div>
-
-            <div class="form-group">
+            <div class="form-gruppe">
               <label for="p-email">E-Mail *</label>
-              <input type="text" id="p-email" name="email" placeholder="max@example.ch" />
-              <span class="error-msg" id="err-p-email"></span>
+              <input type="text" id="p-email" name="email" placeholder="max@example.ch">
+              <span class="fehler-text" id="fehler-p-email"></span>
             </div>
 
-            <div class="form-group">
+            <!-- Zahlenfeld für Postleitzahl (geeigneter Feldtyp) -->
+            <div class="form-gruppe">
+              <label for="p-plz">Postleitzahl *</label>
+              <input type="number" id="p-plz" name="plz" placeholder="8000" min="1000" max="9999">
+              <span class="fehler-text" id="fehler-p-plz"></span>
+            </div>
+
+            <!-- Dropdown: Waffen-Interesse -->
+            <div class="form-gruppe">
               <label for="p-interesse">Waffen-Interesse *</label>
               <select id="p-interesse" name="interesse">
                 <option value="">— bitte wählen —</option>
@@ -82,115 +119,262 @@
                 <option value="stangenwaffen">Stangenwaffen</option>
                 <option value="digital">Digital Twin Gaming</option>
               </select>
-              <span class="error-msg" id="err-p-interesse"></span>
+              <span class="fehler-text" id="fehler-p-interesse"></span>
             </div>
 
-            <div class="form-group form-group--checkbox">
-              <label class="checkbox-label">
-                <input type="checkbox" id="p-agb" name="agb" />
-                Ich akzeptiere die <a href="#" class="link">AGB</a> und bestätige, mindestens 18 Jahre alt zu sein.
+            <!-- AGB Checkbox -->
+            <div class="form-gruppe">
+              <label class="agb-label">
+                <input type="checkbox" id="p-agb" name="agb">
+                <span>Ich bestätige, mindestens 18 Jahre alt zu sein und akzeptiere die
+                  <a href="#" class="text-gold">AGB</a>. *
+                </span>
               </label>
-              <span class="error-msg" id="err-p-agb"></span>
+              <span class="fehler-text" id="fehler-p-agb"></span>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-full" id="promo-submit">Jetzt anmelden</button>
-            <div class="form-success" id="promo-success">✔ Anmeldung gespeichert! Dein Code kommt per E-Mail.</div>
+            <!-- Spinner (während DB-Speicherung) -->
+            <div class="spinner-wrap" id="spinner-promo">
+              <div class="spinner"></div>
+              <p style="margin-top:8px;font-size:0.85rem;color:var(--farbe-text-grau)">Wird gespeichert…</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-voll" id="promo-submit-btn">
+              Jetzt anmelden
+            </button>
+
+            <!-- Erfolgsmeldung -->
+            <div class="erfolg-meldung" id="erfolg-promo">
+              ✔ Anmeldung gespeichert! Dein Code kommt per E-Mail.
+            </div>
+
+            <!-- Fehlermeldung: E-Mail bereits verwendet (DB-Check) -->
+            <div class="fehler-meldung-db" id="fehler-email-vorhanden">
+              ✖ Diese E-Mail-Adresse ist bereits registriert.
+            </div>
+
           </form>
+
         </div>
 
-        <!-- GAME -->
-        <div class="game-wrap" id="digital-twin">
-          <h2>Versus Runner</h2>
-          <p class="game-sub">Teste dein Wissen — weiche Hindernissen aus und sammle Punkte!</p>
-          <div class="game-meta">
-            <span>Score: <strong id="game-score">0</strong></span>
-            <span>Highscore: <strong id="game-highscore">0</strong></span>
-          </div>
-          <canvas id="game-canvas" width="600" height="200" aria-label="Versus Runner Spielfeld"></canvas>
-          <p class="game-hint">Steuerung: <kbd>Leertaste</kbd> oder <strong>Tippen</strong> = Sprung</p>
-          <div class="game-controls">
-            <button class="btn btn-primary" id="game-start">▶ Starten</button>
-            <button class="btn btn-outline" id="game-pause">⏸ Pause</button>
-            <button class="btn btn-outline" id="game-reset">↺ Neustart</button>
-          </div>
-          <div class="game-over-msg" id="game-over-msg">Game Over! Dein Score: <span id="final-score">0</span></div>
-        </div>
+        <!-- RECHTE SEITE: Promotion-Infos ─────────────────────── -->
+        <div class="promo-info-bereich">
 
-      </div>
-    </section>
+          <span class="abschnitt-label">/ Im Paket</span>
+          <h2>Was erhältst du?</h2>
 
-    <!-- INFO BOX -->
-    <section class="promo-info section">
-      <div class="container promo-info-grid">
-        <div class="info-box">
-          <h3>Was ist im Paket?</h3>
-          <ul>
-            <li>✔ 10% Rabatt auf die erste Bestellung</li>
-            <li>✔ Exklusiver Digital-Twin-Redeem-Code</li>
-            <li>✔ Frühzeitiger Zugang zu Neuheiten</li>
-            <li>✔ Monatlicher Ironbound-Newsletter</li>
+          <ul class="vorteile-liste">
+            <li>
+              <span class="vorteil-icon">✓</span>
+              <div>
+                <strong>10% Rabatt</strong>
+                <p>Auf deine erste Bestellung im Ironbound-Shop.</p>
+              </div>
+            </li>
+            <li>
+              <span class="vorteil-icon">✓</span>
+              <div>
+                <strong>Digital-Twin-Code</strong>
+                <p>Exklusiver Einlöse-Code für das Partnerspiel.</p>
+              </div>
+            </li>
+            <li>
+              <span class="vorteil-icon">✓</span>
+              <div>
+                <strong>Frühzugang</strong>
+                <p>Als Erstes über Neuheiten und limitierte Editionen informiert.</p>
+              </div>
+            </li>
+            <li>
+              <span class="vorteil-icon">✓</span>
+              <div>
+                <strong>Newsletter</strong>
+                <p>Monatliche Ironbound-News, Aktionen und Gaming-Updates.</p>
+              </div>
+            </li>
           </ul>
-        </div>
-        <div class="info-box">
-          <h3>Teilen</h3>
-          <div class="share-btns">
-            <a href="#" class="btn btn-outline">Facebook</a>
-            <a href="#" class="btn btn-outline">Twitter / X</a>
-            <button class="btn btn-outline" id="copy-link">🔗 Link kopieren</button>
-          </div>
-          <span class="copy-confirm" id="copy-confirm">Link kopiert!</span>
-        </div>
-      </div>
-    </section>
 
-  </main>
+        </div>
 
-  <footer class="site-footer">
-    <div class="footer-inner container">
-      <div class="footer-col">
-        <strong>Ironbound</strong>
-        <a href="#">Über uns</a>
-        <a href="#">Impressum</a>
       </div>
-      <div class="footer-col">
-        <strong>Navigation</strong>
-        <a href="index.html">Home</a>
-        <a href="shop.html">Shop</a>
-        <a href="promotion.html">Promotionen</a>
-      </div>
-      <div class="footer-col">
-        <strong>Rechtliches</strong>
-        <a href="#">Datenschutz</a>
-        <a href="#">Altersprüfung 18+</a>
-        <a href="#">AGB</a>
-      </div>
+
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 Ironbound — Die Spitze der Waffenkunst.</span>
+  </section>
+
+
+  <!-- ============================================================
+       DIGITAL TWIN SEKTION
+  ============================================================ -->
+  <section class="digital-twin" id="digital-twin">
+    <div class="container">
+
+      <span class="abschnitt-label">/ Digital Twin</span>
+      <h2>Real kaufen. Digital spielen.</h2>
+
+      <div class="twin-grid">
+
+        <div class="twin-erklaerung">
+          <p>
+            Jeder Kauf enthält ein lizenziertes In-Game Item für unsere Partnerschaftsspiele.
+            Deine Waffe existiert in beiden Welten — real in deinen Händen und digital im Spiel.
+          </p>
+          <div class="twin-schritte">
+            <div class="schritt">
+              <div class="schritt-nummer">1</div>
+              <div class="schritt-text">Waffe im Shop kaufen</div>
+            </div>
+            <div class="schritt-pfeil">→</div>
+            <div class="schritt">
+              <div class="schritt-nummer">2</div>
+              <div class="schritt-text">Redeem-Code per E-Mail</div>
+            </div>
+            <div class="schritt-pfeil">→</div>
+            <div class="schritt">
+              <div class="schritt-nummer">3</div>
+              <div class="schritt-text">Im Spiel einlösen</div>
+            </div>
+          </div>
+          <div class="partner-label">Partner-Spiele</div>
+          <div class="partner-badges">
+            <span class="partner-badge">Game A</span>
+            <span class="partner-badge">Game B</span>
+            <span class="partner-badge">Game C</span>
+          </div>
+        </div>
+
+        <div class="twin-visual">
+          <!-- Animation: Twin-Element pulsiert (CSS-Anforderung: animiertes Teaser-Element) -->
+          <div class="twin-box">
+            <div class="twin-physisch">
+              <div class="twin-icon">⚙</div>
+              <div class="twin-label">Physisch</div>
+            </div>
+            <div class="twin-verbindung">
+              <!-- CSS-Animation: Puls läuft durch die Linie -->
+              <div class="verbindungs-linie">
+                <div class="verbindungs-puls"></div>
+              </div>
+            </div>
+            <div class="twin-digital">
+              <div class="twin-icon">🎮</div>
+              <div class="twin-label">Digital</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       VERSUS RUNNER — Interaktives Game-Element (③)
+       Eigener Code, min. 15 Zeilen JS, min. 30 Zeilen CSS
+       Grafiken: Waffen-Silhouetten statt T-Rex
+       Startet erst beim Klick auf Start-Button
+  ============================================================ -->
+  <section class="game-sektion">
+    <div class="container">
+
+      <span class="abschnitt-label">/ Versus Runner</span>
+      <h2>Teste deine Reaktion.</h2>
+      <p class="game-beschreibung">
+        Steuere deinen Kämpfer und weiche den anfliegenden Waffen-Hindernissen aus.
+        Je länger du überlebst, desto höher dein Score.
+      </p>
+
+      <!-- Game HUD: Score-Anzeige -->
+      <div class="game-hud">
+        <div class="hud-element">
+          <div class="hud-wert" id="game-score">000</div>
+          <div class="hud-label">Score</div>
+        </div>
+        <div class="hud-element">
+          <div class="hud-wert" id="game-highscore">000</div>
+          <div class="hud-label">Highscore</div>
+        </div>
+      </div>
+
+      <!-- Canvas: hier läuft das Spiel -->
+      <canvas id="game-canvas" width="800" height="220"></canvas>
+
+      <p class="game-steuerung">
+        Steuerung: <strong>Leertaste</strong> oder <strong>Tippen/Klicken</strong> = Sprung
+      </p>
+
+      <!-- Buttons: Spiel startet ERST bei Klick (Anforderung) -->
+      <div class="game-buttons">
+        <button class="btn btn-primary" id="game-start-btn">▶ Starten</button>
+        <button class="btn btn-ghost" id="game-pause-btn">⏸ Pause</button>
+        <button class="btn btn-ghost" id="game-reset-btn">↺ Neustart</button>
+      </div>
+
+      <!-- Game-Over Meldung -->
+      <div class="game-over-meldung" id="game-over-meldung">
+        GAME OVER — Score: <span id="game-final-score">0</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER — identisch auf allen Seiten
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-raster">
+
+        <div class="footer-logo-bereich">
+          <strong>IRONBOUND</strong>
+          <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Instagram">IG</a>
+            <a href="#" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="X / Twitter">X</a>
+          </div>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Shop</strong>
+          <a href="shop.html">Arsenal</a>
+          <a href="shop.html?kat=digital">Digital Twin</a>
+          <a href="promotion.html">Aktionen</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Info</strong>
+          <a href="#">Über uns</a>
+          <a href="#">Versand</a>
+          <a href="#">Kontakt</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Rechtliches</strong>
+          <a href="#">Datenschutz</a>
+          <a href="#">AGB</a>
+          <a href="#">18+ Verifikation</a>
+        </div>
+
+      </div>
+
+      <p class="footer-disclaimer">
+        ⚠ Das ist ein Schulprojekt und keine reale Website. | Gruppe: Jan, Enea, Tina, Sofija
+      </p>
+
+      <p class="footer-copyright">
+        © 2025 IRONBOUND — Alle Rechte vorbehalten.
+      </p>
+
     </div>
   </footer>
 
-  <script src="js/nav.js"></script>
-  <script src="js/validate.js"></script>
-  <script src="js/game.js"></script>
-  <script>
-    initFormValidation('promo-form', {
-      'p-vorname':   { required: true, minLength: 2 },
-      'p-nachname':  { required: true, minLength: 2 },
-      'p-email':     { required: true, email: true },
-      'p-interesse': { required: true, select: true },
-      'p-agb':       { required: true, checkbox: true },
-    }, 'promo-success');
 
-    // Copy link
-    document.getElementById('copy-link').addEventListener('click', function() {
-      navigator.clipboard.writeText(window.location.href).then(function() {
-        const c = document.getElementById('copy-confirm');
-        c.style.display = 'inline';
-        setTimeout(() => c.style.display = 'none', 2000);
-      });
-    });
-  </script>
+  <script src="js/common.js"></script>
+  <script src="js/formular-promo.js"></script>
+  <script src="js/game.js"></script>
 
 </body>
 </html>

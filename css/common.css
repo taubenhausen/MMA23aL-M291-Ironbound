@@ -1,0 +1,558 @@
+/* ============================================================
+   common.css — IRONBOUND
+   Gemeinsame Styles für ALLE Seiten:
+   Header, Navigation, Footer, Buttons, Container, Reset
+   ============================================================ */
+
+
+/* ── CSS-VARIABLEN ─────────────────────────────────────────────
+   Alle Farben und Grössen zentral definiert.
+   Änderung hier = Änderung auf allen Seiten.
+   ─────────────────────────────────────────────────────────── */
+:root {
+  --farbe-hintergrund: #0d0d0f;
+  --farbe-dunkel:      #1a1a1e;
+  --farbe-karte:       #111114;
+  --farbe-rahmen:      #2a2a30;
+  --farbe-text:        #e8e8e8;
+  --farbe-text-grau:   #888888;
+  --farbe-gold:        #c8a060;
+  --farbe-gold-hell:   #e0b878;
+  --farbe-weiss:       #ffffff;
+  --farbe-fehler:      #cc4444;
+  --farbe-erfolg:      #4a8a5a;
+  --nav-hoehe:         64px;
+  --schatten:          0 4px 20px rgba(0, 0, 0, 0.5);
+  --schatten-karte:    0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ── RESET ─────────────────────────────────────────────────────
+   Browser-Standardabstände entfernen.
+   ─────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: var(--farbe-hintergrund);
+  color: var(--farbe-text);
+  font-size: 16px;
+  line-height: 1.6;
+  /* Platz für fixierten Header */
+  padding-top: var(--nav-hoehe);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  color: var(--farbe-weiss);
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+
+/* ── CONTAINER ─────────────────────────────────────────────────
+   Begrenzt Breite, zentriert Inhalt auf allen Seiten.
+   ─────────────────────────────────────────────────────────── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+
+/* ── ABSCHNITT-LABEL ────────────────────────────────────────── */
+.abschnitt-label {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--farbe-gold);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+
+/* ── BUTTONS ───────────────────────────────────────────────────
+   Hover-Effekte: Hintergrundfarbe ändert sich bei Hover.
+   ─────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  /* Übergang: sanfte Farbänderung beim Hover */
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+/* Primär-Button: weiss gefüllt */
+.btn-primary {
+  background-color: var(--farbe-weiss);
+  color: #111;
+  border-color: var(--farbe-weiss);
+}
+
+/* Hover-Effekt: Farbe wechselt zu Gold */
+.btn-primary:hover {
+  background-color: var(--farbe-gold);
+  border-color: var(--farbe-gold);
+  color: #111;
+  transform: translateY(-2px);
+}
+
+/* Ghost-Button: nur Rahmen */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--farbe-text-grau);
+  border-color: var(--farbe-rahmen);
+}
+
+.btn-ghost:hover {
+  border-color: var(--farbe-gold);
+  color: var(--farbe-gold);
+}
+
+/* Kleiner Button */
+.btn-klein {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: transparent;
+  color: var(--farbe-text-grau);
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-klein:hover {
+  background-color: var(--farbe-weiss);
+  color: #111;
+}
+
+/* Volle Breite */
+.btn-voll {
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   HEADER / NAVIGATION
+   ══════════════════════════════════════════════════════════════ */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-hoehe);
+  /* Hintergrundeffekt: Gradient */
+  background: linear-gradient(to bottom, rgba(6,6,8,0.98) 0%, rgba(13,13,15,0.95) 100%);
+  border-bottom: 1px solid var(--farbe-rahmen);
+  z-index: 100;
+  /* Übergang wenn .gescrollt Klasse hinzukommt */
+  transition: box-shadow 0.3s;
+}
+
+/* Rahmeneffekt: Schatten beim Scrollen */
+.site-header.gescrollt {
+  box-shadow: var(--schatten);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--farbe-weiss);
+  text-transform: uppercase;
+  /* Hover-Effekt: Logo leuchtet gold */
+  transition: color 0.2s;
+}
+
+.logo:hover {
+  color: var(--farbe-gold);
+}
+
+/* Navigation-Links */
+.nav-links {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--farbe-text-grau);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 3px;
+  position: relative;
+  /* Übergang für Hover-Effekt */
+  transition: color 0.2s, background-color 0.2s;
+}
+
+/* Hover-Effekt: Hintergrundfarbe und Textfarbe */
+.nav-link:hover {
+  color: var(--farbe-weiss);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Aktiver Link: andere Farbe + Unterstrich */
+.nav-link.aktiv {
+  color: var(--farbe-gold);
+}
+
+/* Unterstrich für aktiven Link mit CSS ::after */
+.nav-link.aktiv::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background-color: var(--farbe-gold);
+  border-radius: 1px;
+}
+
+/* Hamburger-Button: standardmässig versteckt */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--farbe-weiss);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* X-Animation wenn offen */
+.hamburger-btn.offen span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.offen span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.offen span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════════════ */
+
+.site-footer {
+  background-color: #060608;
+  border-top: 1px solid var(--farbe-rahmen);
+  padding: 48px 0 0;
+  margin-top: 80px;
+}
+
+.footer-raster {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Footer-Logo */
+.footer-logo-bereich strong {
+  display: block;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--farbe-weiss);
+  margin-bottom: 8px;
+}
+
+.footer-logo-bereich p {
+  font-size: 0.9rem;
+  color: var(--farbe-text-grau);
+  margin-bottom: 16px;
+  max-width: 260px;
+}
+
+/* Social Media Links */
+.social-links {
+  display: flex;
+  gap: 10px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 3px;
+  color: var(--farbe-text-grau);
+  font-size: 0.85rem;
+  /* Hover-Effekt: Border und Farbe */
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.social-link:hover {
+  border-color: var(--farbe-gold);
+  color: var(--farbe-gold);
+}
+
+/* Footer-Spalten */
+.footer-spalte {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-spalte strong {
+  color: var(--farbe-weiss);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.footer-spalte a {
+  color: var(--farbe-text-grau);
+  font-size: 0.9rem;
+  /* Hover-Effekt: Farbe */
+  transition: color 0.2s;
+}
+
+.footer-spalte a:hover {
+  color: var(--farbe-gold);
+}
+
+/* Disclaimer: pflichtgemäss nach Anforderung */
+.footer-disclaimer {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 3px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--farbe-text-grau);
+  margin-bottom: 0;
+}
+
+/* Copyright-Zeile ganz unten */
+.footer-copyright {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--farbe-text-grau);
+  border-top: 1px solid var(--farbe-rahmen);
+  padding: 16px 24px;
+  margin-top: 24px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   FORMULAR — GEMEINSAM (auch auf promotion.html)
+   ══════════════════════════════════════════════════════════════ */
+
+.form-gruppe {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-gruppe label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--farbe-text-grau);
+  text-transform: uppercase;
+}
+
+.form-gruppe input[type="text"],
+.form-gruppe input[type="email"],
+.form-gruppe input[type="number"],
+.form-gruppe input[type="tel"],
+.form-gruppe select,
+.form-gruppe textarea {
+  background-color: var(--farbe-hintergrund);
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 3px;
+  color: var(--farbe-weiss);
+  font-size: 1rem;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  font-family: inherit;
+  /* Übergang für Fokus-Effekt */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Fokus-Effekt: goldener Rahmen + leichter Schatten */
+.form-gruppe input:focus,
+.form-gruppe select:focus,
+.form-gruppe textarea:focus {
+  border-color: var(--farbe-gold);
+  box-shadow: 0 0 0 3px rgba(200, 160, 96, 0.15);
+}
+
+.form-gruppe textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Fehlerfeld: roter Rahmen */
+.form-gruppe input.feld-fehler,
+.form-gruppe select.feld-fehler,
+.form-gruppe textarea.feld-fehler {
+  border-color: var(--farbe-fehler);
+}
+
+/* Korrektes Feld: grüner Rahmen */
+.form-gruppe input.feld-ok,
+.form-gruppe select.feld-ok,
+.form-gruppe textarea.feld-ok {
+  border-color: var(--farbe-erfolg);
+}
+
+.fehler-text {
+  font-size: 0.8rem;
+  color: var(--farbe-fehler);
+  min-height: 18px;
+  display: block;
+}
+
+/* Erfolgsmeldung: standardmässig versteckt */
+.erfolg-meldung {
+  display: none;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background-color: rgba(74, 138, 90, 0.15);
+  border: 1px solid var(--farbe-erfolg);
+  border-radius: 3px;
+  color: #7ec892;
+  font-size: 0.9rem;
+}
+
+/* Spinner: standardmässig versteckt */
+.spinner-wrap {
+  display: none;
+  text-align: center;
+  padding: 16px 0;
+}
+
+.spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--farbe-rahmen);
+  border-top: 3px solid var(--farbe-gold);
+  border-radius: 50%;
+  /* CSS-Animation: Rotation */
+  animation: drehen 0.8s linear infinite;
+}
+
+@keyframes drehen {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.form-gruppe select option {
+  background-color: var(--farbe-dunkel);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE NAVIGATION
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+
+  /* Desktop-Nav verstecken */
+  .nav-links {
+    display: none;
+  }
+
+  /* Mobile-Nav: ausgeklappt als Dropdown */
+  .nav-links.offen {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--nav-hoehe);
+    left: 0;
+    right: 0;
+    background-color: rgba(6, 6, 8, 0.98);
+    padding: 16px 24px 24px;
+    border-bottom: 1px solid var(--farbe-rahmen);
+    z-index: 99;
+    box-shadow: var(--schatten);
+  }
+
+  /* Hamburger sichtbar */
+  .hamburger-btn {
+    display: flex;
+  }
+
+  /* Footer: 2 Spalten */
+  .footer-raster {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  /* Footer: 1 Spalte */
+  .footer-raster {
+    grid-template-columns: 1fr;
+  }
+
+}
