@@ -14,7 +14,7 @@
 $db_host     = 'localhost';
 $db_name     = 'ironbound_db';   // Datenbank-Name aus Plesk
 $db_benutzer = 'ironboundteam'; // DB-Benutzer aus Plesk
-$db_passwort = 'PASSWORT_HIER';  // DB-Passwort aus Plesk
+$db_passwort = 'Otwertka12.';  // DB-Passwort aus Plesk
 
 
 // Antwort immer als JSON

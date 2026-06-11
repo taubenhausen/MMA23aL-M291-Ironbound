@@ -8,7 +8,7 @@
 $db_host     = 'localhost';
 $db_name     = 'ironbound_db';
 $db_benutzer = 'ironboundteam';
-$db_passwort = 'PASSWORT_HIER';
+$db_passwort = 'Otwertka12.';
 
 header('Content-Type: application/json');
 
