@@ -1,109 +1,182 @@
 <?php
+declare(strict_types=1);
+
 /* ============================================================
    promotion-speichern.php — IRONBOUND
-   Empfängt POST-Daten vom Promotion-Formular (promotion.html)
-   und speichert sie in der Tabelle "promotion_anmeldungen".
 
-   Ablauf:
-   1. DB-Konfiguration einbinden
-   2. Nur POST-Requests erlauben
-   3. Eingaben lesen und bereinigen
-   4. Server-seitige Validierung
-   5. Datenbankverbindung öffnen (PDO via db-config.php)
-   6. E-Mail auf Duplikat prüfen
-   7. Neuen Datensatz einfügen
-   8. JSON-Antwort zurückgeben
-
-   Gibt JSON zurück:
-   {"status": "ok"}              = erfolgreich gespeichert
-   {"status": "email_vorhanden"} = E-Mail bereits in DB
-   {"status": "fehler", ...}     = Fehler aufgetreten
+   Aufgabe dieser Datei:
+   - POST-Daten vom Promotion-Formular empfangen
+   - Server-seitig prüfen
+   - Doppelte E-Mail-Adressen verhindern
+   - Anmeldung in der Datenbank speichern
+   - JSON-Antwort an formular-promo.js zurückgeben
    ============================================================ */
 
 
-/* ── Zugangsdaten aus zentraler Config laden ─────────────────── */
-require_once 'db-config.php';
-/* require_once: bindet db-config.php ein. */
-/* Bricht ab wenn Datei nicht gefunden. Nur einmal einbinden. */
+/* ─────────────────────────────────────────────────────────────
+   1. Antwortformat und Datenbankverbindung
+   -------------------------------------------------------------
+   Die echte DB-Config liegt auf Plesk ausserhalb des öffentlichen
+   Website-Ordners im Ordner private.
+   ─────────────────────────────────────────────────────────── */
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../../private/db-config.php';
 
 
-/* ── Antwort-Format festlegen ────────────────────────────────── */
-header('Content-Type: application/json');
-
-
-/* ── Nur POST-Requests erlauben ──────────────────────────────── */
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['status' => 'fehler', 'meldung' => 'Nur POST erlaubt.']);
+/* ─────────────────────────────────────────────────────────────
+   2. Einheitliche JSON-Antworten
+   -------------------------------------------------------------
+   Dadurch muss echo json_encode nicht überall wiederholt werden.
+   ─────────────────────────────────────────────────────────── */
+function json_antwort(array $daten, int $statusCode = 200): void
+{
+    http_response_code($statusCode);
+    echo json_encode($daten, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
 
-/* ── Eingaben lesen und bereinigen ───────────────────────────── */
-$vorname   = htmlspecialchars(trim($_POST['vorname']   ?? ''));
-$nachname  = htmlspecialchars(trim($_POST['nachname']  ?? ''));
-$email     = htmlspecialchars(trim($_POST['email']     ?? ''));
-$plz       = htmlspecialchars(trim($_POST['plz']       ?? ''));
-$interesse = htmlspecialchars(trim($_POST['interesse'] ?? ''));
+/* ─────────────────────────────────────────────────────────────
+   3. Nur POST erlauben
+   -------------------------------------------------------------
+   Das Formular sendet Daten, darum ist POST korrekt.
+   ─────────────────────────────────────────────────────────── */
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Nur POST erlaubt.'
+    ], 405);
+}
 
 
-/* ── Server-seitige Validierung ──────────────────────────────── */
-if (empty($vorname) || empty($nachname) || empty($email) || empty($plz) || empty($interesse)) {
-    echo json_encode(['status' => 'fehler', 'meldung' => 'Pflichtfelder fehlen.']);
-    exit;
+/* ─────────────────────────────────────────────────────────────
+   4. Eingaben lesen und trimmen
+   -------------------------------------------------------------
+   Wir speichern keine HTML-Entities in der Datenbank. Darum wird hier
+   nur getrimmt. HTML-Ausgabe würde später separat escaped werden.
+   ─────────────────────────────────────────────────────────── */
+$vorname = trim((string)($_POST['vorname'] ?? ''));
+$nachname = trim((string)($_POST['nachname'] ?? ''));
+$email = trim((string)($_POST['email'] ?? ''));
+$plz = trim((string)($_POST['plz'] ?? ''));
+$interesse = trim((string)($_POST['interesse'] ?? ''));
+$agb = trim((string)($_POST['agb'] ?? '0'));
+
+
+/* ─────────────────────────────────────────────────────────────
+   5. Server-seitige Validierung
+   -------------------------------------------------------------
+   JS-Validierung ist gut für User-Komfort. PHP muss trotzdem prüfen,
+   weil man JS im Browser umgehen kann.
+   ─────────────────────────────────────────────────────────── */
+if ($vorname === '' || $nachname === '' || $email === '' || $plz === '' || $interesse === '') {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Pflichtfelder fehlen.'
+    ], 422);
+}
+
+if (!preg_match('/^[\p{L}\s\'\-]{2,}$/u', $vorname)) {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Ungültiger Vorname.'
+    ], 422);
+}
+
+if (!preg_match('/^[\p{L}\s\'\-]{2,}$/u', $nachname)) {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Ungültiger Nachname.'
+    ], 422);
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    /* filter_var mit FILTER_VALIDATE_EMAIL: robustere E-Mail-Prüfung als strpos. */
-    echo json_encode(['status' => 'fehler', 'meldung' => 'Ungueltige E-Mail.']);
-    exit;
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Ungültige E-Mail.'
+    ], 422);
 }
 
-$plz_zahl = intval($plz);
-if ($plz_zahl < 1000 || $plz_zahl > 9999) {
-    echo json_encode(['status' => 'fehler', 'meldung' => 'Ungueltige PLZ (1000-9999).']);
-    exit;
+if (!preg_match('/^\d{4}$/', $plz) || (int)$plz < 1000 || (int)$plz > 9999) {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Ungültige PLZ.'
+    ], 422);
 }
 
-$erlaubte_interessen = ['schwerter', 'schusswaffen', 'bogen', 'messer', 'stangenwaffen', 'digital'];
-if (!in_array($interesse, $erlaubte_interessen)) {
-    /* in_array: prüft ob Wert in Array vorhanden (Whitelist-Prüfung). */
-    echo json_encode(['status' => 'fehler', 'meldung' => 'Ungueltige Auswahl.']);
-    exit;
+$erlaubteInteressen = ['schwerter', 'schusswaffen', 'bogen', 'messer', 'stangenwaffen', 'digital'];
+
+if (!in_array($interesse, $erlaubteInteressen, true)) {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Ungültige Auswahl.'
+    ], 422);
 }
 
-
-/* ── Datenbankverbindung öffnen ──────────────────────────────── */
-$pdo = db_verbinden();
-/* db_verbinden() aus db-config.php: gibt PDO-Objekt zurück. */
-
-
-/* ── E-Mail bereits vorhanden prüfen ─────────────────────────── */
-$check = $pdo->prepare('SELECT id FROM promotion_anmeldungen WHERE email = ?');
-$check->execute([$email]);
-
-if ($check->rowCount() > 0) {
-    echo json_encode(['status' => 'email_vorhanden']);
-    exit;
+if ($agb !== '1') {
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'AGB und 18+ Bestätigung fehlen.'
+    ], 422);
 }
 
 
-/* ── Neuen Datensatz in promotion_anmeldungen einfügen ───────── */
-$insert = $pdo->prepare('
-    INSERT INTO promotion_anmeldungen (vorname, nachname, email, plz, interesse)
-    VALUES (:vorname, :nachname, :email, :plz, :interesse)
-');
-/* erstellt_am wird automatisch via DEFAULT CURRENT_TIMESTAMP gesetzt. */
-
-$insert->execute([
-    ':vorname'   => $vorname,
-    ':nachname'  => $nachname,
-    ':email'     => $email,
-    ':plz'       => $plz_zahl,
-    ':interesse' => $interesse
-]);
+try {
+    /* ─────────────────────────────────────────────────────────
+       6. Datenbankverbindung öffnen
+       ─────────────────────────────────────────────────────── */
+    $pdo = db_verbinden();
 
 
-/* ── Erfolg zurückgeben ──────────────────────────────────────── */
-echo json_encode(['status' => 'ok']);
-exit;
-?>
+    /* ─────────────────────────────────────────────────────────
+       7. Doppelte E-Mail prüfen
+       ---------------------------------------------------------
+       COUNT(*) ist zuverlässiger als rowCount() bei SELECT-Abfragen.
+       ─────────────────────────────────────────────────────── */
+    $check = $pdo->prepare('SELECT COUNT(*) FROM promotion_anmeldungen WHERE email = :email');
+    $check->execute([
+        ':email' => $email
+    ]);
+
+    if ((int)$check->fetchColumn() > 0) {
+        json_antwort([
+            'status' => 'email_vorhanden'
+        ], 409);
+    }
+
+
+    /* ─────────────────────────────────────────────────────────
+       8. Neue Anmeldung speichern
+       ---------------------------------------------------------
+       erstellt_am kann in MySQL automatisch per DEFAULT CURRENT_TIMESTAMP
+       gesetzt werden.
+       ─────────────────────────────────────────────────────── */
+    $insert = $pdo->prepare('
+        INSERT INTO promotion_anmeldungen (vorname, nachname, email, plz, interesse)
+        VALUES (:vorname, :nachname, :email, :plz, :interesse)
+    ');
+
+    $insert->execute([
+        ':vorname'   => $vorname,
+        ':nachname'  => $nachname,
+        ':email'     => $email,
+        ':plz'       => (int)$plz,
+        ':interesse' => $interesse
+    ]);
+
+
+    /* ─────────────────────────────────────────────────────────
+       9. Erfolg zurückgeben
+       ─────────────────────────────────────────────────────── */
+    json_antwort([
+        'status' => 'ok'
+    ]);
+
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+
+    json_antwort([
+        'status'  => 'fehler',
+        'meldung' => 'Datenbankfehler.'
+    ], 500);
+}

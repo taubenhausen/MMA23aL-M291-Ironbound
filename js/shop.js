@@ -1,65 +1,75 @@
 /* ============================================================
    shop.js — IRONBOUND Arsenal-Seite
-   Dynamisch: lädt Produkte via fetch() von shop-produkte.php
-   Interaktive Elemente:
-   - Filter-Chips: Klick filtert über PHP-API
-   - Live-Suche: keyup filtert client-seitig auf geladenen Karten
-   - Preis-Slider: blendet teure Produkte aus
-   - Sortierung: neu laden mit sort-Parameter
+
+   Aufgabe dieser Datei:
+   - Produkte im Raster anzeigen
+   - Filter-Chips auswerten
+   - Suche auswerten
+   - Optional Sortierung und Preis-Slider unterstützen
+   - Fallback-Produkte anzeigen, falls PHP/DB nicht erreichbar ist
+
+   Wichtig:
+   Die CSS-Klassen bleiben gleich wie vorher. Darum bleibt das
+   Aussehen der Produktkarten unverändert.
    ============================================================ */
 
 
-/* ── Statische Fallback-Produkte ───────────────────────────────
-   Werden verwendet wenn die PHP-API nicht erreichbar ist
-   (z. B. GitHub Pages ohne Server).
+/* ─────────────────────────────────────────────────────────────
+   1. Fallback-Produkte
+   -------------------------------------------------------------
+   Diese Daten werden genutzt, wenn die PHP-API nicht erreichbar ist,
+   zum Beispiel beim lokalen Öffnen der HTML-Datei oder auf GitHub Pages.
    ─────────────────────────────────────────────────────────── */
 var FALLBACK_PRODUKTE = [
-  { id:1, nummer:'001', name:'Gladius Romanus',  kategorie:'Schwerter · Einsteiger',    filter_tags:'schwerter einsteiger digital',   preis:249, skill_level:'Einsteiger',    skill_pct:35,  digital_twin:true,  bestseller:false, bild:'img/prod1-placeholder.svg' },
-  { id:2, nummer:'002', name:'M4 Replika',       kategorie:'Schusswaffen · Profi',       filter_tags:'schusswaffen profi',             preis:599, skill_level:'Profi',         skill_pct:100, digital_twin:false, bestseller:true,  bild:'img/prod2-placeholder.svg' },
-  { id:3, nummer:'003', name:'Langbogen 60"',    kategorie:'Bögen · Einsteiger',         filter_tags:'bogen einsteiger digital',       preis:189, skill_level:'Einsteiger',    skill_pct:30,  digital_twin:true,  bestseller:false, bild:'img/prod3-placeholder.svg' },
-  { id:4, nummer:'004', name:'Kampfmesser',      kategorie:'Messer · Fortgeschritten',   filter_tags:'messer fortgeschritten',         preis:149, skill_level:'Fortgeschritten',skill_pct:65, digital_twin:false, bestseller:false, bild:'img/prod4-placeholder.svg' },
-  { id:5, nummer:'005', name:'Armbrust Pro',     kategorie:'Bögen · Fortgeschritten',    filter_tags:'bogen fortgeschritten digital',  preis:399, skill_level:'Fortgeschritten',skill_pct:70, digital_twin:true,  bestseller:false, bild:'img/prod5-placeholder.svg' },
-  { id:6, nummer:'006', name:'Speer Replika',    kategorie:'Stangenwaffen · Einsteiger', filter_tags:'stangenwaffen einsteiger',       preis:99,  skill_level:'Einsteiger',    skill_pct:20,  digital_twin:false, bestseller:false, bild:'img/prod6-placeholder.svg' }
+  { id: 1, nummer: '001', name: 'Gladius Romanus', kategorie: 'Schwerter · Einsteiger', filter_tags: 'schwerter einsteiger digital', preis: 249, skill_level: 'Einsteiger', skill_pct: 35, digital_twin: true, bestseller: false, bild: 'img/prod1-placeholder.svg' },
+  { id: 2, nummer: '002', name: 'M4 Replika', kategorie: 'Schusswaffen · Profi', filter_tags: 'schusswaffen profi', preis: 599, skill_level: 'Profi', skill_pct: 100, digital_twin: false, bestseller: true, bild: 'img/prod2-placeholder.svg' },
+  { id: 3, nummer: '003', name: 'Langbogen 60"', kategorie: 'Bögen · Einsteiger', filter_tags: 'bogen einsteiger digital', preis: 189, skill_level: 'Einsteiger', skill_pct: 30, digital_twin: true, bestseller: false, bild: 'img/prod3-placeholder.svg' },
+  { id: 4, nummer: '004', name: 'Kampfmesser', kategorie: 'Messer · Fortgeschritten', filter_tags: 'messer fortgeschritten', preis: 149, skill_level: 'Fortgeschritten', skill_pct: 65, digital_twin: false, bestseller: false, bild: 'img/prod4-placeholder.svg' },
+  { id: 5, nummer: '005', name: 'Armbrust Pro', kategorie: 'Bögen · Fortgeschritten', filter_tags: 'bogen fortgeschritten digital', preis: 399, skill_level: 'Fortgeschritten', skill_pct: 70, digital_twin: true, bestseller: false, bild: 'img/prod5-placeholder.svg' },
+  { id: 6, nummer: '006', name: 'Speer Replika', kategorie: 'Stangenwaffen · Einsteiger', filter_tags: 'stangenwaffen einsteiger', preis: 99, skill_level: 'Einsteiger', skill_pct: 20, digital_twin: false, bestseller: false, bild: 'img/prod6-placeholder.svg' }
 ];
 
-/* Fallback-Daten client-seitig nach Filter filtern */
-function fallbackAnwenden(filter) {
-  if (!filter || filter === 'alle') { return FALLBACK_PRODUKTE; }
-  return FALLBACK_PRODUKTE.filter(function(p) {
-    return p.filter_tags.indexOf(filter) !== -1;
-  });
+
+/* ─────────────────────────────────────────────────────────────
+   2. Aktueller Zustand der Shop-Seite
+   -------------------------------------------------------------
+   Diese Variablen merken sich, welcher Filter, welche Sortierung und
+   welche Produktliste gerade aktiv sind.
+   ─────────────────────────────────────────────────────────── */
+var shopProdukte = [];
+var aktiverFilter = 'alle';
+var aktiverSort = 'relevanz';
+
+
+/* ─────────────────────────────────────────────────────────────
+   3. Fallback-Daten filtern
+   -------------------------------------------------------------
+   Die Datenbank filtert serverseitig. Der Fallback muss im Browser
+   gefiltert werden, weil dort kein PHP läuft.
+   ─────────────────────────────────────────────────────────── */
+function fallbackFiltern(filter) {
+  if (!filter || filter === 'alle') {
+    return FALLBACK_PRODUKTE.map(window.IRONBOUND.produktNormalisieren);
+  }
+
+  return FALLBACK_PRODUKTE
+    .filter(function (produkt) {
+      return String(produkt.filter_tags).indexOf(filter) !== -1;
+    })
+    .map(window.IRONBOUND.produktNormalisieren);
 }
 
 
-/* ── Globale Variablen ─────────────────────────────────────────
-   Werden befüllt sobald Produkte geladen sind.
+/* ─────────────────────────────────────────────────────────────
+   4. Produktkarte als HTML bauen
+   -------------------------------------------------------------
+   Diese Funktion erzeugt dieselbe HTML-Struktur wie vorher.
+   Dadurch bleiben CSS, Animationen und Hover-Effekte erhalten.
    ─────────────────────────────────────────────────────────── */
-var aktuelleProdukte = [];
-/* Array mit allen Produktobjekten die zuletzt von der API kamen. */
+function produktKarteHtml(produkt) {
+  var p = window.IRONBOUND.produktNormalisieren(produkt);
+  var htmlEscapen = window.IRONBOUND.htmlEscapen;
 
-var aktiverFilter    = 'alle';
-var aktiverSort      = 'relevanz';
-
-
-/* ── DOM-Elemente ──────────────────────────────────────────────
-   Einmal holen, mehrfach verwenden.
-   ─────────────────────────────────────────────────────────── */
-var raster          = document.getElementById('inventar-raster');
-var ergebnisAnzahl  = document.getElementById('ergebnis-anzahl');
-var keineTrefferMsg = document.getElementById('keine-treffer');
-var filterChips     = document.querySelectorAll('.filter-chip');
-var sucheEingabe    = document.getElementById('suche-eingabe');
-var sucheBtn        = document.getElementById('suche-btn');
-var sortAuswahl     = document.getElementById('sort-auswahl');
-var preisSlider     = document.getElementById('preis-slider');
-var preisWert       = document.getElementById('preis-wert');
-
-
-/* ── HILFSFUNKTION: Produkt-HTML erstellen ────────────────────
-   Baut das HTML einer Inventar-Karte aus einem Produktobjekt.
-   ─────────────────────────────────────────────────────────── */
-function produktKarteHtml(p) {
-  /* Badge-HTML vorbereiten */
   var badge = '';
   if (p.digital_twin) {
     badge = '<span class="twin-abzeichen">🎮 Twin</span>';
@@ -67,254 +77,289 @@ function produktKarteHtml(p) {
     badge = '<span class="bestseller-abzeichen">Bestseller</span>';
   }
 
-  /* Skill-Level-Nummer für Anzeige ableiten */
   var skillLvl = '1';
-  if (p.skill_level === 'Fortgeschritten') { skillLvl = '2'; }
-  if (p.skill_level === 'Profi')           { skillLvl = '3'; }
-
-  /* Preis formatieren: 249 → "249.–" */
-  var preisFormatiert = 'CHF ' + parseFloat(p.preis).toFixed(0) + '.–';
+  if (p.skill_level === 'Fortgeschritten') {
+    skillLvl = '2';
+  }
+  if (p.skill_level === 'Profi') {
+    skillLvl = '3';
+  }
 
   return (
-    '<div class="inventar-karte"' +
-         ' data-filter="' + p.filter_tags + '"' +
-         ' data-preis="'  + p.preis       + '">' +
+    '<div class="inventar-karte" data-filter="' + htmlEscapen(p.filter_tags) + '" data-preis="' + htmlEscapen(p.preis) + '">' +
+    '<div class="karten-nummer">' + htmlEscapen(p.nummer) + '</div>' +
 
-      '<div class="karten-nummer">' + p.nummer + '</div>' +
+    '<div class="karten-bild">' +
+    '<img src="' + htmlEscapen(p.bild) + '" alt="' + htmlEscapen(p.name) + '">' +
+    badge +
+    '</div>' +
 
-      '<div class="karten-bild">' +
-        '<img src="' + p.bild + '" alt="' + p.name + '">' +
-        badge +
-      '</div>' +
+    '<div class="karten-inhalt">' +
+    '<div class="karten-kategorie">' + htmlEscapen(p.kategorie) + '</div>' +
+    '<div class="karten-name">' + htmlEscapen(p.name) + '</div>' +
 
-      '<div class="karten-inhalt">' +
-        '<div class="karten-kategorie">' + p.kategorie + '</div>' +
-        '<div class="karten-name">'      + p.name      + '</div>' +
+    '<div class="skill-balken">' +
+    '<div class="skill-fuellung" style="width:' + htmlEscapen(p.skill_pct) + '%;"></div>' +
+    '</div>' +
+    '<span class="skill-text">LVL ' + skillLvl + ' — ' + htmlEscapen(p.skill_level) + '</span>' +
 
-        '<div class="skill-balken">' +
-          '<div class="skill-fuellung" style="width:' + p.skill_pct + '%;"></div>' +
-        '</div>' +
-        '<span class="skill-text">LVL ' + skillLvl + ' — ' + p.skill_level + '</span>' +
-
-        '<div class="karten-fuss">' +
-          '<span class="karten-preis">' + preisFormatiert + '</span>' +
-          '<button class="btn btn-klein">+ Inventar</button>' +
-        '</div>' +
-      '</div>' +
-
+    '<div class="karten-fuss">' +
+    '<span class="karten-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
+    '<button class="btn btn-klein" type="button">+ Inventar</button>' +
+    '</div>' +
+    '</div>' +
     '</div>'
   );
 }
 
 
-/* ── HILFSFUNKTION: Raster rendern ────────────────────────────
-   Nimmt Array von Produktobjekten und schreibt HTML ins Raster.
+/* ─────────────────────────────────────────────────────────────
+   5. Produktliste in das Raster schreiben
+   -------------------------------------------------------------
+   Wenn keine Produkte vorhanden sind, wird die vorhandene Meldung
+   «Keine Produkte gefunden» eingeblendet.
    ─────────────────────────────────────────────────────────── */
 function rasterRendern(produkte) {
-  if (!raster) { return; }
+  var raster = document.getElementById('inventar-raster');
+  var ergebnisAnzahl = document.getElementById('ergebnis-anzahl');
+  var keineTrefferMsg = document.getElementById('keine-treffer');
 
-  if (produkte.length === 0) {
-    raster.innerHTML = '';
-    if (keineTrefferMsg) { keineTrefferMsg.style.display = 'block'; }
-    if (ergebnisAnzahl)  { ergebnisAnzahl.textContent = '0 Produkte im Inventar'; }
+  if (!raster) {
     return;
   }
 
-  if (keineTrefferMsg) { keineTrefferMsg.style.display = 'none'; }
+  if (!produkte || produkte.length === 0) {
+    raster.innerHTML = '';
+
+    if (ergebnisAnzahl) {
+      ergebnisAnzahl.textContent = '0 Produkte im Inventar';
+    }
+
+    if (keineTrefferMsg) {
+      keineTrefferMsg.style.display = 'block';
+    }
+
+    return;
+  }
 
   var html = '';
   for (var i = 0; i < produkte.length; i++) {
-    html += produktKarteHtml(produkte[i]);
+    html = html + produktKarteHtml(produkte[i]);
   }
+
   raster.innerHTML = html;
-  /* innerHTML: setzt den gesamten HTML-Inhalt des Elements. */
 
   if (ergebnisAnzahl) {
     ergebnisAnzahl.textContent = produkte.length + ' Produkte im Inventar';
   }
-}
 
-
-/* ── HILFSFUNKTION: Laden-Spinner im Raster ───────────────────
-   Zeigt Lade-Animation während fetch() läuft.
-   ─────────────────────────────────────────────────────────── */
-function rasterLadeAnimation(anzeigen) {
-  if (!raster) { return; }
-  if (anzeigen) {
-    raster.innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;padding:3rem;">' +
-        '<div class="spinner" style="margin:0 auto;"></div>' +
-        '<p style="margin-top:1rem;color:var(--farbe-text-grau)">Laden…</p>' +
-      '</div>';
+  if (keineTrefferMsg) {
+    keineTrefferMsg.style.display = 'none';
   }
 }
 
 
-/* ── HAUPTFUNKTION: Produkte laden ────────────────────────────
-   Zeigt Fallback-Produkte sofort an (kein Spinner-Flash).
-   Versucht danach die PHP-API; wenn verfügbar, werden die
-   DB-Daten nachgeladen und ersetzt.
+/* ─────────────────────────────────────────────────────────────
+   6. Produkte laden
+   -------------------------------------------------------------
+   Ablauf:
+   1. Fallback sofort anzeigen
+   2. Danach echte DB-Daten laden
+   3. Wenn DB klappt, ersetzt die echte Liste den Fallback
    ─────────────────────────────────────────────────────────── */
-function produkteLaden(filter, sort) {
-  filter = filter || 'alle';
-  sort   = sort   || 'relevanz';
+function produkteLaden() {
+  var sucheEingabe = document.getElementById('suche-eingabe');
+  var suchbegriff = sucheEingabe ? sucheEingabe.value.trim() : '';
 
-  /* Sofort mit statischen Fallback-Daten rendern */
-  aktuelleProdukte = fallbackAnwenden(filter);
-  rasterRendern(aktuelleProdukte);
+  shopProdukte = fallbackFiltern(aktiverFilter);
+  rasterRendern(shopProdukte);
   preisfilterAnwenden();
 
-  /* Im Hintergrund PHP-API anfragen (nur auf Servern mit PHP/DB) */
-  var url = 'php/shop-produkte.php?sort=' + encodeURIComponent(sort);
-  if (filter !== 'alle') {
-    url += '&filter=' + encodeURIComponent(filter);
-  }
-
-  fetch(url)
-    .then(function(antwort) {
-      return antwort.json();
+  window.IRONBOUND.produkteVonApiLaden({
+    filter: aktiverFilter,
+    sort: aktiverSort,
+    suche: suchbegriff
+  })
+    .then(function (produkte) {
+      shopProdukte = produkte;
+      rasterRendern(shopProdukte);
+      preisfilterAnwenden();
     })
-    .then(function(daten) {
-      if (daten.status === 'ok' && daten.produkte.length > 0) {
-        /* DB-Daten vorhanden: Ansicht mit echten Daten aktualisieren */
-        aktuelleProdukte = daten.produkte;
-        rasterRendern(aktuelleProdukte);
-        preisfilterAnwenden();
-      }
-    })
-    .catch(function() {
-      /* PHP nicht erreichbar — Fallback bleibt sichtbar, kein Fehler */
+    .catch(function () {
+      /* Kein Server oder DB-Fehler: Fallback bleibt sichtbar. */
     });
 }
 
 
-/* ── FILTER-CHIPS ──────────────────────────────────────────────
-   Klick → aktiven Filter setzen → neu von API laden.
-   ─────────────────────────────────────────────────────────── */
-for (var i = 0; i < filterChips.length; i++) {
-  filterChips[i].addEventListener('click', function() {
-    /* Alten aktiven Chip deaktivieren */
-    for (var j = 0; j < filterChips.length; j++) {
-      filterChips[j].classList.remove('aktiv');
-    }
-    this.classList.add('aktiv');
-
-    aktiverFilter = this.getAttribute('data-filter');
-    /* Suchfeld leeren wenn Filter gewechselt wird */
-    if (sucheEingabe) { sucheEingabe.value = ''; }
-
-    produkteLaden(aktiverFilter, aktiverSort);
-  });
-}
-
-
-/* ── LIVE-SUCHE ────────────────────────────────────────────────
-   Filtert client-seitig in aktuelleProdukte (kein neuer fetch).
+/* ─────────────────────────────────────────────────────────────
+   7. Suche im Browser anwenden
+   -------------------------------------------------------------
+   Während dem Tippen wird zuerst clientseitig gefiltert. Zusätzlich
+   kann die PHP-API beim nächsten Laden ebenfalls mit dem Suchbegriff
+   arbeiten.
    ─────────────────────────────────────────────────────────── */
 function sucheAusfuehren() {
+  var sucheEingabe = document.getElementById('suche-eingabe');
   var suchbegriff = sucheEingabe ? sucheEingabe.value.toLowerCase().trim() : '';
 
   if (suchbegriff === '') {
-    /* Leere Suche: alle geladenen Produkte zeigen */
-    rasterRendern(aktuelleProdukte);
+    rasterRendern(shopProdukte);
     preisfilterAnwenden();
     return;
   }
 
-  /* Filter-Chips auf "Alle" zurücksetzen */
-  for (var j = 0; j < filterChips.length; j++) {
-    filterChips[j].classList.remove('aktiv');
-  }
-  var alleChip = document.querySelector('[data-filter="alle"]');
-  if (alleChip) { alleChip.classList.add('aktiv'); }
+  var gefilterteProdukte = shopProdukte.filter(function (produkt) {
+    var name = String(produkt.name || '').toLowerCase();
+    var kategorie = String(produkt.kategorie || '').toLowerCase();
+    var tags = String(produkt.filter_tags || '').toLowerCase();
 
-  var gefiltert = [];
-  for (var i = 0; i < aktuelleProdukte.length; i++) {
-    var p    = aktuelleProdukte[i];
-    var name = p.name.toLowerCase();
-    var kat  = p.kategorie.toLowerCase();
-    if (name.indexOf(suchbegriff) !== -1 || kat.indexOf(suchbegriff) !== -1) {
-      gefiltert.push(p);
-    }
-  }
+    return name.indexOf(suchbegriff) !== -1 ||
+      kategorie.indexOf(suchbegriff) !== -1 ||
+      tags.indexOf(suchbegriff) !== -1;
+  });
 
-  rasterRendern(gefiltert);
+  rasterRendern(gefilterteProdukte);
   preisfilterAnwenden();
 }
 
-if (sucheEingabe) {
-  sucheEingabe.addEventListener('keyup', sucheAusfuehren);
-}
-if (sucheBtn) {
-  sucheBtn.addEventListener('click', sucheAusfuehren);
-}
 
-
-/* ── SORTIERUNG ────────────────────────────────────────────────
-   Änderung → neu von API laden mit neuem sort-Parameter.
-   ─────────────────────────────────────────────────────────── */
-if (sortAuswahl) {
-  sortAuswahl.addEventListener('change', function() {
-    aktiverSort = this.value;
-    produkteLaden(aktiverFilter, aktiverSort);
-  });
-}
-
-
-/* ── PREIS-SLIDER ──────────────────────────────────────────────
-   Client-seitig: blendet Karten aus die über dem Maximalpreis liegen.
+/* ─────────────────────────────────────────────────────────────
+   8. Optionalen Preisfilter anwenden
+   -------------------------------------------------------------
+   Deine aktuelle shop.html hat keinen Preis-Slider. Die Funktion bleibt
+   aber erhalten, falls ihr ihn später wieder einfügt.
    ─────────────────────────────────────────────────────────── */
 function preisfilterAnwenden() {
-  if (!preisSlider) { return; }
-  var maxPreis = parseInt(preisSlider.value);
-  var karten   = document.querySelectorAll('.inventar-karte');
+  var preisSlider = document.getElementById('preis-slider');
+  var preisWert = document.getElementById('preis-wert');
+  var ergebnisAnzahl = document.getElementById('ergebnis-anzahl');
+  var keineTrefferMsg = document.getElementById('keine-treffer');
 
+  if (!preisSlider) {
+    return;
+  }
+
+  var maxPreis = Number(preisSlider.value || 0);
+  var karten = document.querySelectorAll('.inventar-karte');
   var sichtbar = 0;
+
   for (var i = 0; i < karten.length; i++) {
-    var preis = parseFloat(karten[i].getAttribute('data-preis'));
+    var preis = Number(karten[i].getAttribute('data-preis') || 0);
+
     if (preis <= maxPreis) {
       karten[i].classList.remove('versteckt');
-      sichtbar++;
+      sichtbar = sichtbar + 1;
     } else {
       karten[i].classList.add('versteckt');
     }
   }
 
+  if (preisWert) {
+    preisWert.textContent = String(maxPreis);
+  }
+
   if (ergebnisAnzahl) {
     ergebnisAnzahl.textContent = sichtbar + ' Produkte im Inventar';
   }
+
   if (keineTrefferMsg) {
-    keineTrefferMsg.style.display = (sichtbar === 0) ? 'block' : 'none';
+    keineTrefferMsg.style.display = sichtbar === 0 ? 'block' : 'none';
   }
 }
 
-if (preisSlider) {
-  preisSlider.addEventListener('input', function() {
-    if (preisWert) { preisWert.textContent = this.value; }
-    preisfilterAnwenden();
-  });
-}
 
-
-/* ── START: Seite geladen → Produkte holen ────────────────────
-   URL-Parameter auslesen: shop.html?kat=schwerter setzt Filter.
+/* ─────────────────────────────────────────────────────────────
+   9. Filter aus URL lesen
+   -------------------------------------------------------------
+   Links wie shop.html?kat=schwerter oder shop.html?filter=digital
+   setzen direkt den passenden Filter-Chip aktiv.
    ─────────────────────────────────────────────────────────── */
-var urlParams   = new URLSearchParams(window.location.search);
-/* URLSearchParams: liest GET-Parameter aus der Browser-URL. */
-var katParam    = urlParams.get('kat');
-/* urlParams.get('kat'): liest den Wert von ?kat=... */
+function filterAusUrlLesen() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var filterAusUrl = urlParams.get('filter') || urlParams.get('kat');
 
-if (katParam) {
-  aktiverFilter = katParam;
-  /* Passenden Chip aktivieren */
-  var chip = document.querySelector('[data-filter="' + katParam + '"]');
-  if (chip) {
-    for (var k = 0; k < filterChips.length; k++) {
-      filterChips[k].classList.remove('aktiv');
-    }
-    chip.classList.add('aktiv');
+  if (filterAusUrl) {
+    aktiverFilter = filterAusUrl;
   }
 }
 
-produkteLaden(aktiverFilter, aktiverSort);
-/* Sofort beim Laden der Seite: Produkte von der DB holen. */
+
+/* ─────────────────────────────────────────────────────────────
+   10. Filter-Chips optisch aktualisieren
+   -------------------------------------------------------------
+   Nur ein Chip darf die Klasse «aktiv» haben.
+   ─────────────────────────────────────────────────────────── */
+function aktiveFilterklasseSetzen() {
+  var filterChips = document.querySelectorAll('.filter-chip');
+
+  for (var i = 0; i < filterChips.length; i++) {
+    var chip = filterChips[i];
+    var chipFilter = chip.getAttribute('data-filter');
+
+    if (chipFilter === aktiverFilter) {
+      chip.classList.add('aktiv');
+    } else {
+      chip.classList.remove('aktiv');
+    }
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   11. Events einrichten
+   -------------------------------------------------------------
+   Hier werden alle Klicks, Eingaben und Änderungen verbunden.
+   ─────────────────────────────────────────────────────────── */
+function eventsEinrichten() {
+  var filterChips = document.querySelectorAll('.filter-chip');
+  var sucheEingabe = document.getElementById('suche-eingabe');
+  var sucheBtn = document.getElementById('suche-btn');
+  var sortAuswahl = document.getElementById('sort-auswahl');
+  var preisSlider = document.getElementById('preis-slider');
+
+  for (var i = 0; i < filterChips.length; i++) {
+    filterChips[i].addEventListener('click', function () {
+      aktiverFilter = this.getAttribute('data-filter') || 'alle';
+
+      if (sucheEingabe) {
+        sucheEingabe.value = '';
+      }
+
+      aktiveFilterklasseSetzen();
+      produkteLaden();
+    });
+  }
+
+  if (sucheEingabe) {
+    sucheEingabe.addEventListener('keyup', sucheAusfuehren);
+  }
+
+  if (sucheBtn) {
+    sucheBtn.addEventListener('click', sucheAusfuehren);
+  }
+
+  if (sortAuswahl) {
+    sortAuswahl.addEventListener('change', function () {
+      aktiverSort = this.value;
+      produkteLaden();
+    });
+  }
+
+  if (preisSlider) {
+    preisSlider.addEventListener('input', preisfilterAnwenden);
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   12. Start der Shop-Seite
+   -------------------------------------------------------------
+   Erst wenn die HTML-Seite geladen ist, werden Filter gelesen,
+   Events verbunden und Produkte geladen.
+   ─────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+  filterAusUrlLesen();
+  aktiveFilterklasseSetzen();
+  eventsEinrichten();
+  produkteLaden();
+});

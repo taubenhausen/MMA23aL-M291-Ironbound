@@ -14,9 +14,9 @@ var ctx = canvas.getContext('2d');
 
 
 // Spielzustand: alle false = Spiel läuft noch nicht beim Laden
-var spielLaeuft   = false;  // true = Spiel ist aktiv
+var spielLaeuft = false;  // true = Spiel ist aktiv
 var spielPausiert = false;  // true = Spiel ist pausiert
-var spielVorbei   = false;  // true = Game Over
+var spielVorbei = false;  // true = Game Over
 
 // frameId speichert die ID von requestAnimationFrame (zum Stoppen)
 var frameId = null;
@@ -344,9 +344,9 @@ function spielBeenden() {
 
   // Game-Over-Meldung und Finalscore im HTML anzeigen
   var gameMeldung = document.getElementById('game-over-meldung');
-  var finalScore  = document.getElementById('game-final-score');
+  var finalScore = document.getElementById('game-final-score');
   if (gameMeldung) { gameMeldung.style.display = 'block'; }
-  if (finalScore)  { finalScore.textContent = score; }
+  if (finalScore) { finalScore.textContent = score; }
 
   // Roten Schleier über Canvas + Text
   ctx.fillStyle = 'rgba(204, 68, 68, 0.15)';
@@ -396,7 +396,7 @@ if (resetBtn) { resetBtn.addEventListener('click', spielNeustart); }
 
 
 // Leertaste: Springen oder Spiel starten
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
   if (event.code === 'Space') {
     event.preventDefault(); // Verhindert Seitenscroll bei Leertaste
     if (!spielLaeuft || spielVorbei) {
@@ -408,13 +408,13 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Klick auf Canvas → Springen oder Starten
-canvas.addEventListener('click', function() {
+canvas.addEventListener('click', function () {
   if (!spielLaeuft || spielVorbei) { spielStarten(); }
   else { spielerSpringen(); }
 });
 
 // Touch auf Canvas (Mobile) → Springen oder Starten
-canvas.addEventListener('touchstart', function(event) {
+canvas.addEventListener('touchstart', function (event) {
   event.preventDefault(); // Standard-Touch-Verhalten unterdrücken
   if (!spielLaeuft || spielVorbei) { spielStarten(); }
   else { spielerSpringen(); }
