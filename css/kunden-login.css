@@ -243,6 +243,7 @@
 .partner-badges {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .partner-badge {
@@ -252,6 +253,7 @@
   color: var(--farbe-text-grau);
   letter-spacing: 1px;
   border-radius: 2px;
+  white-space: nowrap;
   /* Hover-Effekt */
   transition: border-color 0.2s, color 0.2s;
   cursor: pointer;

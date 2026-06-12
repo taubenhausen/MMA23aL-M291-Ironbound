@@ -22,8 +22,8 @@
       <nav class="nav-links" id="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="shop.html" class="nav-link">Arsenal</a>
-        <a href="kunden-login.html#digital-twin" class="nav-link">Digital Twin</a>
-        <a href="kunden-login.html" class="nav-link" id="kunden-nav-link">Kunden-Login</a>
+        <a href="digital-twin.html" class="nav-link">Digital Twin</a>
+        <a href="kunden-login.html" class="nav-link aktiv" id="kunden-nav-link">Kunden-Login</a>
         <a href="#" class="nav-link" id="warenkorb-nav-link">Inventar (<span id="warenkorb-anzahl">0</span>)</a>
       </nav>
 
@@ -38,8 +38,7 @@
 
 
   <!-- ============================================================
-       KUNDEN-LOGIN BANNER
-       Die bestehenden CSS-Klassen bleiben, damit das Aussehen gleich bleibt.
+       BANNER
   ============================================================ -->
   <section class="promo-banner">
     <div class="promo-banner-bg"></div>
@@ -54,8 +53,7 @@
 
 
   <!-- ============================================================
-       KUNDENREGISTRIERUNG + LOGIN
-       Beide Formulare nutzen php/kunden-login.php und die Tabelle Kunden.
+       REGISTRIERUNG + LOGIN
   ============================================================ -->
   <section class="promo-main" id="kunden-login">
     <div class="container">
@@ -120,7 +118,7 @@
         </div>
 
         <!-- RECHTE SEITE: Login ─────────────────────────────── -->
-        <div class="promo-info-bereich">
+        <div class="promo-formular-bereich">
 
           <span class="abschnitt-label">/ Login</span>
           <h2>Einloggen.</h2>
@@ -152,133 +150,8 @@
           <div class="fehler-meldung-db" id="fehler-email-vorhanden"></div>
           <div class="fehler-meldung-db" id="kunden-fehler"></div>
 
-          <ul class="vorteile-liste">
-            <li>
-              <span class="vorteil-icon">✓</span>
-              <div>
-                <strong>Datenbank-Login</strong>
-                <p>Dein Konto wird in der bestehenden Tabelle Kunden gespeichert.</p>
-              </div>
-            </li>
-            <li>
-              <span class="vorteil-icon">✓</span>
-              <div>
-                <strong>Inventar über Bestellungen</strong>
-                <p>Der Warenkorb wird mit Bestellungen und besteht_aus abgebildet.</p>
-              </div>
-            </li>
-          </ul>
-
         </div>
 
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       DIGITAL TWIN SEKTION
-  ============================================================ -->
-  <section class="digital-twin" id="digital-twin">
-    <div class="container">
-
-      <span class="abschnitt-label">/ Digital Twin</span>
-      <h2>Real kaufen. Digital spielen.</h2>
-
-      <div class="twin-grid">
-
-        <div class="twin-erklaerung">
-          <p>
-            Jeder Kauf enthält ein lizenziertes In-Game Item für unsere Partnerschaftsspiele.
-            Deine Waffe existiert in beiden Welten — real in deinen Händen und digital im Spiel.
-          </p>
-          <div class="twin-schritte">
-            <div class="schritt">
-              <div class="schritt-nummer">1</div>
-              <div class="schritt-text">Waffe im Shop kaufen</div>
-            </div>
-            <div class="schritt-pfeil">→</div>
-            <div class="schritt">
-              <div class="schritt-nummer">2</div>
-              <div class="schritt-text">Redeem-Code per E-Mail</div>
-            </div>
-            <div class="schritt-pfeil">→</div>
-            <div class="schritt">
-              <div class="schritt-nummer">3</div>
-              <div class="schritt-text">Im Spiel einlösen</div>
-            </div>
-          </div>
-          <div class="partner-label">Partner-Spiele</div>
-          <div class="partner-badges">
-            <span class="partner-badge">Game A</span>
-            <span class="partner-badge">Game B</span>
-            <span class="partner-badge">Game C</span>
-          </div>
-        </div>
-
-        <div class="twin-visual">
-          <div class="twin-box">
-            <div class="twin-physisch">
-              <div class="twin-icon">⚙</div>
-              <div class="twin-label">Physisch</div>
-            </div>
-            <div class="twin-verbindung">
-              <div class="verbindungs-linie">
-                <div class="verbindungs-puls"></div>
-              </div>
-            </div>
-            <div class="twin-digital">
-              <div class="twin-icon">🎮</div>
-              <div class="twin-label">Digital</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       VERSUS RUNNER — bestehendes interaktives Game bleibt erhalten
-  ============================================================ -->
-  <section class="game-sektion">
-    <div class="container">
-
-      <span class="abschnitt-label">/ Versus Runner</span>
-      <h2>Teste deine Reaktion.</h2>
-      <p class="game-beschreibung">
-        Steuere deinen Kämpfer und weiche den anfliegenden Waffen-Hindernissen aus.
-        Je länger du überlebst, desto höher dein Score.
-      </p>
-
-      <div class="game-hud">
-        <div class="hud-element">
-          <div class="hud-wert" id="game-score">000</div>
-          <div class="hud-label">Score</div>
-        </div>
-        <div class="hud-element">
-          <div class="hud-wert" id="game-highscore">000</div>
-          <div class="hud-label">Highscore</div>
-        </div>
-      </div>
-
-      <canvas id="game-canvas" width="800" height="220"></canvas>
-
-      <p class="game-steuerung">
-        Steuerung: <strong>Leertaste</strong> oder <strong>Tippen/Klicken</strong> = Sprung
-      </p>
-
-      <div class="game-buttons">
-        <button class="btn btn-primary" id="game-start-btn">▶ Starten</button>
-        <button class="btn btn-ghost" id="game-pause-btn">⏸ Pause</button>
-        <button class="btn btn-ghost" id="game-reset-btn">↺ Neustart</button>
-      </div>
-
-      <div class="game-over-meldung" id="game-over-meldung">
-        GAME OVER — Score: <span id="game-final-score">0</span>
       </div>
 
     </div>
@@ -306,7 +179,7 @@
         <div class="footer-spalte">
           <strong>Shop</strong>
           <a href="shop.html">Arsenal</a>
-          <a href="shop.html?kat=digital">Digital Twin</a>
+          <a href="digital-twin.html">Digital Twin</a>
           <a href="kunden-login.html">Kunden-Login</a>
         </div>
 
@@ -340,8 +213,6 @@
 
   <script src="js/common.js" defer></script>
   <script src="js/kunden-login.js" defer></script>
-  <script src="js/partner-games.js" defer></script>
-  <script src="js/game.js" defer></script>
 
 </body>
 </html>
