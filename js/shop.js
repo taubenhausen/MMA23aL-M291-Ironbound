@@ -21,12 +21,14 @@
    zum Beispiel beim lokalen Öffnen der HTML-Datei oder auf GitHub Pages.
    ─────────────────────────────────────────────────────────── */
 var FALLBACK_PRODUKTE = [
-  { id: 1, nummer: '001', name: 'Gladius Romanus', kategorie: 'Schwerter · Einsteiger', filter_tags: 'schwerter einsteiger digital', preis: 249, skill_level: 'Einsteiger', skill_pct: 35, digital_twin: true, bestseller: false, bild: 'img/prod1-placeholder.svg' },
-  { id: 2, nummer: '002', name: 'M4 Replika', kategorie: 'Schusswaffen · Profi', filter_tags: 'schusswaffen profi', preis: 599, skill_level: 'Profi', skill_pct: 100, digital_twin: false, bestseller: true, bild: 'img/prod2-placeholder.svg' },
-  { id: 3, nummer: '003', name: 'Langbogen 60"', kategorie: 'Bögen · Einsteiger', filter_tags: 'bogen einsteiger digital', preis: 189, skill_level: 'Einsteiger', skill_pct: 30, digital_twin: true, bestseller: false, bild: 'img/prod3-placeholder.svg' },
+  { id: 1, nummer: '001', name: 'Gladius Romanus', kategorie: 'Schwerter · Einsteiger', filter_tags: 'schwerter digital', preis: 249, skill_level: 'Einsteiger', skill_pct: 35, digital_twin: true, bestseller: false, bild: 'img/prod1-placeholder.svg' },
+  { id: 2, nummer: '002', name: 'M4 Replika', kategorie: 'Schusswaffen · Profi', filter_tags: 'schusswaffen profi digital', preis: 599, skill_level: 'Profi', skill_pct: 100, digital_twin: true, bestseller: true, bild: 'img/prod2-placeholder.svg' },
+  { id: 3, nummer: '003', name: 'Langbogen 60"', kategorie: 'Bögen · Einsteiger', filter_tags: 'bogen digital', preis: 189, skill_level: 'Einsteiger', skill_pct: 30, digital_twin: true, bestseller: false, bild: 'img/prod3-placeholder.svg' },
   { id: 4, nummer: '004', name: 'Kampfmesser', kategorie: 'Messer · Fortgeschritten', filter_tags: 'messer fortgeschritten', preis: 149, skill_level: 'Fortgeschritten', skill_pct: 65, digital_twin: false, bestseller: false, bild: 'img/prod4-placeholder.svg' },
   { id: 5, nummer: '005', name: 'Armbrust Pro', kategorie: 'Bögen · Fortgeschritten', filter_tags: 'bogen fortgeschritten digital', preis: 399, skill_level: 'Fortgeschritten', skill_pct: 70, digital_twin: true, bestseller: false, bild: 'img/prod5-placeholder.svg' },
-  { id: 6, nummer: '006', name: 'Speer Replika', kategorie: 'Stangenwaffen · Einsteiger', filter_tags: 'stangenwaffen einsteiger', preis: 99, skill_level: 'Einsteiger', skill_pct: 20, digital_twin: false, bestseller: false, bild: 'img/prod6-placeholder.svg' }
+  { id: 6, nummer: '006', name: 'Speer Replika', kategorie: 'Stangenwaffen · Einsteiger', filter_tags: 'stangenwaffen', preis: 99, skill_level: 'Einsteiger', skill_pct: 20, digital_twin: false, bestseller: false, bild: 'img/prod6-placeholder.svg' },
+  { id: 7, nummer: '007', name: 'Desert Eagle Replika', kategorie: 'Schusswaffen · Profi', filter_tags: 'schusswaffen profi digital', preis: 749, skill_level: 'Profi', skill_pct: 100, digital_twin: true, bestseller: false, bild: 'img/prod2-placeholder.svg' },
+  { id: 8, nummer: '008', name: 'Winchester Karabiner', kategorie: 'Schusswaffen · Profi', filter_tags: 'schusswaffen profi digital', preis: 899, skill_level: 'Profi', skill_pct: 100, digital_twin: true, bestseller: false, bild: 'img/prod2-placeholder.svg' }
 ];
 
 
@@ -105,7 +107,7 @@ function produktKarteHtml(produkt) {
 
         '<div class="karten-fuss">' +
           '<span class="karten-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
-          '<button class="btn btn-klein" type="button">+ Inventar</button>' +
+          '<button class="btn btn-klein inventar-btn" type="button" data-produkt-id="' + htmlEscapen(p.id) + '">+ Inventar</button>' +
         '</div>' +
       '</div>' +
     '</div>'
@@ -268,6 +270,75 @@ function preisfilterAnwenden() {
 }
 
 
+
+/* ─────────────────────────────────────────────────────────────
+   Produkt ins Inventar legen
+   -------------------------------------------------------------
+   Der Button nutzt die bestehenden Tabellen Bestellungen und
+   besteht_aus. Wenn kein Kunde eingeloggt ist, wird zur Login-Seite
+   weitergeleitet.
+   ─────────────────────────────────────────────────────────── */
+function produktInsInventarLegen(produktId) {
+  var daten = new FormData();
+  daten.set('action', 'hinzufuegen');
+  daten.set('produkt_id', produktId);
+
+  fetch('php/warenkorb.php', {
+    method: 'POST',
+    body: daten
+  })
+    .then(function(antwort) { return antwort.json(); })
+    .then(function(daten) {
+      if (daten.status === 'nicht_eingeloggt') {
+        window.location.href = 'kunden-login.html';
+        return;
+      }
+
+      if (daten.status !== 'ok') {
+        alert(daten.meldung || 'Produkt konnte nicht hinzugefügt werden.');
+        return;
+      }
+
+      if (window.IRONBOUND && window.IRONBOUND.warenkorbAnzahlAktualisieren) {
+        window.IRONBOUND.warenkorbAnzahlAktualisieren();
+      }
+
+      alert('Produkt wurde ins Inventar gelegt.');
+    })
+    .catch(function() {
+      alert('Datenbankfehler beim Inventar.');
+    });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Klicks auf Inventar-Buttons verarbeiten
+   -------------------------------------------------------------
+   Event-Delegation: Wir hängen nur einen Listener ans Raster.
+   Dadurch funktionieren die Buttons auch nach dem Nachladen aus
+   der Datenbank.
+   ─────────────────────────────────────────────────────────── */
+function inventarButtonsEinrichten() {
+  var raster = document.getElementById('inventar-raster');
+
+  if (!raster) {
+    return;
+  }
+
+  raster.addEventListener('click', function(event) {
+    var button = event.target.closest('.inventar-btn');
+
+    if (!button) {
+      return;
+    }
+
+    var produktId = Number(button.getAttribute('data-produkt-id') || 0);
+
+    if (produktId > 0) {
+      produktInsInventarLegen(produktId);
+    }
+  });
+}
+
 /* ─────────────────────────────────────────────────────────────
    9. Filter aus URL lesen
    -------------------------------------------------------------
@@ -361,5 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
   filterAusUrlLesen();
   aktiveFilterklasseSetzen();
   eventsEinrichten();
+  inventarButtonsEinrichten();
   produkteLaden();
 });

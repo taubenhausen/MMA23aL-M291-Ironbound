@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   for (var i = 0; i < alleNavLinks.length; i++) {
     var link = alleNavLinks[i];
-    var linkZiel = link.getAttribute('href').split('#')[0];
+    var href = link.getAttribute('href') || '';
+    var linkZiel = href.split('#')[0];
 
     link.classList.remove('aktiv');
 
@@ -222,4 +223,186 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+});
+
+/* ============================================================
+   Kundenstatus und Inventar-Anzeige
+   ------------------------------------------------------------
+   Dieser Block ist bewusst separat am Ende der Datei.
+   Er aktualisiert oben in der Navigation den Kunden-Login und den
+   Warenkorb-Zähler aus der Datenbank.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Warenkorb-Zähler oben in der Navigation aktualisieren
+   ------------------------------------------------------------ */
+window.IRONBOUND.warenkorbAnzahlAktualisieren = function() {
+  var anzahlElement = document.getElementById('warenkorb-anzahl');
+  if (!anzahlElement) return Promise.resolve();
+
+  return fetch('php/warenkorb.php?action=status')
+    .then(function(antwort) { return antwort.json(); })
+    .then(function(daten) {
+      anzahlElement.textContent = String(daten.anzahl || 0);
+    })
+    .catch(function() {
+      anzahlElement.textContent = '0';
+    });
+};
+
+/* ------------------------------------------------------------
+   Aktuellen Kundenstatus oben anzeigen
+   ------------------------------------------------------------ */
+window.IRONBOUND.kundenStatusAktualisieren = function() {
+  var kundenLink = document.getElementById('kunden-nav-link');
+  var kundenMenu = document.getElementById('kunden-konto-menu');
+
+  return fetch('php/kunden-login.php?action=status')
+    .then(function(antwort) { return antwort.json(); })
+    .then(function(daten) {
+      if (daten.status === 'ok' && daten.eingeloggt && daten.kunde) {
+        window.IRONBOUND.kundenMenuAnzeigen(daten.kunde.name || 'Mein Konto');
+      } else {
+        window.IRONBOUND.kundenLoginLinkAnzeigen();
+      }
+    })
+    .catch(function() {
+      window.IRONBOUND.kundenLoginLinkAnzeigen();
+    });
+};
+
+/* ------------------------------------------------------------
+   Kundenname als Hover-Menü anzeigen
+   ------------------------------------------------------------
+   Der Name selber löst keine Aktion aus. Nur der Button im
+   aufgeklappten Menü meldet den Kunden ab.
+   ------------------------------------------------------------ */
+window.IRONBOUND.kundenMenuAnzeigen = function(kundenName) {
+  var vorhandenesMenu = document.getElementById('kunden-konto-menu');
+
+  if (vorhandenesMenu) {
+    var nameElement = vorhandenesMenu.querySelector('.kunden-name-text');
+    if (nameElement) {
+      nameElement.textContent = kundenName;
+    }
+    return;
+  }
+
+  var kundenLink = document.getElementById('kunden-nav-link');
+  if (!kundenLink || !kundenLink.parentNode) return;
+
+  var menu = document.createElement('div');
+  menu.className = 'nav-konto-menu';
+  menu.id = 'kunden-konto-menu';
+
+  var nameSpan = document.createElement('span');
+  nameSpan.className = 'nav-link kunden-name-text';
+  nameSpan.textContent = kundenName;
+
+  var dropdown = document.createElement('div');
+  dropdown.className = 'konto-dropdown';
+
+  var logoutBtn = document.createElement('button');
+  logoutBtn.type = 'button';
+  logoutBtn.className = 'konto-logout-btn';
+  logoutBtn.textContent = 'Ausloggen';
+
+  logoutBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    fetch('php/kunden-login.php?action=logout')
+      .then(function() {
+        window.location.reload();
+      });
+  });
+
+  dropdown.appendChild(logoutBtn);
+  menu.appendChild(nameSpan);
+  menu.appendChild(dropdown);
+
+  kundenLink.replaceWith(menu);
+};
+
+/* ------------------------------------------------------------
+   Normalen Kunden-Login-Link anzeigen
+   ------------------------------------------------------------
+   Diese Funktion wird genutzt, wenn kein Kunde eingeloggt ist
+   oder wenn der Status-Aufruf nicht funktioniert.
+   ------------------------------------------------------------ */
+window.IRONBOUND.kundenLoginLinkAnzeigen = function() {
+  var kundenMenu = document.getElementById('kunden-konto-menu');
+
+  if (kundenMenu && kundenMenu.parentNode) {
+    var link = document.createElement('a');
+    link.href = 'kunden-login.html';
+    link.className = 'nav-link';
+    link.id = 'kunden-nav-link';
+    link.textContent = 'Kunden-Login';
+
+    kundenMenu.replaceWith(link);
+    return;
+  }
+
+  var kundenLink = document.getElementById('kunden-nav-link');
+  if (!kundenLink) return;
+
+  kundenLink.textContent = 'Kunden-Login';
+  kundenLink.href = 'kunden-login.html';
+  kundenLink.onclick = null;
+};
+
+/* ------------------------------------------------------------
+   Inventar beim Klick anzeigen
+   ------------------------------------------------------------
+   Für das Schulprojekt reicht hier eine einfache Liste per alert().
+   Die Daten kommen trotzdem sauber aus Bestellungen und besteht_aus.
+   ------------------------------------------------------------ */
+window.IRONBOUND.warenkorbAnzeigen = function(event) {
+  if (event) event.preventDefault();
+
+  fetch('php/warenkorb.php?action=liste')
+    .then(function(antwort) { return antwort.json(); })
+    .then(function(daten) {
+      if (daten.status === 'nicht_eingeloggt') {
+        window.location.href = 'kunden-login.html';
+        return;
+      }
+
+      if (daten.status !== 'ok') {
+        alert(daten.meldung || 'Inventar konnte nicht geladen werden.');
+        return;
+      }
+
+      if (!daten.produkte || daten.produkte.length === 0) {
+        alert('Dein Inventar ist noch leer.');
+        return;
+      }
+
+      var zeilen = ['Dein Inventar / Warenkorb:', ''];
+      daten.produkte.forEach(function(produkt) {
+        zeilen.push(produkt.menge + '× ' + produkt.name + ' — CHF ' + Number(produkt.positions_total || 0).toFixed(2));
+      });
+      zeilen.push('');
+      zeilen.push('Total: CHF ' + Number(daten.bestellung.totale_kosten || 0).toFixed(2));
+
+      alert(zeilen.join('\n'));
+    })
+    .catch(function() {
+      alert('Inventar konnte nicht geladen werden.');
+    });
+};
+
+/* ------------------------------------------------------------
+   Kunden- und Inventar-Status beim Laden jeder Seite starten
+   ------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded', function() {
+  var warenkorbLink = document.getElementById('warenkorb-nav-link');
+
+  if (warenkorbLink) {
+    warenkorbLink.addEventListener('click', window.IRONBOUND.warenkorbAnzeigen);
+  }
+
+  window.IRONBOUND.kundenStatusAktualisieren();
+  window.IRONBOUND.warenkorbAnzahlAktualisieren();
 });

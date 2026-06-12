@@ -5,9 +5,9 @@
 
 ```
 ironbound/
-├── index.html           ← Homepage (Hero, Sortiment, Promotionen, Newsletter-Formular)
+├── index.html           ← Homepage (Hero, Sortiment, Kunden-Loginen, Newsletter-Formular)
 ├── shop.html            ← Shop / Produktliste (Suche, Filter, Produktraster)
-├── promotion.html       ← Promotion Page (Formular + Versus Runner Game)
+├── kunden-login.html       ← Kunden-Login Page (Formular + Versus Runner Game)
 ├── css/
 │   └── style.css        ← Alle Styles (dark theme, responsive 500–1400px)
 ├── js/

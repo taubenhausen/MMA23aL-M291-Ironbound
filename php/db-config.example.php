@@ -16,7 +16,7 @@ declare(strict_types=1);
 /* ─────────────────────────────────────────────────────────────
    Zentrale Datenbankverbindung
    -------------------------------------------------------------
-   Diese Funktion wird von shop-produkte.php und promotion-speichern.php
+   Diese Funktion wird von shop-produkte.php und kunden-login.php
    mit require_once geladen.
    ─────────────────────────────────────────────────────────── */
 function db_verbinden(): PDO

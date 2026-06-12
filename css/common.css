@@ -1,7 +1,7 @@
 /* ============================================================
    common.css — IRONBOUND
    Gemeinsame Styles für ALLE drei Seiten.
-   Wird auf index.html, shop.html und promotion.html eingebunden.
+   Wird auf index.html, shop.html und kunden-login.html eingebunden.
    Enthält: Reset, Variablen, Header, Navigation, Footer, Buttons,
             Formular-Grundstyles, Spinner.
    ============================================================ */
@@ -318,6 +318,67 @@ h3 {
   /* Goldener Unterstrich für den aktiven Link. */
 }
 
+
+/* Kunden-Menü in der Navigation
+   ------------------------------------------------------------
+   Wenn ein Kunde eingeloggt ist, wird nur der Name angezeigt.
+   Der Name selber hat keine Klick-Aktion. Der Logout erscheint
+   erst beim Hover darunter. */
+.nav-konto-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.kunden-name-text {
+  cursor: default;
+  user-select: none;
+}
+
+.konto-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  padding: 8px;
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 4px;
+  background-color: var(--farbe-karte);
+  box-shadow: var(--schatten);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 20;
+}
+
+.nav-konto-menu:hover .konto-dropdown,
+.nav-konto-menu:focus-within .konto-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.konto-logout-btn {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 3px;
+  background-color: transparent;
+  color: var(--farbe-text-grau);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.konto-logout-btn:hover {
+  color: var(--farbe-gold);
+  border-color: var(--farbe-gold);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
 .hamburger-btn {
   display: none;
   /* Standardmässig versteckt. @media macht ihn auf Mobile sichtbar. */
@@ -496,6 +557,7 @@ h3 {
 .form-gruppe input[type="email"],
 .form-gruppe input[type="number"],
 .form-gruppe input[type="tel"],
+.form-gruppe input[type="password"],
 .form-gruppe select,
 .form-gruppe textarea {
   /* [type="text"] = Attributselektor: nur Inputs mit diesem Attribut-Wert. */
@@ -512,6 +574,44 @@ h3 {
   font-family: inherit;
   /* Schrift vom body erben. Sonst: Browser-Standard (Times New Roman). */
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+
+/* Passwortfeld mit Augen-Button
+   ------------------------------------------------------------
+   Der Wrapper sorgt dafür, dass der Augen-Button im Feld sitzt,
+   ohne das bestehende Design der Inputs zu verändern. */
+.passwort-feld-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.passwort-feld-wrap input {
+  padding-right: 48px;
+}
+
+.passwort-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--farbe-text-grau);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.passwort-toggle:hover {
+  color: var(--farbe-gold);
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 .form-gruppe input:focus,
