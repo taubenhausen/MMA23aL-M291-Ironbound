@@ -5,7 +5,7 @@
 <!-- Wurzelelement. ALLES andere ist darin enthalten. lang="de" = Sprache Deutsch. -->
 
 <head>
-<!-- Unsichtbarer Kopfbereich: enthält Metadaten, CSS-Verknüpfungen, Seitentitel. -->
+  <!-- Unsichtbarer Kopfbereich: enthält Metadaten, CSS-Verknüpfungen, Seitentitel. -->
 
   <meta charset="UTF-8">
   <!-- Zeichenset UTF-8: alle Zeichen werden korrekt angezeigt (ä, ö, ü, Emojis usw.). -->
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<!-- Sichtbarer Seiteninhalt. Alles was der User sieht, kommt hierher. -->
+  <!-- Sichtbarer Seiteninhalt. Alles was der User sieht, kommt hierher. -->
 
 
   <!-- ============================================================
@@ -34,18 +34,18 @@
   ============================================================ -->
 
   <header class="site-header" id="site-header">
-  <!-- header = semantisches HTML für den Kopfbereich. -->
-  <!-- class="site-header" = CSS-Styles aus common.css werden angewendet. -->
-  <!-- id="site-header" = JS greift darauf zu (Schatten beim Scrollen hinzufügen). -->
+    <!-- header = semantisches HTML für den Kopfbereich. -->
+    <!-- class="site-header" = CSS-Styles aus common.css werden angewendet. -->
+    <!-- id="site-header" = JS greift darauf zu (Schatten beim Scrollen hinzufügen). -->
 
     <div class="header-inner">
-    <!-- div = unsichtbare Box. class="header-inner" = zentriert Inhalt auf max. 1200px. -->
+      <!-- div = unsichtbare Box. class="header-inner" = zentriert Inhalt auf max. 1200px. -->
 
       <a href="index.html" class="logo">IRONBOUND</a>
       <!-- a = Link. href = Ziel. Klick auf Logo = zurück zur Startseite. -->
 
       <nav class="nav-links" id="nav-links">
-      <!-- nav = semantisches Element für Navigation. id = JS öffnet/schliesst Menü. -->
+        <!-- nav = semantisches Element für Navigation. id = JS öffnet/schliesst Menü. -->
 
         <a href="index.html" class="nav-link aktiv">Home</a>
         <!-- Interner Link zur Startseite. class="aktiv" = gold unterstrichen (aktuelle Seite). -->
@@ -61,7 +61,7 @@
       </nav>
 
       <button class="hamburger-btn" id="hamburger-btn">
-      <!-- button = klickbares Element. Auf Mobile sichtbar, auf Desktop versteckt (CSS). -->
+        <!-- button = klickbares Element. Auf Mobile sichtbar, auf Desktop versteckt (CSS). -->
 
         <span></span>
         <!-- Erster Strich des Hamburger-Icons. Leer — wird per CSS als Linie gezeichnet. -->
@@ -85,20 +85,20 @@
   ============================================================ -->
 
   <section class="hero">
-  <!-- section = semantischer Inhaltsbereich. class = CSS-Styles. -->
+    <!-- section = semantischer Inhaltsbereich. class = CSS-Styles. -->
 
     <div class="hero-bg"></div>
     <!-- Leeres div. Wird per CSS als Gradient-Hintergrund gezeichnet (CSS-Anforderung). -->
 
     <div class="hero-inhalt">
-    <!-- Inhalt-Box. position:relative damit er über .hero-bg liegt. -->
+      <!-- Inhalt-Box. position:relative damit er über .hero-bg liegt. -->
 
       <p class="hero-eyebrow einblenden">ARSENAL · DIGITAL TWIN · 18+</p>
       <!-- Kleiner Text über dem Titel. class="einblenden" startet die CSS-Einblend-Animation. -->
 
       <h1 class="hero-titel einblenden-verzoegert">
-      <!-- h1 = wichtigste Überschrift. Nur EINE h1 pro Seite! -->
-      <!-- "einblenden-verzoegert" = animation-delay: 0.3s → erscheint 0.3s nach Laden. -->
+        <!-- h1 = wichtigste Überschrift. Nur EINE h1 pro Seite! -->
+        <!-- "einblenden-verzoegert" = animation-delay: 0.3s → erscheint 0.3s nach Laden. -->
 
         Die Spitze der<br>Waffenkunst.
         <!-- br = Zeilenumbruch innerhalb des Titels. -->
@@ -106,14 +106,14 @@
       </h1>
 
       <p class="hero-text einblenden-spaet">
-      <!-- "einblenden-spaet" = animation-delay: 0.6s → erscheint nach dem Titel. -->
+        <!-- "einblenden-spaet" = animation-delay: 0.6s → erscheint nach dem Titel. -->
 
         Historische Waffen, Trainingsrepliken und moderne Präzisionsmodelle —
         jetzt mit digitalem Gegenstück im Spiel.
       </p>
 
       <div class="hero-buttons einblenden-spaet">
-      <!-- div gruppiert die zwei Buttons. Flexbox macht sie nebeneinander. -->
+        <!-- div gruppiert die zwei Buttons. Flexbox macht sie nebeneinander. -->
 
         <a href="shop.html" class="btn btn-primary">Arsenal betreten</a>
         <!-- Primär-Button: weiss gefüllt. Hover → wird gold. -->
@@ -133,10 +133,10 @@
   ============================================================ -->
 
   <section class="ueber-uns" id="ueber-uns">
-  <!-- id="ueber-uns" = könnte als Anker-Ziel dienen. -->
+    <!-- id="ueber-uns" = könnte als Anker-Ziel dienen. -->
 
     <div class="container">
-    <!-- container = begrenzt auf max. 1200px und zentriert. Auf allen Sektionen verwendet. -->
+      <!-- container = begrenzt auf max. 1200px und zentriert. Auf allen Sektionen verwendet. -->
 
       <span class="abschnitt-label">/ Über uns</span>
       <!-- span = Inline-Element. Kleines goldenes Label über der Überschrift. -->
@@ -145,10 +145,10 @@
       <!-- h2 = zweite Überschrift. Mehrere h2 pro Seite erlaubt. -->
 
       <div class="zwei-spalten">
-      <!-- Flexbox: zwei gleichbreite Spalten nebeneinander. Auf Mobile untereinander. -->
+        <!-- Flexbox: zwei gleichbreite Spalten nebeneinander. Auf Mobile untereinander. -->
 
         <div class="spalte">
-        <!-- Linke Spalte: Fliesstext. flex:1 = nimmt gleich viel Platz wie rechte Spalte. -->
+          <!-- Linke Spalte: Fliesstext. flex:1 = nimmt gleich viel Platz wie rechte Spalte. -->
 
           <p>
             Ironbound verbindet historische Präzision mit digitaler Innovation.
@@ -164,10 +164,10 @@
         </div>
 
         <div class="spalte statistiken">
-        <!-- Rechte Spalte. Zusatzklasse "statistiken" = flex-direction: column. -->
+          <!-- Rechte Spalte. Zusatzklasse "statistiken" = flex-direction: column. -->
 
           <div class="stat">
-          <!-- Einzelne Statistik-Box. Trennlinie unten via CSS border-bottom. -->
+            <!-- Einzelne Statistik-Box. Trennlinie unten via CSS border-bottom. -->
 
             <strong class="stat-zahl">500+</strong>
             <!-- strong = fett + semantisch wichtig. Grosse Zahl. -->
@@ -201,7 +201,7 @@
   ============================================================ -->
 
   <section class="sortiment" id="sortiment">
-  <!-- id="sortiment" = Ziel des Anker-Links href="#sortiment" oben. -->
+    <!-- id="sortiment" = Ziel des Anker-Links href="#sortiment" oben. -->
 
     <div class="container">
 
@@ -209,10 +209,10 @@
       <h2>Wähle deine Waffe.</h2>
 
       <div class="kategorien-raster">
-      <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
+        <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
 
         <a href="shop.html?kat=schusswaffen" class="kategorie-kachel">
-        <!-- a als Block-Element. ?kat=schusswaffen = URL-Parameter (könnte JS auslesen). -->
+          <!-- a als Block-Element. ?kat=schusswaffen = URL-Parameter (könnte JS auslesen). -->
 
           <div class="kachel-nummer">01</div>
           <!-- Nummerierung oben links auf der Kachel. -->
@@ -257,7 +257,7 @@
         </a>
 
         <a href="kunden-login.html#digital-twin" class="kategorie-kachel kachel-highlight">
-        <!-- Zusatzklasse "kachel-highlight" = goldener Rand (spezielle Kachel). -->
+          <!-- Zusatzklasse "kachel-highlight" = goldener Rand (spezielle Kachel). -->
 
           <div class="kachel-badge">NEU</div>
           <!-- Badge-Label oben. Nur auf dieser Kachel sichtbar. -->
@@ -305,15 +305,15 @@
   ============================================================ -->
 
   <footer class="site-footer">
-  <!-- footer = semantisches HTML für den Fussbereich. -->
+    <!-- footer = semantisches HTML für den Fussbereich. -->
 
     <div class="container">
 
       <div class="footer-raster">
-      <!-- CSS Grid: 2fr 1fr 1fr 1fr = linke Spalte doppelt so breit. -->
+        <!-- CSS Grid: 2fr 1fr 1fr 1fr = linke Spalte doppelt so breit. -->
 
         <div class="footer-logo-bereich">
-        <!-- Logo-Spalte: Logo + Beschreibung + Social Links. -->
+          <!-- Logo-Spalte: Logo + Beschreibung + Social Links. -->
 
           <strong>IRONBOUND</strong>
           <!-- strong = fett. Logo-Text. -->
@@ -321,9 +321,10 @@
           <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
 
           <div class="social-links">
-          <!-- Flexbox: drei Icon-Buttons nebeneinander. -->
+            <!-- Flexbox: drei Icon-Buttons nebeneinander. -->
 
-            <a href="https://www.instagram.com/reel/DYrQNvUTdOq/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="social-link" title="Instagram">IG</a>
+            <a href="https://www.instagram.com/reel/DYrQNvUTdOq/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
+              class="social-link" title="Instagram">IG</a>
             <a href="https://youtu.be/dQw4w9WgXcQ?si=vUtqieOJpkXjKWvx" class="social-link" title="YouTube">YT</a>
             <a href="https://x.com/Catsillyness/status/2065087834734592231?s=20" class="social-link" title="X">X</a>
 
