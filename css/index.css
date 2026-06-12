@@ -1,0 +1,520 @@
+/* ============================================================
+   index.css — IRONBOUND Startseite
+   Seiten-spezifische Styles für index.html
+   ============================================================ */
+
+
+/* ── HERO ──────────────────────────────────────────────────────
+   Vollbild, Hintergrundeffekt: Gradient (CSS-Anforderung)
+   ─────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--nav-hoehe));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Hintergrundeffekt: Gradient (CSS-Anforderung) */
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #060608 0%, #1a100a 50%, #0a0a10 100%);
+}
+
+.hero-inhalt {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--farbe-gold);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.hero-titel {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--farbe-weiss);
+  margin-bottom: 24px;
+  max-width: 700px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-text {
+  font-size: 1.1rem;
+  color: var(--farbe-text-grau);
+  max-width: 500px;
+  margin-bottom: 36px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+
+/* ── CSS-ANIMATIONEN (Anforderung: Text-Animation) ─────────────
+   Hero-Elemente blenden nacheinander ein.
+   ─────────────────────────────────────────────────────────── */
+
+/* Keyframes: von unten + transparent nach normal */
+@keyframes einblenden {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.einblenden {
+  animation: einblenden 0.8s ease forwards;
+}
+
+.einblenden-verzoegert {
+  opacity: 0;
+  animation: einblenden 0.8s ease 0.3s forwards;
+}
+
+.einblenden-spaet {
+  opacity: 0;
+  animation: einblenden 0.8s ease 0.6s forwards;
+}
+
+
+/* ── ÜBER UNS ──────────────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.ueber-uns {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+  background-color: var(--farbe-dunkel);
+}
+
+.zwei-spalten {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+.spalte {
+  flex: 1;
+}
+
+.spalte p {
+  color: var(--farbe-text-grau);
+  margin-bottom: 16px;
+}
+
+.statistiken {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--farbe-rahmen);
+}
+
+.stat:last-child {
+  border-bottom: none;
+}
+
+.stat-zahl {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--farbe-weiss);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  color: var(--farbe-text-grau);
+  text-transform: uppercase;
+}
+
+
+/* ── SORTIMENT / KATEGORIEN ────────────────────────────────────
+   CSS Grid: 3 Spalten
+   ─────────────────────────────────────────────────────────── */
+.sortiment {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+}
+
+.kategorien-raster {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.kategorie-kachel {
+  display: block;
+  background-color: var(--farbe-dunkel);
+  border: 1px solid var(--farbe-rahmen);
+  padding: 32px;
+  position: relative;
+  /* Übergang für Hover-Effekte */
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* Hover-Effekt: Rahmen leuchtet gold */
+.kategorie-kachel:hover {
+  border-color: var(--farbe-gold);
+  background-color: rgba(200, 160, 96, 0.05);
+}
+
+/* Hover-Effekt: Pfeil bewegt sich */
+.kategorie-kachel:hover .kachel-pfeil {
+  transform: translateX(8px);
+  color: var(--farbe-gold);
+}
+
+.kachel-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--farbe-gold);
+  border: 1px solid var(--farbe-gold);
+  padding: 2px 8px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.kachel-nummer {
+  font-size: 0.75rem;
+  color: var(--farbe-text-grau);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.kachel-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--farbe-weiss);
+  margin-bottom: 6px;
+}
+
+.kachel-sub {
+  font-size: 0.85rem;
+  color: var(--farbe-text-grau);
+  margin-bottom: 16px;
+}
+
+.kachel-pfeil {
+  font-size: 1.1rem;
+  color: var(--farbe-text-grau);
+  transition: transform 0.2s, color 0.2s;
+}
+
+.kachel-highlight {
+  border-color: rgba(200, 160, 96, 0.25);
+}
+
+
+/* ── PRODUKTE ──────────────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.produkte {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+}
+
+.produkt-raster {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.produktkarte {
+  background-color: var(--farbe-karte);
+  border: 1px solid var(--farbe-rahmen);
+  border-radius: 4px;
+  overflow: hidden;
+  /* Rahmeneffekt: Schatten (CSS-Anforderung) */
+  box-shadow: var(--schatten-karte);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+/* Hover-Effekt: Karte hebt sich */
+.produktkarte:hover {
+  border-color: var(--farbe-gold);
+  box-shadow: 0 8px 32px rgba(200, 160, 96, 0.15);
+  transform: translateY(-4px);
+}
+
+.produkt-bild {
+  position: relative;
+  background-color: var(--farbe-dunkel);
+  overflow: hidden;
+}
+
+.produkt-bild img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+/* Hover-Effekt: Bild-Zoom */
+.produktkarte:hover .produkt-bild img {
+  transform: scale(1.05);
+}
+
+.digital-badge,
+.bestseller-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  font-weight: 600;
+  border-radius: 2px;
+}
+
+.digital-badge {
+  background-color: rgba(74, 138, 90, 0.9);
+  color: #fff;
+}
+
+.bestseller-badge {
+  background-color: var(--farbe-gold);
+  color: #111;
+}
+
+.produkt-info {
+  padding: 16px;
+}
+
+.produkt-kategorie {
+  font-size: 0.75rem;
+  color: var(--farbe-text-grau);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.produkt-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--farbe-weiss);
+  margin-bottom: 14px;
+}
+
+.produkt-fuss {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.produkt-preis {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--farbe-gold);
+}
+
+.mehr-link {
+  text-align: center;
+}
+
+
+/* ── PROMOTIONEN / SLIDER ──────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.promotionen {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+  background-color: var(--farbe-dunkel);
+}
+
+.slider {
+  position: relative;
+  border: 1px solid var(--farbe-rahmen);
+  overflow: hidden;
+  border-radius: 4px;
+  /* Rahmeneffekt: Schatten */
+  box-shadow: var(--schatten);
+}
+
+.slide {
+  display: none;
+  position: relative;
+}
+
+.slide.aktiv {
+  display: block;
+}
+
+.slide img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  filter: brightness(0.55);
+}
+
+.slide-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  /* Hintergrundeffekt: Gradient (CSS-Anforderung) */
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+}
+
+.slide-tag {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--farbe-gold);
+  display: block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.slide-titel {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--farbe-weiss);
+}
+
+.slider-pfeil {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--farbe-rahmen);
+  color: var(--farbe-weiss);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slider-pfeil:hover {
+  background-color: var(--farbe-gold);
+  border-color: var(--farbe-gold);
+  color: #111;
+}
+
+.slider-links { left: 12px; }
+.slider-rechts { right: 12px; }
+
+.slider-punkte {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.punkt {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s, width 0.3s;
+}
+
+.punkt.aktiv {
+  background-color: var(--farbe-gold);
+  width: 24px;
+  border-radius: 4px;
+}
+
+
+/* ── NEWSLETTER ────────────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+.newsletter {
+  padding: 80px 0;
+  border-top: 1px solid var(--farbe-rahmen);
+}
+
+.form-zeile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Fehlermeldung DB (E-Mail bereits verwendet) */
+.fehler-meldung-db {
+  display: none;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background-color: rgba(204, 68, 68, 0.12);
+  border: 1px solid var(--farbe-fehler);
+  border-radius: 3px;
+  color: #e07070;
+  font-size: 0.9rem;
+}
+
+
+/* ── RESPONSIVE ────────────────────────────────────────────────
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+
+  .hero-titel {
+    font-size: 2.5rem;
+  }
+
+  .zwei-spalten {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .kategorien-raster {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .produkt-raster {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .hero-titel {
+    font-size: 2rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .kategorien-raster {
+    grid-template-columns: 1fr;
+  }
+
+  .produkt-raster {
+    grid-template-columns: 1fr;
+  }
+
+  .form-zeile {
+    grid-template-columns: 1fr;
+  }
+
+}

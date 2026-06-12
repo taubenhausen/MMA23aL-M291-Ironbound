@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<!-- Pflicht-Deklaration: sagt dem Browser dass dies HTML5 ist. MUSS die erste Zeile sein. -->
+
+<html lang="de">
+<!-- Wurzelelement. ALLES andere ist darin enthalten. lang="de" = Sprache Deutsch. -->
+
+<head>
+<!-- Unsichtbarer Kopfbereich: enthält Metadaten, CSS-Verknüpfungen, Seitentitel. -->
+
+  <meta charset="UTF-8">
+  <!-- Zeichenset UTF-8: alle Zeichen werden korrekt angezeigt (ä, ö, ü, Emojis usw.). -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Macht die Seite auf dem Handy korrekt skaliert. Ohne das: Mini-Desktop-Ansicht. -->
+
+  <title>IRONBOUND – Waffen-Shop</title>
+  <!-- Wird im Browser-Tab angezeigt. Auch von Suchmaschinen als Seitentitel verwendet. -->
+
+  <link rel="stylesheet" href="css/common.css">
+  <!-- CSS-Datei einbinden. common.css = Styles die auf ALLEN Seiten gleich sind. -->
+
+  <link rel="stylesheet" href="css/index.css">
+  <!-- Zweite CSS-Datei: nur für diese Seite (Hero, Kategorien, Produkte). -->
+
+</head>
+
+<body>
+<!-- Sichtbarer Seiteninhalt. Alles was der User sieht, kommt hierher. -->
+
+
+  <!-- ============================================================
+       HEADER / NAVIGATION
+       Auf jeder Seite identisch. CSS in common.css. JS in common.js.
+  ============================================================ -->
+
+  <header class="site-header" id="site-header">
+  <!-- header = semantisches HTML für den Kopfbereich. -->
+  <!-- class="site-header" = CSS-Styles aus common.css werden angewendet. -->
+  <!-- id="site-header" = JS greift darauf zu (Schatten beim Scrollen hinzufügen). -->
+
+    <div class="header-inner">
+    <!-- div = unsichtbare Box. class="header-inner" = zentriert Inhalt auf max. 1200px. -->
+
+      <a href="index.html" class="logo">IRONBOUND</a>
+      <!-- a = Link. href = Ziel. Klick auf Logo = zurück zur Startseite. -->
+
+      <nav class="nav-links" id="nav-links">
+      <!-- nav = semantisches Element für Navigation. id = JS öffnet/schliesst Menü. -->
+
+        <a href="index.html" class="nav-link aktiv">Home</a>
+        <!-- Interner Link zur Startseite. class="aktiv" = gold unterstrichen (aktuelle Seite). -->
+
+        <a href="shop.html" class="nav-link">Arsenal</a>
+        <!-- Link zur Shop-Seite. Kein "aktiv" weil wir nicht dort sind. -->
+
+        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+        <!-- #digital-twin = Anker-Link. Springt direkt zu id="digital-twin" auf promotion.html. -->
+
+      </nav>
+
+      <button class="hamburger-btn" id="hamburger-btn">
+      <!-- button = klickbares Element. Auf Mobile sichtbar, auf Desktop versteckt (CSS). -->
+
+        <span></span>
+        <!-- Erster Strich des Hamburger-Icons. Leer — wird per CSS als Linie gezeichnet. -->
+
+        <span></span>
+        <!-- Zweiter Strich. Bei .offen: wird unsichtbar (opacity: 0). -->
+
+        <span></span>
+        <!-- Dritter Strich. Bei .offen: dreht sich zu X zusammen mit dem ersten. -->
+
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       HERO-SECTION
+       CSS-Animation: Text blendet beim Laden von unten ein.
+       Hintergrund: Gradient-Effekt via .hero-bg.
+  ============================================================ -->
+
+  <section class="hero">
+  <!-- section = semantischer Inhaltsbereich. class = CSS-Styles. -->
+
+    <div class="hero-bg"></div>
+    <!-- Leeres div. Wird per CSS als Gradient-Hintergrund gezeichnet (CSS-Anforderung). -->
+
+    <div class="hero-inhalt">
+    <!-- Inhalt-Box. position:relative damit er über .hero-bg liegt. -->
+
+      <p class="hero-eyebrow einblenden">ARSENAL · DIGITAL TWIN · 18+</p>
+      <!-- Kleiner Text über dem Titel. class="einblenden" startet die CSS-Einblend-Animation. -->
+
+      <h1 class="hero-titel einblenden-verzoegert">
+      <!-- h1 = wichtigste Überschrift. Nur EINE h1 pro Seite! -->
+      <!-- "einblenden-verzoegert" = animation-delay: 0.3s → erscheint 0.3s nach Laden. -->
+
+        Die Spitze der<br>Waffenkunst.
+        <!-- br = Zeilenumbruch innerhalb des Titels. -->
+
+      </h1>
+
+      <p class="hero-text einblenden-spaet">
+      <!-- "einblenden-spaet" = animation-delay: 0.6s → erscheint nach dem Titel. -->
+
+        Historische Waffen, Trainingsrepliken und moderne Präzisionsmodelle —
+        jetzt mit digitalem Gegenstück im Spiel.
+      </p>
+
+      <div class="hero-buttons einblenden-spaet">
+      <!-- div gruppiert die zwei Buttons. Flexbox macht sie nebeneinander. -->
+
+        <a href="shop.html" class="btn btn-primary">Arsenal betreten</a>
+        <!-- Primär-Button: weiss gefüllt. Hover → wird gold. -->
+
+        <a href="#sortiment" class="btn btn-ghost">Mehr erfahren ↓</a>
+        <!-- Anker-Link: scrollt zur Section mit id="sortiment" auf dieser Seite. -->
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       ÜBER UNS
+  ============================================================ -->
+
+  <section class="ueber-uns" id="ueber-uns">
+  <!-- id="ueber-uns" = könnte als Anker-Ziel dienen. -->
+
+    <div class="container">
+    <!-- container = begrenzt auf max. 1200px und zentriert. Auf allen Sektionen verwendet. -->
+
+      <span class="abschnitt-label">/ Über uns</span>
+      <!-- span = Inline-Element. Kleines goldenes Label über der Überschrift. -->
+
+      <h2>Kein Shop. Eine Erfahrung.</h2>
+      <!-- h2 = zweite Überschrift. Mehrere h2 pro Seite erlaubt. -->
+
+      <div class="zwei-spalten">
+      <!-- Flexbox: zwei gleichbreite Spalten nebeneinander. Auf Mobile untereinander. -->
+
+        <div class="spalte">
+        <!-- Linke Spalte: Fliesstext. flex:1 = nimmt gleich viel Platz wie rechte Spalte. -->
+
+          <p>
+            Ironbound verbindet historische Präzision mit digitaler Innovation.
+            Jede Waffe erzählt eine Geschichte — und du trägst sie ins Spiel.
+          </p>
+          <!-- p = Absatz. Mehrere p-Elemente = mehrere Absätze mit Abstand dazwischen. -->
+
+          <p>
+            Wir bieten ein breites Sortiment: von historischen Schwertern und
+            Bögen über taktische Messer bis hin zu modernen Schusswaffen-Repliken.
+          </p>
+
+        </div>
+
+        <div class="spalte statistiken">
+        <!-- Rechte Spalte. Zusatzklasse "statistiken" = flex-direction: column. -->
+
+          <div class="stat">
+          <!-- Einzelne Statistik-Box. Trennlinie unten via CSS border-bottom. -->
+
+            <strong class="stat-zahl">500+</strong>
+            <!-- strong = fett + semantisch wichtig. Grosse Zahl. -->
+
+            <span class="stat-label">Produkte</span>
+            <!-- Kleines Label unter der Zahl. -->
+
+          </div>
+
+          <div class="stat">
+            <strong class="stat-zahl">12</strong>
+            <span class="stat-label">Kategorien</span>
+          </div>
+
+          <div class="stat">
+            <strong class="stat-zahl">3</strong>
+            <span class="stat-label">Game-Partner</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SORTIMENT / KATEGORIEN
+       CSS Grid: 3 Spalten. Hover-Effekt auf Kacheln.
+  ============================================================ -->
+
+  <section class="sortiment" id="sortiment">
+  <!-- id="sortiment" = Ziel des Anker-Links href="#sortiment" oben. -->
+
+    <div class="container">
+
+      <span class="abschnitt-label">/ Arsenal</span>
+      <h2>Wähle deine Waffe.</h2>
+
+      <div class="kategorien-raster">
+      <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
+
+        <a href="shop.html?kat=schusswaffen" class="kategorie-kachel">
+        <!-- a als Block-Element. ?kat=schusswaffen = URL-Parameter (könnte JS auslesen). -->
+
+          <div class="kachel-nummer">01</div>
+          <!-- Nummerierung oben links auf der Kachel. -->
+
+          <div class="kachel-name">Schusswaffen</div>
+          <!-- Hauptname der Kategorie. Grosse Schrift. -->
+
+          <div class="kachel-sub">Gewehre · Pistolen · MG</div>
+          <!-- Untertitel in grau. -->
+
+          <div class="kachel-pfeil">→</div>
+          <!-- Pfeil-Symbol. Hover: bewegt sich 8px nach rechts (CSS transition). -->
+
+        </a>
+
+        <a href="shop.html?kat=schwerter" class="kategorie-kachel">
+          <div class="kachel-nummer">02</div>
+          <div class="kachel-name">Schwerter</div>
+          <div class="kachel-sub">Historisch · Repliken · HEMA</div>
+          <div class="kachel-pfeil">→</div>
+        </a>
+
+        <a href="shop.html?kat=messer" class="kategorie-kachel">
+          <div class="kachel-nummer">03</div>
+          <div class="kachel-name">Messer</div>
+          <div class="kachel-sub">Taktisch · Kampf · Survival</div>
+          <div class="kachel-pfeil">→</div>
+        </a>
+
+        <a href="shop.html?kat=bogen" class="kategorie-kachel">
+          <div class="kachel-nummer">04</div>
+          <div class="kachel-name">Bögen</div>
+          <div class="kachel-sub">Langbogen · Armbrust · Sport</div>
+          <div class="kachel-pfeil">→</div>
+        </a>
+
+        <a href="shop.html?kat=stangenwaffen" class="kategorie-kachel">
+          <div class="kachel-nummer">05</div>
+          <div class="kachel-name">Stangenwaffen</div>
+          <div class="kachel-sub">Speere · Hellebarden · Stäbe</div>
+          <div class="kachel-pfeil">→</div>
+        </a>
+
+        <a href="promotion.html#digital-twin" class="kategorie-kachel kachel-highlight">
+        <!-- Zusatzklasse "kachel-highlight" = goldener Rand (spezielle Kachel). -->
+
+          <div class="kachel-badge">NEU</div>
+          <!-- Badge-Label oben. Nur auf dieser Kachel sichtbar. -->
+
+          <div class="kachel-nummer">06</div>
+          <div class="kachel-name">Digital Twin</div>
+          <div class="kachel-sub">Real kaufen. Digital spielen.</div>
+          <div class="kachel-pfeil">→</div>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       AUSGEWÄHLTE PRODUKTE
+       Hover-Effekt: Karte hebt sich, Bild zoomt leicht.
+       Rahmeneffekt: box-shadow.
+  ============================================================ -->
+
+  <section class="produkte">
+
+    <div class="container">
+
+      <span class="abschnitt-label">/ Top Picks</span>
+      <h2>Ausgewählte Waffen.</h2>
+
+      <div class="produkt-raster">
+      <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
+
+        <div class="produktkarte">
+        <!-- Einzelne Produktkarte. Hover: transform: translateY(-4px) = hebt sich. -->
+
+          <div class="produkt-bild">
+          <!-- Bild-Container. overflow:hidden damit Zoom-Effekt nicht rausgeht. -->
+
+            <img src="img/prod1-placeholder.svg" alt="Gladius Romanus">
+            <!-- img = Bild. src = Pfad. alt = Text wenn Bild nicht lädt (Screenreader/SEO). -->
+
+            <span class="digital-badge">🎮 Twin</span>
+            <!-- Badge über dem Bild. position:absolute oben links. -->
+
+          </div>
+
+          <div class="produkt-info">
+          <!-- Bereich unter dem Bild mit Name, Kategorie, Preis. -->
+
+            <div class="produkt-kategorie">Schwerter · Einsteiger</div>
+            <!-- Kleine graue Kategorie-Angabe. -->
+
+            <div class="produkt-name">Gladius Romanus</div>
+            <!-- Produktname in weiss, fett. -->
+
+            <div class="produkt-fuss">
+            <!-- Flexbox: Preis links, Button rechts. -->
+
+              <span class="produkt-preis">CHF 249</span>
+              <!-- Preis in gold. -->
+
+              <a href="shop.html" class="btn btn-klein">Details</a>
+              <!-- Kleiner Outline-Button. -->
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Produktkarte 2 -->
+        <div class="produktkarte">
+          <div class="produkt-bild">
+            <img src="img/prod2-placeholder.svg" alt="M4 Replika">
+            <span class="bestseller-badge">Bestseller</span>
+            <!-- Anderer Badge: gold statt grün. -->
+          </div>
+          <div class="produkt-info">
+            <div class="produkt-kategorie">Schusswaffen · Profi</div>
+            <div class="produkt-name">M4 Replika</div>
+            <div class="produkt-fuss">
+              <span class="produkt-preis">CHF 599</span>
+              <a href="shop.html" class="btn btn-klein">Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produktkarte 3 -->
+        <div class="produktkarte">
+          <div class="produkt-bild">
+            <img src="img/prod3-placeholder.svg" alt="Langbogen 60 Zoll">
+            <span class="digital-badge">🎮 Twin</span>
+          </div>
+          <div class="produkt-info">
+            <div class="produkt-kategorie">Bögen · Einsteiger</div>
+            <div class="produkt-name">Langbogen 60"</div>
+            <div class="produkt-fuss">
+              <span class="produkt-preis">CHF 189</span>
+              <a href="shop.html" class="btn btn-klein">Details</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mehr-link">
+        <a href="shop.html" class="btn btn-primary">Ganzes Arsenal ansehen →</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       PROMOTIONEN — BILD-SLIDER
+       Interaktives Element: Klick auf Pfeile/Punkte wechselt Slide.
+       Autoplay: alle 4.5 Sekunden automatisch.
+       JS: slider.js
+  ============================================================ -->
+
+  <section class="promotionen">
+    <div class="container">
+
+      <span class="abschnitt-label">/ Aktionen</span>
+      <h2>Aktuelle Promotionen.</h2>
+
+      <div class="slider">
+      <!-- Container für alle Slides. position:relative damit Pfeile darin positioniert. -->
+
+        <div class="slide aktiv" id="slide-0">
+        <!-- class="aktiv" = display:block (sichtbar). Andere Slides: display:none. -->
+        <!-- id="slide-0" = JS findet diese Slide per getElementById('slide-0'). -->
+
+          <img src="img/promo1-placeholder.svg" alt="Promo 1">
+          <!-- Bild der Slide. filter:brightness(0.55) = abgedunkelt für Text-Lesbarkeit. -->
+
+          <div class="slide-info">
+          <!-- Text-Box über dem Bild. position:absolute unten. Gradient-Hintergrund. -->
+
+            <span class="slide-tag">Limited</span>
+            <!-- Kleines goldenes Label. -->
+
+            <div class="slide-titel">10% auf alle Schwerter</div>
+            <!-- Haupttext der Slide. -->
+
+          </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+        <!-- Kein "aktiv" = display:none = unsichtbar beim Start. -->
+          <img src="img/promo2-placeholder.svg" alt="Promo 2">
+          <div class="slide-info">
+            <span class="slide-tag">Digital</span>
+            <div class="slide-titel">Code inklusive bei jedem Kauf</div>
+          </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+          <img src="img/promo3-placeholder.svg" alt="Promo 3">
+          <div class="slide-info">
+            <span class="slide-tag">Neu</span>
+            <div class="slide-titel">Präzisionsmodelle 2025</div>
+          </div>
+        </div>
+
+        <button class="slider-pfeil slider-links" id="slider-zurueck">&#8592;</button>
+        <!-- Pfeil-Button links. &#8592; = HTML-Entity für ← . id = JS findet ihn. -->
+
+        <button class="slider-pfeil slider-rechts" id="slider-weiter">&#8594;</button>
+        <!-- Pfeil-Button rechts. &#8594; = HTML-Entity für → . -->
+
+        <div class="slider-punkte">
+        <!-- Punkte-Navigation unten mittig. -->
+
+          <button class="punkt aktiv" id="punkt-0"></button>
+          <!-- Erster Punkt aktiv (gold, breiter). id = JS synchronisiert mit Slide. -->
+
+          <button class="punkt" id="punkt-1"></button>
+          <button class="punkt" id="punkt-2"></button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       Identisch auf allen Seiten (index, shop, promotion).
+       Disclaimer und Gruppenname laut Anforderung.
+  ============================================================ -->
+
+  <footer class="site-footer">
+  <!-- footer = semantisches HTML für den Fussbereich. -->
+
+    <div class="container">
+
+      <div class="footer-raster">
+      <!-- CSS Grid: 2fr 1fr 1fr 1fr = linke Spalte doppelt so breit. -->
+
+        <div class="footer-logo-bereich">
+        <!-- Logo-Spalte: Logo + Beschreibung + Social Links. -->
+
+          <strong>IRONBOUND</strong>
+          <!-- strong = fett. Logo-Text. -->
+
+          <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
+
+          <div class="social-links">
+          <!-- Flexbox: drei Icon-Buttons nebeneinander. -->
+
+            <a href="#" class="social-link" title="Instagram">IG</a>
+            <!-- href="#" = Platzhalter, führt nirgends hin. title = Tooltip beim Hover. -->
+
+            <a href="#" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="X / Twitter">X</a>
+
+          </div>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Shop</strong>
+          <a href="shop.html">Arsenal</a>
+          <a href="shop.html?kat=digital">Digital Twin</a>
+          <a href="promotion.html">Aktionen</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Info</strong>
+          <a href="#">Über uns</a>
+          <a href="#">Versand</a>
+          <a href="#">Kontakt</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Rechtliches</strong>
+          <a href="#">Datenschutz</a>
+          <a href="#">AGB</a>
+          <a href="#">18+ Verifikation</a>
+        </div>
+
+      </div>
+
+      <p class="footer-disclaimer">
+        ⚠ Das ist ein Schulprojekt und keine reale Website. | Gruppe: Jan, Enea, Tina, Sofija
+      </p>
+      <!-- Pflicht laut Anforderung: Disclaimer + Gruppenname. -->
+
+      <p class="footer-copyright">
+        © 2025 IRONBOUND — Alle Rechte vorbehalten.
+      </p>
+
+    </div>
+  </footer>
+
+
+  <!-- JS am Ende des body einbinden. -->
+  <!-- WARUM HIER? HTML wird von oben nach unten geladen. -->
+  <!-- JS ganz oben = läuft bevor HTML-Elemente existieren = Fehler. -->
+  <!-- JS am Ende = alle Elemente existieren bereits. -->
+
+  <script src="js/common.js"></script>
+  <!-- Navigation: Hamburger-Menü, Scroll-Schatten, aktiven Link erkennen. -->
+
+  <script src="js/slider.js"></script>
+  <!-- Bild-Slider: Autoplay, Pfeil-Klicks, Punkte-Klicks. -->
+
+</body>
+<!-- Ende des sichtbaren Inhalts. -->
+
+</html>
+<!-- Ende des HTML-Dokuments. -->

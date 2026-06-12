@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arsenal – IRONBOUND</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/shop.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       HEADER — identisch auf allen Seiten
+  ============================================================ -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo">IRONBOUND</a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link aktiv">Arsenal</a>
+        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+      </nav>
+
+      <button class="hamburger-btn" id="hamburger-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       SHOP BANNER / KOPF
+  ============================================================ -->
+  <section class="shop-banner">
+    <div class="container">
+      <p class="breadcrumb">
+        <a href="index.html">Home</a> › Arsenal
+      </p>
+      <h1>Arsenal</h1>
+      <p class="shop-untertitel">
+        Historische Präzision. Moderne Kraft. Dein Inventar.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SUCHLEISTE (Interaktives Element: Live-Filter ④)
+  ============================================================ -->
+  <section class="shop-suche">
+    <div class="container">
+      <div class="suche-wrap">
+        <input
+          type="text"
+          id="suche-eingabe"
+          placeholder="🔍  Suche nach Waffe, Kategorie, Epoche…"
+          class="suche-feld"
+        >
+        <button class="btn btn-primary" id="suche-btn">Suchen</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FILTER-CHIPS (Interaktives Element ④)
+  ============================================================ -->
+  <section class="filter-leiste">
+    <div class="container">
+      <div class="filter-chips">
+        <button class="filter-chip aktiv" data-filter="alle">Alle</button>
+        <button class="filter-chip" data-filter="schwerter">Schwerter</button>
+        <button class="filter-chip" data-filter="schusswaffen">Schusswaffen</button>
+        <button class="filter-chip" data-filter="messer">Messer</button>
+        <button class="filter-chip" data-filter="bogen">Bögen</button>
+        <button class="filter-chip" data-filter="einsteiger">Einsteiger</button>
+        <button class="filter-chip" data-filter="digital">🎮 Digital Twin</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SHOP LAYOUT: Produktraster
+  ============================================================ -->
+  <div class="shop-layout container">
+
+    <!-- PRODUKTBEREICH -->
+    <div class="produkt-bereich">
+
+      <!-- Topbar: Anzahl -->
+      <div class="produkt-topbar">
+        <span class="ergebnis-anzahl" id="ergebnis-anzahl">6 Produkte im Inventar</span>
+      </div>
+
+      <!-- INVENTAR-RASTER (Produktkarten) -->
+      <div class="inventar-raster" id="inventar-raster">
+
+        <!-- Karte 1 -->
+        <div class="inventar-karte" data-filter="schwerter einsteiger digital" data-preis="249">
+          <div class="karten-nummer">001</div>
+          <div class="karten-bild">
+            <img src="img/prod1-placeholder.svg" alt="Gladius Romanus">
+            <span class="twin-abzeichen">🎮 Twin</span>
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Schwerter · Einsteiger</div>
+            <div class="karten-name">Gladius Romanus</div>
+            <!-- Skill-Balken -->
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 35%;"></div>
+            </div>
+            <span class="skill-text">LVL 1 — Einsteiger</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 249</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte 2 -->
+        <div class="inventar-karte" data-filter="schusswaffen profi" data-preis="599">
+          <div class="karten-nummer">002</div>
+          <div class="karten-bild">
+            <img src="img/prod2-placeholder.svg" alt="M4 Replika">
+            <span class="bestseller-abzeichen">Bestseller</span>
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Schusswaffen · Profi</div>
+            <div class="karten-name">M4 Replika</div>
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 100%;"></div>
+            </div>
+            <span class="skill-text">LVL 3 — Profi</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 599</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte 3 -->
+        <div class="inventar-karte" data-filter="bogen einsteiger digital" data-preis="189">
+          <div class="karten-nummer">003</div>
+          <div class="karten-bild">
+            <img src="img/prod3-placeholder.svg" alt="Langbogen 60 Zoll">
+            <span class="twin-abzeichen">🎮 Twin</span>
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Bögen · Einsteiger</div>
+            <div class="karten-name">Langbogen 60"</div>
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 30%;"></div>
+            </div>
+            <span class="skill-text">LVL 1 — Einsteiger</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 189</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte 4 -->
+        <div class="inventar-karte" data-filter="messer fortgeschritten" data-preis="149">
+          <div class="karten-nummer">004</div>
+          <div class="karten-bild">
+            <img src="img/prod4-placeholder.svg" alt="Kampfmesser">
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Messer · Fortgeschritten</div>
+            <div class="karten-name">Kampfmesser</div>
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 65%;"></div>
+            </div>
+            <span class="skill-text">LVL 2 — Fortgeschritten</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 149</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte 5 -->
+        <div class="inventar-karte" data-filter="bogen fortgeschritten digital" data-preis="399">
+          <div class="karten-nummer">005</div>
+          <div class="karten-bild">
+            <img src="img/prod5-placeholder.svg" alt="Armbrust Pro">
+            <span class="twin-abzeichen">🎮 Twin</span>
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Bögen · Fortgeschritten</div>
+            <div class="karten-name">Armbrust Pro</div>
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 70%;"></div>
+            </div>
+            <span class="skill-text">LVL 2 — Fortgeschritten</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 399</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Karte 6 -->
+        <div class="inventar-karte" data-filter="schwerter einsteiger" data-preis="99">
+          <div class="karten-nummer">006</div>
+          <div class="karten-bild">
+            <img src="img/prod6-placeholder.svg" alt="Speer Replika">
+          </div>
+          <div class="karten-inhalt">
+            <div class="karten-kategorie">Stangenwaffen · Einsteiger</div>
+            <div class="karten-name">Speer Replika</div>
+            <div class="skill-balken">
+              <div class="skill-fuellung" style="width: 20%;"></div>
+            </div>
+            <span class="skill-text">LVL 1 — Einsteiger</span>
+            <div class="karten-fuss">
+              <span class="karten-preis">CHF 99</span>
+              <button class="btn btn-klein">+ Inventar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Ende inventar-raster -->
+
+      <!-- Keine Treffer Meldung -->
+      <div class="keine-treffer" id="keine-treffer" style="display:none;">
+        <p>Keine Produkte gefunden. Bitte andere Filter wählen.</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button class="seite-btn aktiv">01</button>
+        <button class="seite-btn">02</button>
+        <button class="seite-btn">03</button>
+      </div>
+
+    </div>
+    <!-- Ende produkt-bereich -->
+
+  </div>
+  <!-- Ende shop-layout -->
+
+
+  <!-- ============================================================
+       FOOTER — identisch auf allen Seiten
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-raster">
+
+        <div class="footer-logo-bereich">
+          <strong>IRONBOUND</strong>
+          <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Instagram">IG</a>
+            <a href="#" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="X / Twitter">X</a>
+          </div>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Shop</strong>
+          <a href="shop.html">Arsenal</a>
+          <a href="shop.html?kat=digital">Digital Twin</a>
+          <a href="promotion.html">Aktionen</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Info</strong>
+          <a href="#">Über uns</a>
+          <a href="#">Versand</a>
+          <a href="#">Kontakt</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Rechtliches</strong>
+          <a href="#">Datenschutz</a>
+          <a href="#">AGB</a>
+          <a href="#">18+ Verifikation</a>
+        </div>
+
+      </div>
+
+      <p class="footer-disclaimer">
+        ⚠ Das ist ein Schulprojekt und keine reale Website. | Gruppe: Jan, Enea, Tina, Sofija
+      </p>
+
+      <p class="footer-copyright">
+        © 2025 IRONBOUND — Alle Rechte vorbehalten.
+      </p>
+
+    </div>
+  </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/shop.js"></script>
+
+</body>
+</html>
