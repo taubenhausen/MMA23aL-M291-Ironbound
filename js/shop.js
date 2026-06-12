@@ -41,6 +41,9 @@ var FALLBACK_PRODUKTE = [
 var shopProdukte = [];
 var aktiverFilter = 'alle';
 var aktiverSort = 'relevanz';
+var aktiveSeite = 1;
+var PRODUKTE_PRO_SEITE = 20;
+var aktuelleGefilterteProdukte = [];
 
 
 /* ─────────────────────────────────────────────────────────────
@@ -121,7 +124,34 @@ function produktKarteHtml(produkt) {
    Wenn keine Produkte vorhanden sind, wird die vorhandene Meldung
    «Keine Produkte gefunden» eingeblendet.
    ─────────────────────────────────────────────────────────── */
+function paginierungRendern() {
+  var pagination = document.querySelector('.pagination');
+  if (!pagination) return;
+
+  var gesamtSeiten = Math.ceil(aktuelleGefilterteProdukte.length / PRODUKTE_PRO_SEITE);
+
+  pagination.innerHTML = '';
+
+  if (gesamtSeiten <= 1) return;
+
+  for (var s = 1; s <= gesamtSeiten; s++) {
+    var btn = document.createElement('button');
+    btn.className = 'seite-btn' + (s === aktiveSeite ? ' aktiv' : '');
+    btn.textContent = String(s).padStart(2, '0');
+    btn.setAttribute('data-seite', s);
+    btn.addEventListener('click', function() {
+      aktiveSeite = Number(this.getAttribute('data-seite'));
+      rasterRendern(aktuelleGefilterteProdukte);
+      var topbar = document.querySelector('.produkt-topbar');
+      if (topbar) topbar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    pagination.appendChild(btn);
+  }
+}
+
 function rasterRendern(produkte) {
+  aktuelleGefilterteProdukte = produkte || [];
+
   var raster = document.getElementById('inventar-raster');
   var ergebnisAnzahl = document.getElementById('ergebnis-anzahl');
   var keineTrefferMsg = document.getElementById('keine-treffer');
@@ -130,7 +160,7 @@ function rasterRendern(produkte) {
     return;
   }
 
-  if (!produkte || produkte.length === 0) {
+  if (aktuelleGefilterteProdukte.length === 0) {
     raster.innerHTML = '';
 
     if (ergebnisAnzahl) {
@@ -141,23 +171,29 @@ function rasterRendern(produkte) {
       keineTrefferMsg.style.display = 'block';
     }
 
+    paginierungRendern();
     return;
   }
 
+  var start = (aktiveSeite - 1) * PRODUKTE_PRO_SEITE;
+  var seitenProdukte = aktuelleGefilterteProdukte.slice(start, start + PRODUKTE_PRO_SEITE);
+
   var html = '';
-  for (var i = 0; i < produkte.length; i++) {
-    html = html + produktKarteHtml(produkte[i]);
+  for (var i = 0; i < seitenProdukte.length; i++) {
+    html = html + produktKarteHtml(seitenProdukte[i]);
   }
 
   raster.innerHTML = html;
 
   if (ergebnisAnzahl) {
-    ergebnisAnzahl.textContent = produkte.length + ' Produkte im Inventar';
+    ergebnisAnzahl.textContent = aktuelleGefilterteProdukte.length + ' Produkte im Inventar';
   }
 
   if (keineTrefferMsg) {
     keineTrefferMsg.style.display = 'none';
   }
+
+  paginierungRendern();
 }
 
 
@@ -201,6 +237,7 @@ function produkteLaden() {
    arbeiten.
    ─────────────────────────────────────────────────────────── */
 function sucheAusfuehren() {
+  aktiveSeite = 1;
   var sucheEingabe = document.getElementById('suche-eingabe');
   var suchbegriff = sucheEingabe ? sucheEingabe.value.toLowerCase().trim() : '';
 
@@ -391,6 +428,7 @@ function eventsEinrichten() {
   for (var i = 0; i < filterChips.length; i++) {
     filterChips[i].addEventListener('click', function() {
       aktiverFilter = this.getAttribute('data-filter') || 'alle';
+      aktiveSeite = 1;
 
       if (sucheEingabe) {
         sucheEingabe.value = '';
