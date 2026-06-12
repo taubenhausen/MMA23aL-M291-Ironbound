@@ -285,79 +285,8 @@
       <span class="abschnitt-label">/ Top Picks</span>
       <h2>Ausgewählte Waffen.</h2>
 
-      <div class="produkt-raster">
-      <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
-
-        <div class="produktkarte">
-        <!-- Einzelne Produktkarte. Hover: transform: translateY(-4px) = hebt sich. -->
-
-          <div class="produkt-bild">
-          <!-- Bild-Container. overflow:hidden damit Zoom-Effekt nicht rausgeht. -->
-
-            <img src="img/prod1-placeholder.svg" alt="Gladius Romanus">
-            <!-- img = Bild. src = Pfad. alt = Text wenn Bild nicht lädt (Screenreader/SEO). -->
-
-            <span class="digital-badge">🎮 Twin</span>
-            <!-- Badge über dem Bild. position:absolute oben links. -->
-
-          </div>
-
-          <div class="produkt-info">
-          <!-- Bereich unter dem Bild mit Name, Kategorie, Preis. -->
-
-            <div class="produkt-kategorie">Schwerter · Einsteiger</div>
-            <!-- Kleine graue Kategorie-Angabe. -->
-
-            <div class="produkt-name">Gladius Romanus</div>
-            <!-- Produktname in weiss, fett. -->
-
-            <div class="produkt-fuss">
-            <!-- Flexbox: Preis links, Button rechts. -->
-
-              <span class="produkt-preis">CHF 249</span>
-              <!-- Preis in gold. -->
-
-              <a href="shop.html" class="btn btn-klein">Details</a>
-              <!-- Kleiner Outline-Button. -->
-
-            </div>
-          </div>
-        </div>
-
-        <!-- Produktkarte 2 -->
-        <div class="produktkarte">
-          <div class="produkt-bild">
-            <img src="img/prod2-placeholder.svg" alt="M4 Replika">
-            <span class="bestseller-badge">Bestseller</span>
-            <!-- Anderer Badge: gold statt grün. -->
-          </div>
-          <div class="produkt-info">
-            <div class="produkt-kategorie">Schusswaffen · Profi</div>
-            <div class="produkt-name">M4 Replika</div>
-            <div class="produkt-fuss">
-              <span class="produkt-preis">CHF 599</span>
-              <a href="shop.html" class="btn btn-klein">Details</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produktkarte 3 -->
-        <div class="produktkarte">
-          <div class="produkt-bild">
-            <img src="img/prod3-placeholder.svg" alt="Langbogen 60 Zoll">
-            <span class="digital-badge">🎮 Twin</span>
-          </div>
-          <div class="produkt-info">
-            <div class="produkt-kategorie">Bögen · Einsteiger</div>
-            <div class="produkt-name">Langbogen 60"</div>
-            <div class="produkt-fuss">
-              <span class="produkt-preis">CHF 189</span>
-              <a href="shop.html" class="btn btn-klein">Details</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <!-- wird durch index.js aus der Datenbank befüllt -->
+      <div class="produkt-raster" id="index-produkt-raster"></div>
 
       <div class="mehr-link">
         <a href="shop.html" class="btn btn-primary">Ganzes Arsenal ansehen →</a>
@@ -392,11 +321,9 @@
           <div class="social-links">
           <!-- Flexbox: drei Icon-Buttons nebeneinander. -->
 
-            <a href="#" class="social-link" title="Instagram">IG</a>
-            <!-- href="#" = Platzhalter, führt nirgends hin. title = Tooltip beim Hover. -->
-
-            <a href="#" class="social-link" title="YouTube">YT</a>
-            <a href="#" class="social-link" title="X / Twitter">X</a>
+            <a href="https://www.instagram.com/reel/DYrQNvUTdOq/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="social-link" title="Instagram">IG</a>
+            <a href="https://youtu.be/dQw4w9WgXcQ?si=vUtqieOJpkXjKWvx" class="social-link" title="YouTube">YT</a>
+            <a href="https://x.com/Catsillyness/status/2065087834734592231?s=20" class="social-link" title="X">X</a>
 
           </div>
         </div>
@@ -408,6 +335,7 @@
           <a href="promotion.html">Aktionen</a>
         </div>
 
+        <!-- Interne Links, die als Platzhalter dienen -->
         <div class="footer-spalte">
           <strong>Info</strong>
           <a href="#">Über uns</a>
@@ -444,6 +372,9 @@
 
   <script src="js/common.js"></script>
   <!-- Navigation: Hamburger-Menü, Scroll-Schatten, aktiven Link erkennen. -->
+
+  <script src="js/index.js"></script>
+  <!-- Lädt Top-3-Produkte dynamisch aus der Datenbank. -->
 
 </body>
 <!-- Ende des sichtbaren Inhalts. -->
