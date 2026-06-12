@@ -117,80 +117,18 @@
 }
 
 
-/* ── SHOP LAYOUT: Sidebar + Grid ───────────────────────────────
+/* ── SHOP LAYOUT ───────────────────────────────────────────────
    ─────────────────────────────────────────────────────────── */
 .shop-layout {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 0;
   padding-top: 32px;
   padding-bottom: 64px;
-  align-items: start;
-}
-
-
-/* ── SIDEBAR ───────────────────────────────────────────────────
-   Rahmeneffekt: rechte Trennlinie
-   ─────────────────────────────────────────────────────────── */
-.sidebar {
-  border-right: 1px solid var(--farbe-rahmen);
-  padding-right: 28px;
-  position: sticky;
-  top: calc(var(--nav-hoehe) + 16px);
-}
-
-.sidebar-sektion {
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sidebar-titel {
-  font-size: 0.7rem;
-  letter-spacing: 3px;
-  color: var(--farbe-text-grau);
-  text-transform: uppercase;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--farbe-rahmen);
-  margin-bottom: 4px;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: var(--farbe-text);
-  transition: color 0.2s;
-}
-
-.checkbox-label:hover {
-  color: var(--farbe-gold);
-}
-
-.checkbox-label input[type="checkbox"] {
-  accent-color: var(--farbe-gold);
-}
-
-.preis-slider {
-  width: 100%;
-  accent-color: var(--farbe-gold);
-}
-
-.preis-anzeige {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: var(--farbe-text-grau);
 }
 
 
 /* ── PRODUKTBEREICH ────────────────────────────────────────────
    ─────────────────────────────────────────────────────────── */
 .produkt-bereich {
-  padding-left: 32px;
+  padding-left: 0;
 }
 
 .produkt-topbar {
@@ -406,23 +344,6 @@
 /* ── RESPONSIVE ────────────────────────────────────────────────
    ─────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-
-  .shop-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    position: static;
-    border-right: none;
-    border-bottom: 1px solid var(--farbe-rahmen);
-    padding-right: 0;
-    padding-bottom: 24px;
-    margin-bottom: 24px;
-  }
-
-  .produkt-bereich {
-    padding-left: 0;
-  }
 
   .inventar-raster {
     grid-template-columns: repeat(2, 1fr);

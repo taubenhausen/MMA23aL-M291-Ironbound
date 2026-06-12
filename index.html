@@ -1,35 +1,75 @@
 <!DOCTYPE html>
+<!-- Pflicht-Deklaration: sagt dem Browser dass dies HTML5 ist. MUSS die erste Zeile sein. -->
+
 <html lang="de">
+<!-- Wurzelelement. ALLES andere ist darin enthalten. lang="de" = Sprache Deutsch. -->
 
 <head>
+<!-- Unsichtbarer Kopfbereich: enthält Metadaten, CSS-Verknüpfungen, Seitentitel. -->
+
   <meta charset="UTF-8">
+  <!-- Zeichenset UTF-8: alle Zeichen werden korrekt angezeigt (ä, ö, ü, Emojis usw.). -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Macht die Seite auf dem Handy korrekt skaliert. Ohne das: Mini-Desktop-Ansicht. -->
+
   <title>IRONBOUND – Waffen-Shop</title>
+  <!-- Wird im Browser-Tab angezeigt. Auch von Suchmaschinen als Seitentitel verwendet. -->
+
   <link rel="stylesheet" href="css/common.css">
+  <!-- CSS-Datei einbinden. common.css = Styles die auf ALLEN Seiten gleich sind. -->
+
   <link rel="stylesheet" href="css/index.css">
+  <!-- Zweite CSS-Datei: nur für diese Seite (Hero, Kategorien, Produkte). -->
+
 </head>
 
 <body>
+<!-- Sichtbarer Seiteninhalt. Alles was der User sieht, kommt hierher. -->
+
 
   <!-- ============================================================
-       HEADER — identisch auf allen Seiten (aus common.css)
+       HEADER / NAVIGATION
+       Auf jeder Seite identisch. CSS in common.css. JS in common.js.
   ============================================================ -->
+
   <header class="site-header" id="site-header">
+  <!-- header = semantisches HTML für den Kopfbereich. -->
+  <!-- class="site-header" = CSS-Styles aus common.css werden angewendet. -->
+  <!-- id="site-header" = JS greift darauf zu (Schatten beim Scrollen hinzufügen). -->
+
     <div class="header-inner">
+    <!-- div = unsichtbare Box. class="header-inner" = zentriert Inhalt auf max. 1200px. -->
 
       <a href="index.html" class="logo">IRONBOUND</a>
+      <!-- a = Link. href = Ziel. Klick auf Logo = zurück zur Startseite. -->
 
       <nav class="nav-links" id="nav-links">
+      <!-- nav = semantisches Element für Navigation. id = JS öffnet/schliesst Menü. -->
+
         <a href="index.html" class="nav-link aktiv">Home</a>
+        <!-- Interner Link zur Startseite. class="aktiv" = gold unterstrichen (aktuelle Seite). -->
+
         <a href="shop.html" class="nav-link">Arsenal</a>
-        <a href="promotion.html" class="nav-link">Aktionen</a>
+        <!-- Link zur Shop-Seite. Kein "aktiv" weil wir nicht dort sind. -->
+
         <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+        <!-- #digital-twin = Anker-Link. Springt direkt zu id="digital-twin" auf promotion.html. -->
+
       </nav>
 
       <button class="hamburger-btn" id="hamburger-btn">
+      <!-- button = klickbares Element. Auf Mobile sichtbar, auf Desktop versteckt (CSS). -->
+
         <span></span>
+        <!-- Erster Strich des Hamburger-Icons. Leer — wird per CSS als Linie gezeichnet. -->
+
         <span></span>
+        <!-- Zweiter Strich. Bei .offen: wird unsichtbar (opacity: 0). -->
+
         <span></span>
+        <!-- Dritter Strich. Bei .offen: dreht sich zu X zusammen mit dem ersten. -->
+
       </button>
 
     </div>
@@ -37,30 +77,48 @@
 
 
   <!-- ============================================================
-       HERO — CSS-Animation: Text blendet ein beim Laden
+       HERO-SECTION
+       CSS-Animation: Text blendet beim Laden von unten ein.
+       Hintergrund: Gradient-Effekt via .hero-bg.
   ============================================================ -->
-  <section class="hero">
 
-    <!-- Hintergrundeffekt: Gradient (CSS-Anforderung) -->
+  <section class="hero">
+  <!-- section = semantischer Inhaltsbereich. class = CSS-Styles. -->
+
     <div class="hero-bg"></div>
+    <!-- Leeres div. Wird per CSS als Gradient-Hintergrund gezeichnet (CSS-Anforderung). -->
 
     <div class="hero-inhalt">
+    <!-- Inhalt-Box. position:relative damit er über .hero-bg liegt. -->
 
-      <!-- Animations-Klasse: hero-eyebrow wird eingeblendet -->
       <p class="hero-eyebrow einblenden">ARSENAL · DIGITAL TWIN · 18+</p>
+      <!-- Kleiner Text über dem Titel. class="einblenden" startet die CSS-Einblend-Animation. -->
 
       <h1 class="hero-titel einblenden-verzoegert">
+      <!-- h1 = wichtigste Überschrift. Nur EINE h1 pro Seite! -->
+      <!-- "einblenden-verzoegert" = animation-delay: 0.3s → erscheint 0.3s nach Laden. -->
+
         Die Spitze der<br>Waffenkunst.
+        <!-- br = Zeilenumbruch innerhalb des Titels. -->
+
       </h1>
 
       <p class="hero-text einblenden-spaet">
+      <!-- "einblenden-spaet" = animation-delay: 0.6s → erscheint nach dem Titel. -->
+
         Historische Waffen, Trainingsrepliken und moderne Präzisionsmodelle —
         jetzt mit digitalem Gegenstück im Spiel.
       </p>
 
       <div class="hero-buttons einblenden-spaet">
+      <!-- div gruppiert die zwei Buttons. Flexbox macht sie nebeneinander. -->
+
         <a href="shop.html" class="btn btn-primary">Arsenal betreten</a>
+        <!-- Primär-Button: weiss gefüllt. Hover → wird gold. -->
+
         <a href="#sortiment" class="btn btn-ghost">Mehr erfahren ↓</a>
+        <!-- Anker-Link: scrollt zur Section mit id="sortiment" auf dieser Seite. -->
+
       </div>
 
     </div>
@@ -71,38 +129,62 @@
   <!-- ============================================================
        ÜBER UNS
   ============================================================ -->
+
   <section class="ueber-uns" id="ueber-uns">
+  <!-- id="ueber-uns" = könnte als Anker-Ziel dienen. -->
+
     <div class="container">
+    <!-- container = begrenzt auf max. 1200px und zentriert. Auf allen Sektionen verwendet. -->
 
       <span class="abschnitt-label">/ Über uns</span>
+      <!-- span = Inline-Element. Kleines goldenes Label über der Überschrift. -->
+
       <h2>Kein Shop. Eine Erfahrung.</h2>
+      <!-- h2 = zweite Überschrift. Mehrere h2 pro Seite erlaubt. -->
 
       <div class="zwei-spalten">
+      <!-- Flexbox: zwei gleichbreite Spalten nebeneinander. Auf Mobile untereinander. -->
 
         <div class="spalte">
+        <!-- Linke Spalte: Fliesstext. flex:1 = nimmt gleich viel Platz wie rechte Spalte. -->
+
           <p>
             Ironbound verbindet historische Präzision mit digitaler Innovation.
             Jede Waffe erzählt eine Geschichte — und du trägst sie ins Spiel.
           </p>
+          <!-- p = Absatz. Mehrere p-Elemente = mehrere Absätze mit Abstand dazwischen. -->
+
           <p>
             Wir bieten ein breites Sortiment: von historischen Schwertern und
             Bögen über taktische Messer bis hin zu modernen Schusswaffen-Repliken.
           </p>
+
         </div>
 
         <div class="spalte statistiken">
+        <!-- Rechte Spalte. Zusatzklasse "statistiken" = flex-direction: column. -->
+
           <div class="stat">
+          <!-- Einzelne Statistik-Box. Trennlinie unten via CSS border-bottom. -->
+
             <strong class="stat-zahl">500+</strong>
+            <!-- strong = fett + semantisch wichtig. Grosse Zahl. -->
+
             <span class="stat-label">Produkte</span>
+            <!-- Kleines Label unter der Zahl. -->
+
           </div>
+
           <div class="stat">
             <strong class="stat-zahl">12</strong>
             <span class="stat-label">Kategorien</span>
           </div>
+
           <div class="stat">
             <strong class="stat-zahl">3</strong>
             <span class="stat-label">Game-Partner</span>
           </div>
+
         </div>
 
       </div>
@@ -113,20 +195,35 @@
 
   <!-- ============================================================
        SORTIMENT / KATEGORIEN
+       CSS Grid: 3 Spalten. Hover-Effekt auf Kacheln.
   ============================================================ -->
+
   <section class="sortiment" id="sortiment">
+  <!-- id="sortiment" = Ziel des Anker-Links href="#sortiment" oben. -->
+
     <div class="container">
 
       <span class="abschnitt-label">/ Arsenal</span>
       <h2>Wähle deine Waffe.</h2>
 
       <div class="kategorien-raster">
+      <!-- CSS Grid: repeat(3, 1fr) = 3 gleiche Spalten. Auf Mobile: 1 Spalte. -->
 
         <a href="shop.html?kat=schusswaffen" class="kategorie-kachel">
+        <!-- a als Block-Element. ?kat=schusswaffen = URL-Parameter (könnte JS auslesen). -->
+
           <div class="kachel-nummer">01</div>
+          <!-- Nummerierung oben links auf der Kachel. -->
+
           <div class="kachel-name">Schusswaffen</div>
+          <!-- Hauptname der Kategorie. Grosse Schrift. -->
+
           <div class="kachel-sub">Gewehre · Pistolen · MG</div>
+          <!-- Untertitel in grau. -->
+
           <div class="kachel-pfeil">→</div>
+          <!-- Pfeil-Symbol. Hover: bewegt sich 8px nach rechts (CSS transition). -->
+
         </a>
 
         <a href="shop.html?kat=schwerter" class="kategorie-kachel">
@@ -158,7 +255,11 @@
         </a>
 
         <a href="promotion.html#digital-twin" class="kategorie-kachel kachel-highlight">
+        <!-- Zusatzklasse "kachel-highlight" = goldener Rand (spezielle Kachel). -->
+
           <div class="kachel-badge">NEU</div>
+          <!-- Badge-Label oben. Nur auf dieser Kachel sichtbar. -->
+
           <div class="kachel-nummer">06</div>
           <div class="kachel-name">Digital Twin</div>
           <div class="kachel-sub">Real kaufen. Digital spielen.</div>
@@ -173,61 +274,19 @@
 
   <!-- ============================================================
        AUSGEWÄHLTE PRODUKTE
+       Hover-Effekt: Karte hebt sich, Bild zoomt leicht.
+       Rahmeneffekt: box-shadow.
   ============================================================ -->
+
   <section class="produkte">
+
     <div class="container">
 
       <span class="abschnitt-label">/ Top Picks</span>
       <h2>Ausgewählte Waffen.</h2>
 
-      <div class="produkt-raster">
-
-        <div class="produktkarte">
-          <div class="produkt-bild">
-            <img src="img/prod1-placeholder.svg" alt="Gladius Romanus">
-            <span class="digital-badge">🎮 Twin</span>
-          </div>
-          <div class="produkt-info">
-            <div class="produkt-kategorie">Schwerter · Einsteiger</div>
-            <div class="produkt-name">Gladius Romanus</div>
-            <div class="produkt-fuss">
-              <span class="produkt-preis">CHF 249</span>
-              <a href="shop.html" class="btn btn-klein">Details</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="produktkarte">
-          <div class="produkt-bild">
-            <img src="img/prod2-placeholder.svg" alt="M4 Replika">
-            <span class="bestseller-badge">Bestseller</span>
-          </div>
-          <div class="produkt-info">
-            <div class="produkt-kategorie">Schusswaffen · Profi</div>
-            <div class="produkt-name">M4 Replika</div>
-            <div class="produkt-fuss">
-              <span class="produkt-preis">CHF 599</span>
-              <a href="shop.html" class="btn btn-klein">Details</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="produktkarte">
-          <div class="produkt-bild">
-            <img src="img/prod3-placeholder.svg" alt="Langbogen 60 Zoll">
-            <span class="digital-badge">🎮 Twin</span>
-          </div>
-          <div class="produkt-info">
-            <div class="produkt-kategorie">Bögen · Einsteiger</div>
-            <div class="produkt-name">Langbogen 60"</div>
-            <div class="produkt-fuss">
-              <span class="produkt-preis">CHF 189</span>
-              <a href="shop.html" class="btn btn-klein">Details</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <!-- wird durch index.js aus der Datenbank befüllt -->
+      <div class="produkt-raster" id="index-produkt-raster"></div>
 
       <div class="mehr-link">
         <a href="shop.html" class="btn btn-primary">Ganzes Arsenal ansehen →</a>
@@ -238,165 +297,34 @@
 
 
   <!-- ============================================================
-       PROMOTIONEN — Bild-Slider
+       FOOTER
+       Identisch auf allen Seiten (index, shop, promotion).
+       Disclaimer und Gruppenname laut Anforderung.
   ============================================================ -->
-  <section class="promotionen">
-    <div class="container">
 
-      <span class="abschnitt-label">/ Aktionen</span>
-      <h2>Aktuelle Promotionen.</h2>
-
-      <div class="slider">
-
-        <div class="slide aktiv" id="slide-0">
-          <img src="img/promo1-placeholder.svg" alt="Promo 1">
-          <div class="slide-info">
-            <span class="slide-tag">Limited</span>
-            <div class="slide-titel">10% auf alle Schwerter</div>
-          </div>
-        </div>
-
-        <div class="slide" id="slide-1">
-          <img src="img/promo2-placeholder.svg" alt="Promo 2">
-          <div class="slide-info">
-            <span class="slide-tag">Digital</span>
-            <div class="slide-titel">Code inklusive bei jedem Kauf</div>
-          </div>
-        </div>
-
-        <div class="slide" id="slide-2">
-          <img src="img/promo3-placeholder.svg" alt="Promo 3">
-          <div class="slide-info">
-            <span class="slide-tag">Neu</span>
-            <div class="slide-titel">Präzisionsmodelle 2025</div>
-          </div>
-        </div>
-
-        <button class="slider-pfeil slider-links" id="slider-zurueck">&#8592;</button>
-        <button class="slider-pfeil slider-rechts" id="slider-weiter">&#8594;</button>
-
-        <div class="slider-punkte">
-          <button class="punkt aktiv" id="punkt-0"></button>
-          <button class="punkt" id="punkt-1"></button>
-          <button class="punkt" id="punkt-2"></button>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       NEWSLETTER-FORMULAR
-       - 5 Felder: Vorname, Nachname, E-Mail, PLZ, Interesse
-       - Mindestens 3 Pflichtfelder
-       - JS-Validierung
-       - PHP sendet Daten an Datenbank
-  ============================================================ -->
-  <section class="newsletter" id="newsletter">
-    <div class="container">
-
-      <div class="zwei-spalten">
-
-        <div class="spalte">
-          <span class="abschnitt-label">/ Newsletter</span>
-          <h2>Zugang zum inneren Kreis.</h2>
-          <p>
-            Früher Zugang zu Neuheiten, exklusive Aktionen und
-            dein erster Digital-Twin-Code — gratis.
-          </p>
-        </div>
-
-        <div class="spalte">
-          <!-- novalidate: HTML5-Validierung AUS, wir machen JS-Validierung -->
-          <!-- action: PHP-Datei die die Daten in die DB speichert -->
-          <form id="newsletter-form" novalidate>
-
-            <div class="form-zeile">
-
-              <div class="form-gruppe">
-                <label for="feld-vorname">Vorname *</label>
-                <input type="text" id="feld-vorname" name="vorname" placeholder="Max">
-                <span class="fehler-text" id="fehler-feld-vorname"></span>
-              </div>
-
-              <div class="form-gruppe">
-                <label for="feld-nachname">Nachname *</label>
-                <input type="text" id="feld-nachname" name="nachname" placeholder="Mustermann">
-                <span class="fehler-text" id="fehler-feld-nachname"></span>
-              </div>
-
-            </div>
-
-            <div class="form-gruppe">
-              <label for="feld-email">E-Mail *</label>
-              <input type="text" id="feld-email" name="email" placeholder="max@example.ch">
-              <span class="fehler-text" id="fehler-feld-email"></span>
-            </div>
-
-            <!-- Zahlenfeld für PLZ (geeigneter Feldtyp laut Anforderung) -->
-            <div class="form-gruppe">
-              <label for="feld-plz">Postleitzahl</label>
-              <input type="number" id="feld-plz" name="plz" placeholder="8000" min="1000" max="9999">
-              <span class="fehler-text" id="fehler-feld-plz"></span>
-            </div>
-
-            <div class="form-gruppe">
-              <label for="feld-interesse">Interesse</label>
-              <select id="feld-interesse" name="interesse">
-                <option value="">— bitte wählen —</option>
-                <option value="schwerter">Schwerter</option>
-                <option value="schusswaffen">Schusswaffen</option>
-                <option value="bogen">Bögen</option>
-                <option value="messer">Messer</option>
-                <option value="digital">Digital Twin</option>
-              </select>
-            </div>
-
-            <!-- Spinner: wird beim Senden angezeigt -->
-            <div class="spinner-wrap" id="spinner-newsletter">
-              <div class="spinner"></div>
-              <p style="margin-top:8px;font-size:0.85rem;color:var(--farbe-text-grau)">Wird gespeichert…</p>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-voll">Anmelden</button>
-
-            <!-- Erfolgsmeldung -->
-            <div class="erfolg-meldung" id="erfolg-newsletter">
-              ✔ Erfolgreich angemeldet! Schau in dein Postfach.
-            </div>
-
-            <!-- Fehlermeldung E-Mail bereits verwendet -->
-            <div class="fehler-meldung-db" id="fehler-email-vorhanden">
-              ✖ Diese E-Mail-Adresse ist bereits registriert.
-            </div>
-
-          </form>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       FOOTER — identisch auf allen Seiten
-  ============================================================ -->
   <footer class="site-footer">
+  <!-- footer = semantisches HTML für den Fussbereich. -->
+
     <div class="container">
 
       <div class="footer-raster">
+      <!-- CSS Grid: 2fr 1fr 1fr 1fr = linke Spalte doppelt so breit. -->
 
-        <!-- Logo + Beschreibung + Social Media -->
         <div class="footer-logo-bereich">
+        <!-- Logo-Spalte: Logo + Beschreibung + Social Links. -->
+
           <strong>IRONBOUND</strong>
+          <!-- strong = fett. Logo-Text. -->
+
           <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
+
           <div class="social-links">
-            <a href="#" class="social-link" title="Instagram">IG</a>
-            <a href="#" class="social-link" title="YouTube">YT</a>
-            <a href="#" class="social-link" title="X / Twitter">X</a>
+          <!-- Flexbox: drei Icon-Buttons nebeneinander. -->
+
+            <a href="https://www.instagram.com/reel/DYrQNvUTdOq/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==" class="social-link" title="Instagram">IG</a>
+            <a href="https://youtu.be/dQw4w9WgXcQ?si=vUtqieOJpkXjKWvx" class="social-link" title="YouTube">YT</a>
+            <a href="https://x.com/Catsillyness/status/2065087834734592231?s=20" class="social-link" title="X">X</a>
+
           </div>
         </div>
 
@@ -407,6 +335,7 @@
           <a href="promotion.html">Aktionen</a>
         </div>
 
+        <!-- Interne Links, die als Platzhalter dienen -->
         <div class="footer-spalte">
           <strong>Info</strong>
           <a href="#">Über uns</a>
@@ -423,10 +352,10 @@
 
       </div>
 
-      <!-- Disclaimer: Pflichtangabe laut Anforderung -->
       <p class="footer-disclaimer">
         ⚠ Das ist ein Schulprojekt und keine reale Website. | Gruppe: Jan, Enea, Tina, Sofija
       </p>
+      <!-- Pflicht laut Anforderung: Disclaimer + Gruppenname. -->
 
       <p class="footer-copyright">
         © 2025 IRONBOUND — Alle Rechte vorbehalten.
@@ -436,10 +365,19 @@
   </footer>
 
 
-  <!-- JS am Ende: erst laden wenn HTML vollständig ist -->
+  <!-- JS am Ende des body einbinden. -->
+  <!-- WARUM HIER? HTML wird von oben nach unten geladen. -->
+  <!-- JS ganz oben = läuft bevor HTML-Elemente existieren = Fehler. -->
+  <!-- JS am Ende = alle Elemente existieren bereits. -->
+
   <script src="js/common.js"></script>
-  <script src="js/slider.js"></script>
-  <script src="js/formular-newsletter.js"></script>
+  <!-- Navigation: Hamburger-Menü, Scroll-Schatten, aktiven Link erkennen. -->
+
+  <script src="js/index.js"></script>
+  <!-- Lädt Top-3-Produkte dynamisch aus der Datenbank. -->
 
 </body>
+<!-- Ende des sichtbaren Inhalts. -->
+
 </html>
+<!-- Ende des HTML-Dokuments. -->

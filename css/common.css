@@ -1,74 +1,101 @@
 /* ============================================================
    common.css — IRONBOUND
-   Gemeinsame Styles für ALLE Seiten:
-   Header, Navigation, Footer, Buttons, Container, Reset
+   Gemeinsame Styles für ALLE drei Seiten.
+   Wird auf index.html, shop.html und promotion.html eingebunden.
+   Enthält: Reset, Variablen, Header, Navigation, Footer, Buttons,
+            Formular-Grundstyles, Spinner.
    ============================================================ */
 
 
 /* ── CSS-VARIABLEN ─────────────────────────────────────────────
-   Alle Farben und Grössen zentral definiert.
-   Änderung hier = Änderung auf allen Seiten.
+   :root = gilt für die gesamte Seite (höchstes Element).
+   Variablen-Syntax: --name: wert;
+   Verwenden: color: var(--name);
+   Vorteil: Farbe an einer Stelle ändern = überall geändert.
    ─────────────────────────────────────────────────────────── */
 :root {
-  --farbe-hintergrund: #0d0d0f;
-  --farbe-dunkel:      #1a1a1e;
-  --farbe-karte:       #111114;
-  --farbe-rahmen:      #2a2a30;
-  --farbe-text:        #e8e8e8;
-  --farbe-text-grau:   #888888;
-  --farbe-gold:        #c8a060;
-  --farbe-gold-hell:   #e0b878;
-  --farbe-weiss:       #ffffff;
-  --farbe-fehler:      #cc4444;
-  --farbe-erfolg:      #4a8a5a;
-  --nav-hoehe:         64px;
-  --schatten:          0 4px 20px rgba(0, 0, 0, 0.5);
-  --schatten-karte:    0 2px 12px rgba(0, 0, 0, 0.4);
+  --farbe-hintergrund: #0d0d0f;   /* Haupt-Hintergrund: fast schwarz */
+  --farbe-dunkel:      #1a1a1e;   /* Etwas heller: für Sektionen */
+  --farbe-karte:       #111114;   /* Produktkarten-Hintergrund */
+  --farbe-rahmen:      #2a2a30;   /* Rahmenfarbe: dunkles Grau */
+  --farbe-text:        #e8e8e8;   /* Heller Fliesstext */
+  --farbe-text-grau:   #888888;   /* Gedämpfter Sekundärtext */
+  --farbe-gold:        #c8a060;   /* Akzentfarbe: warmes Gold */
+  --farbe-gold-hell:   #e0b878;   /* Helleres Gold für Hover */
+  --farbe-weiss:       #ffffff;   /* Reines Weiss */
+  --farbe-fehler:      #cc4444;   /* Rot: Fehlermeldungen */
+  --farbe-erfolg:      #4a8a5a;   /* Grün: Erfolgsmeldungen */
+  --nav-hoehe:         64px;      /* Höhe der Navigation */
+  --schatten:          0 4px 20px rgba(0, 0, 0, 0.5);   /* Standard-Schatten */
+  --schatten-karte:    0 2px 12px rgba(0, 0, 0, 0.4);   /* Karten-Schatten */
 }
 
 
 /* ── RESET ─────────────────────────────────────────────────────
-   Browser-Standardabstände entfernen.
+   Browser haben eigene Standardabstände (z.B. margin bei p, ul).
+   Wir setzen alles auf 0 und definieren selbst.
    ─────────────────────────────────────────────────────────── */
+
 * {
+  /* * = ALLE HTML-Elemente. ::before/::after = CSS-Pseudo-Elemente. */
   box-sizing: border-box;
+  /* border-box: Padding und Border werden IN die Breite eingerechnet. */
+  /* Ohne: 100px wide + 20px padding = 120px. MIT: bleibt 100px. */
   margin: 0;
+  /* Aussenabstand auf 0: kein ungewollter Standardabstand. */
   padding: 0;
+  /* Innenabstand auf 0: wir definieren überall selbst. */
 }
 
 html {
   scroll-behavior: smooth;
+  /* Klick auf Anker-Link (#sortiment) scrollt weich statt springt. */
 }
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
+  /* Schriftart für die ganze Seite. Alle Elemente erben das. */
+  /* Fallback-Kette: erst Segoe UI, dann Arial, dann irgendeine sans-serif. */
   background-color: var(--farbe-hintergrund);
+  /* Hintergrundfarbe der gesamten Seite. */
   color: var(--farbe-text);
+  /* Textfarbe für die gesamte Seite. Elemente erben das. */
   font-size: 16px;
+  /* Basis-Schriftgrösse. 1rem = 16px. */
   line-height: 1.6;
-  /* Platz für fixierten Header */
+  /* Zeilenhöhe: 160% der Schriftgrösse. Verbessert Lesbarkeit. */
   padding-top: var(--nav-hoehe);
+  /* Platz für die fixierte Navigation. Ohne das würde Inhalt unter Nav verschwinden. */
 }
 
 img {
   max-width: 100%;
+  /* Bilder nie breiter als ihr Container. Verhindert horizontales Scrollen. */
   height: auto;
+  /* Höhe automatisch = Seitenverhältnis bleibt erhalten. */
   display: block;
+  /* Entfernt den Standard-Leerraum unter Bildern (inline-baseline). */
 }
 
 a {
   text-decoration: none;
+  /* Keine Unterstreichung bei Links. Wir stylen selbst. */
   color: inherit;
+  /* Linkfarbe erbt vom Elternelement. Kein automatisches Blau. */
 }
 
 h1, h2, h3 {
   line-height: 1.2;
+  /* Überschriften brauchen weniger Zeilenabstand als Fliesstext. */
   color: var(--farbe-weiss);
+  /* Alle Überschriften: weiss. */
 }
 
 h2 {
   font-size: 2rem;
+  /* 2rem = 32px. */
   margin-bottom: 1.5rem;
+  /* Abstand unter jeder h2. */
 }
 
 h3 {
@@ -78,60 +105,78 @@ h3 {
 
 
 /* ── CONTAINER ─────────────────────────────────────────────────
-   Begrenzt Breite, zentriert Inhalt auf allen Seiten.
+   Wiederverwendbare Klasse: begrenzt Breite und zentriert Inhalt.
+   Wird auf fast jeder Section verwendet.
    ─────────────────────────────────────────────────────────── */
 .container {
   max-width: 1200px;
+  /* Maximale Breite. Auf grossen Bildschirmen wird nicht breiter. */
   margin: 0 auto;
+  /* auto links + auto rechts = horizontal zentrieren. */
   padding: 0 24px;
+  /* 24px Abstand links und rechts. Damit Text nicht am Rand klebt. */
 }
 
 
-/* ── ABSCHNITT-LABEL ────────────────────────────────────────── */
+/* ── ABSCHNITT-LABEL ────────────────────────────────────────────
+   Kleines goldenes Label über jeder Überschrift.
+   ─────────────────────────────────────────────────────────── */
 .abschnitt-label {
   display: block;
+  /* Block statt inline: geht auf eigene Zeile. */
   font-size: 0.75rem;
+  /* 0.75rem = 12px. Kleiner als Fliesstext. */
   letter-spacing: 4px;
+  /* Weiter Buchstabenabstand für gesperrten Look. */
   color: var(--farbe-gold);
   margin-bottom: 10px;
   text-transform: uppercase;
+  /* Alles grossgeschrieben. */
 }
 
 
 /* ── BUTTONS ───────────────────────────────────────────────────
-   Hover-Effekte: Hintergrundfarbe ändert sich bei Hover.
+   Hover-Effekt (CSS-Anforderung): Farbe ändert sich sanft.
+   transition = animierter Übergang statt abruptem Wechsel.
    ─────────────────────────────────────────────────────────── */
 .btn {
   display: inline-block;
+  /* inline-block = kann margin/padding haben wie Block, aber läuft in Text-Zeile. */
   padding: 12px 28px;
+  /* Innenabstand: 12px oben/unten, 28px links/rechts. */
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 1px;
   cursor: pointer;
+  /* Maus-Zeiger wird zur Hand. */
   border: 2px solid transparent;
+  /* Rahmen vorhanden aber unsichtbar. Verhindert Sprung beim Hover. */
   border-radius: 3px;
-  /* Übergang: sanfte Farbänderung beim Hover */
+  /* Leicht abgerundete Ecken. */
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  /* Alle diese Eigenschaften ändern sich in 0.2 Sekunden = sanfter Übergang. */
 }
 
-/* Primär-Button: weiss gefüllt */
 .btn-primary {
   background-color: var(--farbe-weiss);
+  /* Primär-Button: weiss gefüllt. */
   color: #111;
+  /* Schwarzer Text auf weissem Hintergrund. */
   border-color: var(--farbe-weiss);
 }
 
-/* Hover-Effekt: Farbe wechselt zu Gold */
 .btn-primary:hover {
+  /* :hover = CSS gilt wenn Maus über dem Element ist. */
   background-color: var(--farbe-gold);
   border-color: var(--farbe-gold);
   color: #111;
   transform: translateY(-2px);
+  /* 2px nach oben verschieben = Button "hebt sich" beim Hover. */
 }
 
-/* Ghost-Button: nur Rahmen */
 .btn-ghost {
   background-color: transparent;
+  /* Kein Hintergrund. Nur Rahmen sichtbar. */
   color: var(--farbe-text-grau);
   border-color: var(--farbe-rahmen);
 }
@@ -141,15 +186,16 @@ h3 {
   color: var(--farbe-gold);
 }
 
-/* Kleiner Button */
 .btn-klein {
   display: inline-block;
   padding: 6px 14px;
+  /* Kleiner als .btn: weniger padding. */
   font-size: 0.8rem;
   font-weight: 600;
   background-color: transparent;
   color: var(--farbe-text-grau);
   border: 1px solid var(--farbe-rahmen);
+  /* 1px statt 2px. */
   border-radius: 3px;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
@@ -160,34 +206,42 @@ h3 {
   color: #111;
 }
 
-/* Volle Breite */
 .btn-voll {
   width: 100%;
+  /* Volle Breite des Containers. Für Formular-Submit-Button. */
   text-align: center;
 }
 
 
 /* ══════════════════════════════════════════════════════════════
    HEADER / NAVIGATION
+   position: fixed = bleibt immer oben, scrollt nicht mit.
+   z-index: 100 = liegt über allen anderen Elementen.
    ══════════════════════════════════════════════════════════════ */
 
 .site-header {
   position: fixed;
+  /* Fixed = klebt am Browser-Fenster, nicht an der Seite. */
   top: 0;
   left: 0;
   right: 0;
+  /* Dehnt sich auf volle Breite des Fensters aus. */
   height: var(--nav-hoehe);
-  /* Hintergrundeffekt: Gradient */
+  /* 64px hoch. */
   background: linear-gradient(to bottom, rgba(6,6,8,0.98) 0%, rgba(13,13,15,0.95) 100%);
+  /* Hintergrundeffekt: leichter Gradient von fast-schwarz nach dunkel. */
   border-bottom: 1px solid var(--farbe-rahmen);
+  /* Trennlinie zum Inhalt. */
   z-index: 100;
-  /* Übergang wenn .gescrollt Klasse hinzukommt */
+  /* Stapelreihenfolge: 100 = liegt über normalem Inhalt (der hat z-index 0). */
   transition: box-shadow 0.3s;
+  /* Schatten erscheint sanft wenn .gescrollt Klasse hinzukommt. */
 }
 
-/* Rahmeneffekt: Schatten beim Scrollen */
 .site-header.gescrollt {
+  /* Klasse wird per JS hinzugefügt wenn window.scrollY > 50. */
   box-shadow: var(--schatten);
+  /* Schatten erscheint = Rahmeneffekt (CSS-Anforderung). */
 }
 
 .header-inner {
@@ -195,30 +249,35 @@ h3 {
   margin: 0 auto;
   padding: 0 24px;
   height: 100%;
+  /* 100% der header-Höhe = 64px. */
   display: flex;
+  /* Flexbox: Logo, Nav, Hamburger nebeneinander. */
   align-items: center;
+  /* Vertikal zentrieren innerhalb der 64px. */
   justify-content: space-between;
+  /* Gleichmässig verteilen: Logo links, Nav rechts. */
 }
 
-/* Logo */
 .logo {
   font-size: 1.3rem;
   font-weight: 900;
+  /* 900 = schwerster/fettester Schriftschnitt. */
   letter-spacing: 4px;
   color: var(--farbe-weiss);
   text-transform: uppercase;
-  /* Hover-Effekt: Logo leuchtet gold */
   transition: color 0.2s;
 }
 
 .logo:hover {
   color: var(--farbe-gold);
+  /* Hover-Effekt: Logo wird gold. */
 }
 
-/* Navigation-Links */
 .nav-links {
   display: flex;
+  /* Links nebeneinander. */
   gap: 4px;
+  /* Kleiner Abstand zwischen den Links. */
   align-items: center;
 }
 
@@ -229,36 +288,39 @@ h3 {
   padding: 8px 14px;
   border-radius: 3px;
   position: relative;
-  /* Übergang für Hover-Effekt */
+  /* Nötig damit ::after (Unterstrich) darin positioniert werden kann. */
   transition: color 0.2s, background-color 0.2s;
 }
 
-/* Hover-Effekt: Hintergrundfarbe und Textfarbe */
 .nav-link:hover {
   color: var(--farbe-weiss);
   background-color: rgba(255, 255, 255, 0.06);
+  /* Sehr schwacher weisser Hintergrund beim Hover. */
 }
 
-/* Aktiver Link: andere Farbe + Unterstrich */
 .nav-link.aktiv {
+  /* Klasse wird per common.js automatisch gesetzt. */
   color: var(--farbe-gold);
 }
 
-/* Unterstrich für aktiven Link mit CSS ::after */
 .nav-link.aktiv::after {
+  /* ::after = Pseudo-Element. Erscheint nach dem Inhalt. */
   content: '';
+  /* MUSS angegeben werden, sonst kein Pseudo-Element. Leer = kein Text. */
   position: absolute;
+  /* Relativ zum .nav-link (der hat position:relative). */
   bottom: 4px;
   left: 14px;
   right: 14px;
   height: 2px;
   background-color: var(--farbe-gold);
   border-radius: 1px;
+  /* Goldener Unterstrich für den aktiven Link. */
 }
 
-/* Hamburger-Button: standardmässig versteckt */
 .hamburger-btn {
   display: none;
+  /* Standardmässig versteckt. @media macht ihn auf Mobile sichtbar. */
   flex-direction: column;
   gap: 5px;
   background: none;
@@ -271,46 +333,56 @@ h3 {
   display: block;
   width: 22px;
   height: 2px;
+  /* Jeder Strich: 22px breit, 2px hoch. */
   background-color: var(--farbe-weiss);
   border-radius: 2px;
   transition: transform 0.3s, opacity 0.3s;
+  /* Striche animieren sich zu X. */
 }
 
-/* X-Animation wenn offen */
 .hamburger-btn.offen span:nth-child(1) {
+  /* :nth-child(1) = erstes span. */
   transform: translateY(7px) rotate(45deg);
+  /* 7px nach unten verschieben, dann 45° drehen. */
 }
 
 .hamburger-btn.offen span:nth-child(2) {
   opacity: 0;
+  /* Mittlerer Strich ausblenden. */
 }
 
 .hamburger-btn.offen span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
+  /* 7px nach oben, -45° drehen. Bildet X mit erstem Strich. */
 }
 
 
 /* ══════════════════════════════════════════════════════════════
    FOOTER
+   CSS Grid: 4 Spalten (2fr 1fr 1fr 1fr).
+   Erste Spalte (Logo) doppelt so breit.
    ══════════════════════════════════════════════════════════════ */
 
 .site-footer {
   background-color: #060608;
+  /* Etwas dunkler als der Rest der Seite. */
   border-top: 1px solid var(--farbe-rahmen);
   padding: 48px 0 0;
   margin-top: 80px;
+  /* Abstand zum letzten Seiteninhalt. */
 }
 
 .footer-raster {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  /* 4 Spalten: erste ist 2x breiter als die anderen. */
   gap: 40px;
   margin-bottom: 40px;
 }
 
-/* Footer-Logo */
 .footer-logo-bereich strong {
   display: block;
+  /* Block: geht auf eigene Zeile. */
   font-size: 1.1rem;
   letter-spacing: 3px;
   color: var(--farbe-weiss);
@@ -324,35 +396,36 @@ h3 {
   max-width: 260px;
 }
 
-/* Social Media Links */
 .social-links {
   display: flex;
   gap: 10px;
+  /* Social-Buttons nebeneinander. */
 }
 
 .social-link {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Inhalt (IG/YT/X) zentriert. */
   width: 36px;
   height: 36px;
   border: 1px solid var(--farbe-rahmen);
   border-radius: 3px;
   color: var(--farbe-text-grau);
   font-size: 0.85rem;
-  /* Hover-Effekt: Border und Farbe */
   transition: border-color 0.2s, color 0.2s;
 }
 
 .social-link:hover {
   border-color: var(--farbe-gold);
   color: var(--farbe-gold);
+  /* Hover-Effekt: Rahmen und Text werden gold. */
 }
 
-/* Footer-Spalten */
 .footer-spalte {
   display: flex;
   flex-direction: column;
+  /* Links untereinander. */
   gap: 10px;
 }
 
@@ -367,27 +440,27 @@ h3 {
 .footer-spalte a {
   color: var(--farbe-text-grau);
   font-size: 0.9rem;
-  /* Hover-Effekt: Farbe */
   transition: color 0.2s;
 }
 
 .footer-spalte a:hover {
   color: var(--farbe-gold);
+  /* Hover-Effekt: Link wird gold. */
 }
 
-/* Disclaimer: pflichtgemäss nach Anforderung */
 .footer-disclaimer {
+  /* Pflichtangabe: Schulprojekt-Hinweis + Gruppenname. */
   background-color: rgba(255, 255, 255, 0.04);
+  /* Sehr schwacher weisser Hintergrund. */
   border: 1px solid var(--farbe-rahmen);
   border-radius: 3px;
+  /* Rahmeneffekt (CSS-Anforderung). */
   padding: 12px 16px;
   text-align: center;
   font-size: 0.8rem;
   color: var(--farbe-text-grau);
-  margin-bottom: 0;
 }
 
-/* Copyright-Zeile ganz unten */
 .footer-copyright {
   text-align: center;
   font-size: 0.8rem;
@@ -399,12 +472,14 @@ h3 {
 
 
 /* ══════════════════════════════════════════════════════════════
-   FORMULAR — GEMEINSAM (auch auf promotion.html)
+   FORMULAR — GEMEINSAME STYLES
+   Gelten für alle Formulare auf allen Seiten.
    ══════════════════════════════════════════════════════════════ */
 
 .form-gruppe {
   display: flex;
   flex-direction: column;
+  /* Label, Input und Fehlertext untereinander. */
   gap: 6px;
   margin-bottom: 16px;
 }
@@ -423,6 +498,7 @@ h3 {
 .form-gruppe input[type="tel"],
 .form-gruppe select,
 .form-gruppe textarea {
+  /* [type="text"] = Attributselektor: nur Inputs mit diesem Attribut-Wert. */
   background-color: var(--farbe-hintergrund);
   border: 1px solid var(--farbe-rahmen);
   border-radius: 3px;
@@ -430,61 +506,71 @@ h3 {
   font-size: 1rem;
   padding: 10px 14px;
   width: 100%;
+  /* Volle Breite des Eltern-Elements. */
   outline: none;
+  /* Standard-Fokus-Rahmen des Browsers entfernen. Wir machen eigenen. */
   font-family: inherit;
-  /* Übergang für Fokus-Effekt */
+  /* Schrift vom body erben. Sonst: Browser-Standard (Times New Roman). */
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Fokus-Effekt: goldener Rahmen + leichter Schatten */
 .form-gruppe input:focus,
 .form-gruppe select:focus,
 .form-gruppe textarea:focus {
+  /* :focus = wenn das Feld aktiv ist (User hat reingeklickt). */
   border-color: var(--farbe-gold);
+  /* Goldener Rahmen beim Fokus. */
   box-shadow: 0 0 0 3px rgba(200, 160, 96, 0.15);
+  /* Leichter goldener Schein um das Feld. 0 0 0 3px = kein Versatz, nur Grösse. */
 }
 
 .form-gruppe textarea {
   resize: vertical;
+  /* User kann nur vertikal vergrössern, nicht horizontal. */
   min-height: 80px;
 }
 
-/* Fehlerfeld: roter Rahmen */
 .form-gruppe input.feld-fehler,
 .form-gruppe select.feld-fehler,
 .form-gruppe textarea.feld-fehler {
+  /* Klasse wird per JS hinzugefügt wenn Validierung fehlschlägt. */
   border-color: var(--farbe-fehler);
+  /* Roter Rahmen. */
 }
 
-/* Korrektes Feld: grüner Rahmen */
 .form-gruppe input.feld-ok,
 .form-gruppe select.feld-ok,
 .form-gruppe textarea.feld-ok {
+  /* Klasse wird per JS hinzugefügt wenn Eingabe korrekt. */
   border-color: var(--farbe-erfolg);
+  /* Grüner Rahmen. */
 }
 
 .fehler-text {
   font-size: 0.8rem;
   color: var(--farbe-fehler);
   min-height: 18px;
+  /* Mindesthöhe: Layout springt nicht wenn Text erscheint/verschwindet. */
   display: block;
 }
 
-/* Erfolgsmeldung: standardmässig versteckt */
 .erfolg-meldung {
   display: none;
+  /* Unsichtbar beim Start. JS: style.display = 'block' nach Erfolg. */
   margin-top: 16px;
   padding: 12px 16px;
   background-color: rgba(74, 138, 90, 0.15);
+  /* Sehr schwaches Grün. */
   border: 1px solid var(--farbe-erfolg);
   border-radius: 3px;
   color: #7ec892;
+  /* Helleres Grün für den Text. */
   font-size: 0.9rem;
 }
 
-/* Spinner: standardmässig versteckt */
 .spinner-wrap {
   display: none;
+  /* Unsichtbar. JS zeigt ihn während fetch() läuft. */
   text-align: center;
   padding: 16px 0;
 }
@@ -494,65 +580,79 @@ h3 {
   width: 32px;
   height: 32px;
   border: 3px solid var(--farbe-rahmen);
+  /* Grauer Kreisrahmen komplett. */
   border-top: 3px solid var(--farbe-gold);
+  /* Oberer Teil goldfarben = sieht aus wie drehend. */
   border-radius: 50%;
-  /* CSS-Animation: Rotation */
+  /* 50% = vollständiger Kreis. */
   animation: drehen 0.8s linear infinite;
+  /* CSS-Animation (Anforderung): dreht sich kontinuierlich. */
 }
 
 @keyframes drehen {
+  /* Keyframe-Animation: definiert Anfangs- und Endzustand. */
   from { transform: rotate(0deg); }
+  /* Startet bei 0°. */
   to   { transform: rotate(360deg); }
+  /* Endet bei 360° = eine volle Drehung. */
 }
 
 .form-gruppe select option {
   background-color: var(--farbe-dunkel);
+  /* Dropdown-Einträge: dunkler Hintergrund. */
 }
 
 
 /* ══════════════════════════════════════════════════════════════
    RESPONSIVE NAVIGATION
+   @media = CSS gilt NUR bei bestimmter Bildschirmbreite.
    ══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 900px) {
+  /* Gilt wenn Fenster höchstens 900px breit. */
 
-  /* Desktop-Nav verstecken */
   .nav-links {
     display: none;
+    /* Desktop-Nav ausblenden auf Tablet/Mobile. */
   }
 
-  /* Mobile-Nav: ausgeklappt als Dropdown */
   .nav-links.offen {
+    /* Klasse wird per JS gesetzt wenn Hamburger geklickt. */
     display: flex;
     flex-direction: column;
+    /* Links untereinander statt nebeneinander. */
     position: fixed;
+    /* Klebt am Fenster, scrollt nicht mit. */
     top: var(--nav-hoehe);
+    /* Direkt unter dem Header. */
     left: 0;
     right: 0;
     background-color: rgba(6, 6, 8, 0.98);
     padding: 16px 24px 24px;
     border-bottom: 1px solid var(--farbe-rahmen);
     z-index: 99;
+    /* Unter Header (100) aber über Inhalt. */
     box-shadow: var(--schatten);
   }
 
-  /* Hamburger sichtbar */
   .hamburger-btn {
     display: flex;
+    /* Hamburger auf Mobile einblenden. */
   }
 
-  /* Footer: 2 Spalten */
   .footer-raster {
     grid-template-columns: 1fr 1fr;
+    /* Footer: von 4 auf 2 Spalten. */
   }
 
 }
 
 @media (max-width: 600px) {
+  /* Noch kleinere Bildschirme. */
 
-  /* Footer: 1 Spalte */
   .footer-raster {
     grid-template-columns: 1fr;
+    /* Footer: 1 Spalte. */
   }
 
 }

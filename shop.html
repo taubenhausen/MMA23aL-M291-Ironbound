@@ -22,7 +22,6 @@
       <nav class="nav-links" id="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="shop.html" class="nav-link aktiv">Arsenal</a>
-        <a href="promotion.html" class="nav-link">Aktionen</a>
         <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
       </nav>
 
@@ -71,6 +70,24 @@
 
 
   <!-- ============================================================
+       FILTER-CHIPS (Interaktives Element ④)
+  ============================================================ -->
+  <section class="filter-leiste">
+    <div class="container">
+      <div class="filter-chips">
+        <button class="filter-chip aktiv" data-filter="alle">Alle</button>
+        <button class="filter-chip" data-filter="schwerter">Schwerter</button>
+        <button class="filter-chip" data-filter="schusswaffen">Schusswaffen</button>
+        <button class="filter-chip" data-filter="messer">Messer</button>
+        <button class="filter-chip" data-filter="bogen">Bögen</button>
+        <button class="filter-chip" data-filter="einsteiger">Einsteiger</button>
+        <button class="filter-chip" data-filter="digital">🎮 Digital Twin</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
        SHOP LAYOUT: Produktraster
   ============================================================ -->
   <div class="shop-layout container">
@@ -78,145 +95,13 @@
     <!-- PRODUKTBEREICH -->
     <div class="produkt-bereich">
 
-      <!-- Topbar: Anzahl + Sortierung -->
+      <!-- Topbar: Anzahl -->
       <div class="produkt-topbar">
         <span class="ergebnis-anzahl" id="ergebnis-anzahl">6 Produkte im Inventar</span>
-        <select class="sort-auswahl" id="sort-auswahl">
-          <option value="preis-asc">Preis aufsteigend</option>
-          <option value="preis-desc">Preis absteigend</option>
-          <option value="neu">Neuheiten</option>
-        </select>
       </div>
 
-      <!-- INVENTAR-RASTER (Produktkarten) -->
-      <div class="inventar-raster" id="inventar-raster">
-
-        <!-- Karte 1 -->
-        <div class="inventar-karte" data-filter="schwerter einsteiger digital" data-preis="249">
-          <div class="karten-nummer">001</div>
-          <div class="karten-bild">
-            <img src="img/prod1-placeholder.svg" alt="Gladius Romanus">
-            <span class="twin-abzeichen">🎮 Twin</span>
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Schwerter · Einsteiger</div>
-            <div class="karten-name">Gladius Romanus</div>
-            <!-- Skill-Balken -->
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 35%;"></div>
-            </div>
-            <span class="skill-text">LVL 1 — Einsteiger</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 249</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Karte 2 -->
-        <div class="inventar-karte" data-filter="schusswaffen profi" data-preis="599">
-          <div class="karten-nummer">002</div>
-          <div class="karten-bild">
-            <img src="img/prod2-placeholder.svg" alt="M4 Replika">
-            <span class="bestseller-abzeichen">Bestseller</span>
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Schusswaffen · Profi</div>
-            <div class="karten-name">M4 Replika</div>
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 100%;"></div>
-            </div>
-            <span class="skill-text">LVL 3 — Profi</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 599</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Karte 3 -->
-        <div class="inventar-karte" data-filter="bogen einsteiger digital" data-preis="189">
-          <div class="karten-nummer">003</div>
-          <div class="karten-bild">
-            <img src="img/prod3-placeholder.svg" alt="Langbogen 60 Zoll">
-            <span class="twin-abzeichen">🎮 Twin</span>
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Bögen · Einsteiger</div>
-            <div class="karten-name">Langbogen 60"</div>
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 30%;"></div>
-            </div>
-            <span class="skill-text">LVL 1 — Einsteiger</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 189</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Karte 4 -->
-        <div class="inventar-karte" data-filter="messer fortgeschritten" data-preis="149">
-          <div class="karten-nummer">004</div>
-          <div class="karten-bild">
-            <img src="img/prod4-placeholder.svg" alt="Kampfmesser">
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Messer · Fortgeschritten</div>
-            <div class="karten-name">Kampfmesser</div>
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 65%;"></div>
-            </div>
-            <span class="skill-text">LVL 2 — Fortgeschritten</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 149</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Karte 5 -->
-        <div class="inventar-karte" data-filter="bogen fortgeschritten digital" data-preis="399">
-          <div class="karten-nummer">005</div>
-          <div class="karten-bild">
-            <img src="img/prod5-placeholder.svg" alt="Armbrust Pro">
-            <span class="twin-abzeichen">🎮 Twin</span>
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Bögen · Fortgeschritten</div>
-            <div class="karten-name">Armbrust Pro</div>
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 70%;"></div>
-            </div>
-            <span class="skill-text">LVL 2 — Fortgeschritten</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 399</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Karte 6 -->
-        <div class="inventar-karte" data-filter="schwerter einsteiger" data-preis="99">
-          <div class="karten-nummer">006</div>
-          <div class="karten-bild">
-            <img src="img/prod6-placeholder.svg" alt="Speer Replika">
-          </div>
-          <div class="karten-inhalt">
-            <div class="karten-kategorie">Stangenwaffen · Einsteiger</div>
-            <div class="karten-name">Speer Replika</div>
-            <div class="skill-balken">
-              <div class="skill-fuellung" style="width: 20%;"></div>
-            </div>
-            <span class="skill-text">LVL 1 — Einsteiger</span>
-            <div class="karten-fuss">
-              <span class="karten-preis">CHF 99</span>
-              <button class="btn btn-klein">+ Inventar</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <!-- INVENTAR-RASTER — wird vollständig durch shop.js befüllt -->
+      <div class="inventar-raster" id="inventar-raster"></div>
       <!-- Ende inventar-raster -->
 
       <!-- Keine Treffer Meldung -->
