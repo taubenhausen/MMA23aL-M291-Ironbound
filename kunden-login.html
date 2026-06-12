@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aktionen & Digital Twin – IRONBOUND</title>
+  <title>Kunden-Login – IRONBOUND</title>
   <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/promotion.css">
+  <link rel="stylesheet" href="css/kunden-login.css">
 </head>
 
 <body>
@@ -22,7 +22,9 @@
       <nav class="nav-links" id="nav-links">
         <a href="index.html" class="nav-link">Home</a>
         <a href="shop.html" class="nav-link">Arsenal</a>
-        <a href="promotion.html#digital-twin" class="nav-link">Digital Twin</a>
+        <a href="kunden-login.html#digital-twin" class="nav-link">Digital Twin</a>
+        <a href="kunden-login.html" class="nav-link" id="kunden-nav-link">Kunden-Login</a>
+        <a href="#" class="nav-link" id="warenkorb-nav-link">Inventar (<span id="warenkorb-anzahl">0</span>)</a>
       </nav>
 
       <button class="hamburger-btn" id="hamburger-btn">
@@ -36,152 +38,133 @@
 
 
   <!-- ============================================================
-       PROMOTION BANNER
-       CSS-Animation: Teaser-Element (Anforderung)
+       KUNDEN-LOGIN BANNER
+       Die bestehenden CSS-Klassen bleiben, damit das Aussehen gleich bleibt.
   ============================================================ -->
   <section class="promo-banner">
-    <!-- Hintergrundeffekt: Gradient (CSS-Anforderung) -->
     <div class="promo-banner-bg"></div>
     <div class="container promo-banner-inhalt">
-      <p class="abschnitt-label">/ Aktuelle Aktion</p>
-      <!-- Animation: Titel pulsiert -->
-      <h1 class="promo-titel pulsieren">Exklusiv für Mitglieder.</h1>
+      <p class="abschnitt-label">/ Kundenbereich</p>
+      <h1 class="promo-titel pulsieren">Dein Ironbound-Zugang.</h1>
       <p class="promo-untertitel">
-        Melde dich jetzt an und erhalte <strong>10% Rabatt</strong> +
-        einen exklusiven Digital-Twin-Code.
+        Registriere dich oder logge dich ein, damit dein Inventar direkt in der Datenbank gespeichert wird.
       </p>
     </div>
   </section>
 
 
   <!-- ============================================================
-       ANMELDEFORMULAR + DIGITAL TWIN INFO
-       Zwei-Spalten-Layout
+       KUNDENREGISTRIERUNG + LOGIN
+       Beide Formulare nutzen php/kunden-login.php und die Tabelle Kunden.
   ============================================================ -->
-  <section class="promo-main" id="anmeldung">
+  <section class="promo-main" id="kunden-login">
     <div class="container">
 
       <div class="promo-zwei-spalten">
 
-        <!-- LINKE SEITE: Anmeldeformular ──────────────────────── -->
+        <!-- LINKE SEITE: Registrierung ──────────────────────── -->
         <div class="promo-formular-bereich">
 
-          <span class="abschnitt-label">/ Anmeldung</span>
-          <h2>Zugang sichern.</h2>
+          <span class="abschnitt-label">/ Registrierung</span>
+          <h2>Konto erstellen.</h2>
 
-          <!--
-            novalidate: HTML5-Validierung AUS
-            id: JS verarbeitet dieses Formular
-            JS sendet via fetch() an PHP-Datei auf dem Server
-          -->
-          <form id="promo-form" novalidate>
+          <form id="kunden-registrieren-form" novalidate>
 
-            <!-- Vorname + Nachname nebeneinander -->
             <div class="form-zeile">
-
               <div class="form-gruppe">
-                <label for="p-vorname">Vorname *</label>
-                <input type="text" id="p-vorname" name="vorname" placeholder="Max">
-                <span class="fehler-text" id="fehler-p-vorname"></span>
+                <label for="k-vorname">Vorname *</label>
+                <input type="text" id="k-vorname" name="vorname" placeholder="Max">
+                <span class="fehler-text" id="fehler-k-vorname"></span>
               </div>
 
               <div class="form-gruppe">
-                <label for="p-nachname">Nachname *</label>
-                <input type="text" id="p-nachname" name="nachname" placeholder="Mustermann">
-                <span class="fehler-text" id="fehler-p-nachname"></span>
+                <label for="k-nachname">Nachname *</label>
+                <input type="text" id="k-nachname" name="nachname" placeholder="Mustermann">
+                <span class="fehler-text" id="fehler-k-nachname"></span>
               </div>
-
             </div>
 
             <div class="form-gruppe">
-              <label for="p-email">E-Mail *</label>
-              <input type="text" id="p-email" name="email" placeholder="max@example.ch">
-              <span class="fehler-text" id="fehler-p-email"></span>
+              <label for="k-email">E-Mail *</label>
+              <input type="text" id="k-email" name="email" placeholder="max@example.ch">
+              <span class="fehler-text" id="fehler-k-email"></span>
             </div>
 
-            <!-- Zahlenfeld für Postleitzahl (geeigneter Feldtyp) -->
             <div class="form-gruppe">
-              <label for="p-plz">Postleitzahl *</label>
-              <input type="number" id="p-plz" name="plz" placeholder="8000" min="1000" max="9999">
-              <span class="fehler-text" id="fehler-p-plz"></span>
+              <label for="k-telefonnummer">Telefonnummer *</label>
+              <input type="text" id="k-telefonnummer" name="telefonnummer" placeholder="079 123 45 67">
+              <span class="fehler-text" id="fehler-k-telefonnummer"></span>
             </div>
 
-            <!-- Dropdown: Waffen-Interesse -->
             <div class="form-gruppe">
-              <label for="p-interesse">Waffen-Interesse *</label>
-              <select id="p-interesse" name="interesse">
-                <option value="">— bitte wählen —</option>
-                <option value="schwerter">Schwerter &amp; Klingen</option>
-                <option value="schusswaffen">Schusswaffen</option>
-                <option value="bogen">Bögen &amp; Armbrüste</option>
-                <option value="messer">Messer</option>
-                <option value="stangenwaffen">Stangenwaffen</option>
-                <option value="digital">Digital Twin Gaming</option>
-              </select>
-              <span class="fehler-text" id="fehler-p-interesse"></span>
+              <label for="k-passwort">Passwort *</label>
+              <input type="password" id="k-passwort" name="passwort" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
+              <span class="fehler-text" id="fehler-k-passwort"></span>
             </div>
 
-            <!-- AGB Checkbox -->
             <div class="form-gruppe">
               <label class="agb-label">
-                <input type="checkbox" id="p-agb" name="agb">
+                <input type="checkbox" id="k-agb" name="agb">
                 <span>Ich bestätige, mindestens 18 Jahre alt zu sein und akzeptiere die
                   <a href="#" class="text-gold">AGB</a>. *
                 </span>
               </label>
-              <span class="fehler-text" id="fehler-p-agb"></span>
+              <span class="fehler-text" id="fehler-k-agb"></span>
             </div>
 
-            <!-- Spinner (während DB-Speicherung) -->
-            <div class="spinner-wrap" id="spinner-promo">
-              <div class="spinner"></div>
-              <p style="margin-top:8px;font-size:0.85rem;color:var(--farbe-text-grau)">Wird gespeichert…</p>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-voll" id="promo-submit-btn">
-              Jetzt anmelden
+            <button type="submit" class="btn btn-primary btn-voll" id="registrieren-submit-btn">
+              Registrieren
             </button>
 
-            <!-- Erfolgsmeldung -->
-            <div class="erfolg-meldung" id="erfolg-promo">
-              ✔ Anmeldung gespeichert! Dein Code kommt per E-Mail.
-            </div>
-
-            <!-- Fehlermeldung: E-Mail bereits verwendet (DB-Check) -->
-            <div class="fehler-meldung-db" id="fehler-email-vorhanden">
-              ✖ Diese E-Mail-Adresse ist bereits registriert.
-            </div>
-
           </form>
-
         </div>
 
-        <!-- RECHTE SEITE: Promotion-Infos ─────────────────────── -->
+        <!-- RECHTE SEITE: Login ─────────────────────────────── -->
         <div class="promo-info-bereich">
 
-          <span class="abschnitt-label">/ Im Paket</span>
-          <h2>Was erhältst du?</h2>
+          <span class="abschnitt-label">/ Login</span>
+          <h2>Einloggen.</h2>
+
+          <form id="kunden-login-form" novalidate>
+            <div class="form-gruppe">
+              <label for="login-email">E-Mail *</label>
+              <input type="text" id="login-email" name="email" placeholder="max@example.ch">
+              <span class="fehler-text" id="fehler-login-email"></span>
+            </div>
+
+            <div class="form-gruppe">
+              <label for="login-passwort">Passwort *</label>
+              <input type="password" id="login-passwort" name="passwort" placeholder="Dein Passwort" autocomplete="current-password">
+              <span class="fehler-text" id="fehler-login-passwort"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-voll" id="login-submit-btn">
+              Einloggen
+            </button>
+          </form>
+
+          <div class="spinner-wrap" id="spinner-kunden-login">
+            <div class="spinner"></div>
+            <p style="margin-top:8px;font-size:0.85rem;color:var(--farbe-text-grau)">Wird gespeichert…</p>
+          </div>
+
+          <div class="erfolg-meldung" id="kunden-erfolg"></div>
+          <div class="fehler-meldung-db" id="fehler-email-vorhanden"></div>
+          <div class="fehler-meldung-db" id="kunden-fehler"></div>
 
           <ul class="vorteile-liste">
             <li>
               <span class="vorteil-icon">✓</span>
               <div>
-                <strong>10% Rabatt</strong>
-                <p>Auf deine erste Bestellung im Ironbound-Shop.</p>
+                <strong>Datenbank-Login</strong>
+                <p>Dein Konto wird in der bestehenden Tabelle Kunden gespeichert.</p>
               </div>
             </li>
             <li>
               <span class="vorteil-icon">✓</span>
               <div>
-                <strong>Digital-Twin-Code</strong>
-                <p>Exklusiver Einlöse-Code für das Partnerspiel.</p>
-              </div>
-            </li>
-            <li>
-              <span class="vorteil-icon">✓</span>
-              <div>
-                <strong>Frühzugang</strong>
-                <p>Als Erstes über Neuheiten und limitierte Editionen informiert.</p>
+                <strong>Inventar über Bestellungen</strong>
+                <p>Der Warenkorb wird mit Bestellungen und besteht_aus abgebildet.</p>
               </div>
             </li>
           </ul>
@@ -235,14 +218,12 @@
         </div>
 
         <div class="twin-visual">
-          <!-- Animation: Twin-Element pulsiert (CSS-Anforderung: animiertes Teaser-Element) -->
           <div class="twin-box">
             <div class="twin-physisch">
               <div class="twin-icon">⚙</div>
               <div class="twin-label">Physisch</div>
             </div>
             <div class="twin-verbindung">
-              <!-- CSS-Animation: Puls läuft durch die Linie -->
               <div class="verbindungs-linie">
                 <div class="verbindungs-puls"></div>
               </div>
@@ -261,10 +242,7 @@
 
 
   <!-- ============================================================
-       VERSUS RUNNER — Interaktives Game-Element (③)
-       Eigener Code, min. 15 Zeilen JS, min. 30 Zeilen CSS
-       Grafiken: Waffen-Silhouetten statt T-Rex
-       Startet erst beim Klick auf Start-Button
+       VERSUS RUNNER — bestehendes interaktives Game bleibt erhalten
   ============================================================ -->
   <section class="game-sektion">
     <div class="container">
@@ -276,7 +254,6 @@
         Je länger du überlebst, desto höher dein Score.
       </p>
 
-      <!-- Game HUD: Score-Anzeige -->
       <div class="game-hud">
         <div class="hud-element">
           <div class="hud-wert" id="game-score">000</div>
@@ -288,21 +265,18 @@
         </div>
       </div>
 
-      <!-- Canvas: hier läuft das Spiel -->
       <canvas id="game-canvas" width="800" height="220"></canvas>
 
       <p class="game-steuerung">
         Steuerung: <strong>Leertaste</strong> oder <strong>Tippen/Klicken</strong> = Sprung
       </p>
 
-      <!-- Buttons: Spiel startet ERST bei Klick (Anforderung) -->
       <div class="game-buttons">
         <button class="btn btn-primary" id="game-start-btn">▶ Starten</button>
         <button class="btn btn-ghost" id="game-pause-btn">⏸ Pause</button>
         <button class="btn btn-ghost" id="game-reset-btn">↺ Neustart</button>
       </div>
 
-      <!-- Game-Over Meldung -->
       <div class="game-over-meldung" id="game-over-meldung">
         GAME OVER — Score: <span id="game-final-score">0</span>
       </div>
@@ -333,7 +307,7 @@
           <strong>Shop</strong>
           <a href="shop.html">Arsenal</a>
           <a href="shop.html?kat=digital">Digital Twin</a>
-          <a href="promotion.html">Aktionen</a>
+          <a href="kunden-login.html">Kunden-Login</a>
         </div>
 
         <div class="footer-spalte">
@@ -365,7 +339,7 @@
 
 
   <script src="js/common.js" defer></script>
-  <script src="js/formular-promo.js" defer></script>
+  <script src="js/kunden-login.js" defer></script>
   <script src="js/partner-games.js" defer></script>
   <script src="js/game.js" defer></script>
 

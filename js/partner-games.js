@@ -3,7 +3,7 @@
 
    Aufgabe dieser Datei:
    - Partner-Spiele aus php/partner-games.php laden
-   - Die bestehenden Badges in promotion.html ersetzen
+   - Die bestehenden Badges in kunden-login.html ersetzen
 
    Wichtig:
    Die CSS-Klasse partner-badge bleibt gleich. Dadurch ändert sich
@@ -11,7 +11,7 @@
    ============================================================ */
 
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   /* Container mit den bestehenden Game-A/Game-B/Game-C-Badges suchen. */
   var badgeContainer = document.querySelector('.partner-badges');
 
@@ -22,14 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /* Partner-Spiele aus der PHP-API laden. */
   fetch('php/partner-games.php')
-    .then(function(antwort) {
+    .then(function (antwort) {
       if (!antwort.ok) {
         throw new Error('Partner-Games-API nicht erreichbar.');
       }
 
       return antwort.json();
     })
-    .then(function(daten) {
+    .then(function (daten) {
       if (daten.status !== 'ok' || !Array.isArray(daten.games) || daten.games.length === 0) {
         return;
       }
@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
       /* Nur wenn echte Daten vorhanden sind, ersetzen wir die Platzhalter. */
       badgeContainer.innerHTML = '';
 
-      daten.games.forEach(function(game) {
+      daten.games.forEach(function (game) {
         var badge = document.createElement('span');
         badge.className = 'partner-badge';
         badge.textContent = game.name;
         badgeContainer.appendChild(badge);
       });
     })
-    .catch(function() {
+    .catch(function () {
       /* Wenn die API nicht funktioniert, bleiben die bestehenden Platzhalter sichtbar. */
     });
 });

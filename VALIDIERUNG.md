@@ -26,7 +26,7 @@ Die Formular-Validierung erfolgt **ausschliesslich über JavaScript** (kein HTML
 | Nachname | Text | ✅ Ja | Mindestens 2 Zeichen; nur Buchstaben, Leerzeichen, Bindestriche | «Mindestens 2 Zeichen erforderlich.» |
 | E-Mail | Text | ✅ Ja | Gültiges E-Mail-Format: `name@domain.tld` (Regex-Prüfung) | «Bitte gib eine gültige E-Mail-Adresse ein (z. B. max@example.ch).» |
 
-### Formular 2: Promotion-Anmeldung (promotion.html)
+### Formular 2: Kunden-Login (kunden-login.html)
 
 | Feld | Typ | Pflicht | Regeln | Fehlermeldung |
 |------|-----|---------|--------|---------------|

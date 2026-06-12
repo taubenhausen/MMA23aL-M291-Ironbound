@@ -153,10 +153,6 @@ function filter_tags_bauen(string $name, string $kategorie, string $beschreibung
         $tags[] = 'bogen';
     }
 
-    if ($skillLevel === 'Einsteiger') {
-        $tags[] = 'einsteiger';
-    }
-
     if ($skillLevel === 'Fortgeschritten') {
         $tags[] = 'fortgeschritten';
     }
@@ -253,14 +249,25 @@ try {
             case 'schusswaffen':
                 $sql .= ' AND (
                     LOWER(p.kategorie) LIKE :filter_schusswaffen
-                    OR LOWER(p.name) LIKE :filter_m4
-                    OR LOWER(p.name) LIKE :filter_gewehr
-                    OR LOWER(p.name) LIKE :filter_pistole
+                    OR LOWER(p.name)      LIKE :filter_schusswaffen
+                    OR LOWER(p.Beschreibung) LIKE :filter_schusswaffen
+                    OR LOWER(p.name)      LIKE :filter_m4
+                    OR LOWER(p.name)      LIKE :filter_gewehr
+                    OR LOWER(p.name)      LIKE :filter_pistole
+                    OR LOWER(p.name)      LIKE :filter_karabiner
+                    OR LOWER(p.name)      LIKE :filter_revolver
+                    OR LOWER(p.Beschreibung) LIKE :filter_m4
+                    OR LOWER(p.Beschreibung) LIKE :filter_gewehr
+                    OR LOWER(p.Beschreibung) LIKE :filter_pistole
+                    OR LOWER(p.Beschreibung) LIKE :filter_karabiner
+                    OR LOWER(p.Beschreibung) LIKE :filter_revolver
                 )';
                 $params[':filter_schusswaffen'] = '%schusswaff%';
                 $params[':filter_m4'] = '%m4%';
                 $params[':filter_gewehr'] = '%gewehr%';
                 $params[':filter_pistole'] = '%pistole%';
+                $params[':filter_karabiner'] = '%karabiner%';
+                $params[':filter_revolver'] = '%revolver%';
                 break;
 
             case 'messer':
@@ -280,14 +287,6 @@ try {
                 $params[':filter_armbrust'] = '%armbrust%';
                 break;
 
-            case 'einsteiger':
-                $sql .= ' AND (
-                    LOWER(p.kategorie) LIKE :filter_einsteiger
-                    OR LOWER(p.Beschreibung) LIKE :filter_einsteiger
-                    OR LOWER(p.name) LIKE :filter_einsteiger
-                )';
-                $params[':filter_einsteiger'] = '%einsteiger%';
-                break;
         }
     }
 
