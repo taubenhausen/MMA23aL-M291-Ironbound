@@ -1,30 +1,6 @@
 # Ironbound — Waffen-Shop
 **Modul M290 — Gruppe: Jan, Enea, Tina, Sofija**
 
-## Projektstruktur
-
-```
-ironbound/
-├── index.html           ← Homepage (Hero, Sortiment, Kunden-Loginen, Newsletter-Formular)
-├── shop.html            ← Shop / Produktliste (Suche, Filter, Produktraster)
-├── kunden-login.html       ← Kunden-Login Page (Formular + Versus Runner Game)
-├── css/
-│   └── style.css        ← Alle Styles (dark theme, responsive 500–1400px)
-├── js/
-│   ├── nav.js           ← Navigation ① (Hamburger-Menü, Scroll-Effekt)
-│   ├── validate.js      ← Formular-Validierung ② (nur JavaScript, kein HTML5)
-│   ├── slider.js        ← Image Slider ④ (Autoplay, Dots, Pfeile)
-│   ├── shop.js          ← Live-Suche ④ + Filter-Chips + Scroll-Animationen ⑤
-│   └── game.js          ← Versus Runner Game ③ (Canvas 2D)
-├── img/
-│   ├── logo-placeholder.svg
-│   ├── hero-placeholder.svg
-│   ├── promo1-3-placeholder.svg
-│   ├── promo-banner-placeholder.svg
-│   └── prod1-6-placeholder.svg
-└── VALIDIERUNG.md       ← Validierungskonzept (Dokumentation)
-```
-
 ## Interaktive Elemente (5 Pflicht-Elemente)
 
 | # | Element | Datei | Trigger |
