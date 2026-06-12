@@ -53,7 +53,7 @@ function fallbackFiltern(filter) {
   }
 
   return FALLBACK_PRODUKTE
-    .filter(function (produkt) {
+    .filter(function(produkt) {
       return String(produkt.filter_tags).indexOf(filter) !== -1;
     })
     .map(window.IRONBOUND.produktNormalisieren);
@@ -87,27 +87,27 @@ function produktKarteHtml(produkt) {
 
   return (
     '<div class="inventar-karte" data-filter="' + htmlEscapen(p.filter_tags) + '" data-preis="' + htmlEscapen(p.preis) + '">' +
-    '<div class="karten-nummer">' + htmlEscapen(p.nummer) + '</div>' +
+      '<div class="karten-nummer">' + htmlEscapen(p.nummer) + '</div>' +
 
-    '<div class="karten-bild">' +
-    '<img src="' + htmlEscapen(p.bild) + '" alt="' + htmlEscapen(p.name) + '">' +
-    badge +
-    '</div>' +
+      '<div class="karten-bild">' +
+        '<img src="' + htmlEscapen(p.bild) + '" alt="' + htmlEscapen(p.name) + '">' +
+        badge +
+      '</div>' +
 
-    '<div class="karten-inhalt">' +
-    '<div class="karten-kategorie">' + htmlEscapen(p.kategorie) + '</div>' +
-    '<div class="karten-name">' + htmlEscapen(p.name) + '</div>' +
+      '<div class="karten-inhalt">' +
+        '<div class="karten-kategorie">' + htmlEscapen(p.kategorie) + '</div>' +
+        '<div class="karten-name">' + htmlEscapen(p.name) + '</div>' +
 
-    '<div class="skill-balken">' +
-    '<div class="skill-fuellung" style="width:' + htmlEscapen(p.skill_pct) + '%;"></div>' +
-    '</div>' +
-    '<span class="skill-text">LVL ' + skillLvl + ' — ' + htmlEscapen(p.skill_level) + '</span>' +
+        '<div class="skill-balken">' +
+          '<div class="skill-fuellung" style="width:' + htmlEscapen(p.skill_pct) + '%;"></div>' +
+        '</div>' +
+        '<span class="skill-text">LVL ' + skillLvl + ' — ' + htmlEscapen(p.skill_level) + '</span>' +
 
-    '<div class="karten-fuss">' +
-    '<span class="karten-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
-    '<button class="btn btn-klein" type="button">+ Inventar</button>' +
-    '</div>' +
-    '</div>' +
+        '<div class="karten-fuss">' +
+          '<span class="karten-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
+          '<button class="btn btn-klein" type="button">+ Inventar</button>' +
+        '</div>' +
+      '</div>' +
     '</div>'
   );
 }
@@ -180,14 +180,14 @@ function produkteLaden() {
     sort: aktiverSort,
     suche: suchbegriff
   })
-    .then(function (produkte) {
-      shopProdukte = produkte;
-      rasterRendern(shopProdukte);
-      preisfilterAnwenden();
-    })
-    .catch(function () {
-      /* Kein Server oder DB-Fehler: Fallback bleibt sichtbar. */
-    });
+  .then(function(produkte) {
+    shopProdukte = produkte;
+    rasterRendern(shopProdukte);
+    preisfilterAnwenden();
+  })
+  .catch(function() {
+    /* Kein Server oder DB-Fehler: Fallback bleibt sichtbar. */
+  });
 }
 
 
@@ -208,14 +208,14 @@ function sucheAusfuehren() {
     return;
   }
 
-  var gefilterteProdukte = shopProdukte.filter(function (produkt) {
+  var gefilterteProdukte = shopProdukte.filter(function(produkt) {
     var name = String(produkt.name || '').toLowerCase();
     var kategorie = String(produkt.kategorie || '').toLowerCase();
     var tags = String(produkt.filter_tags || '').toLowerCase();
 
     return name.indexOf(suchbegriff) !== -1 ||
-      kategorie.indexOf(suchbegriff) !== -1 ||
-      tags.indexOf(suchbegriff) !== -1;
+           kategorie.indexOf(suchbegriff) !== -1 ||
+           tags.indexOf(suchbegriff) !== -1;
   });
 
   rasterRendern(gefilterteProdukte);
@@ -318,7 +318,7 @@ function eventsEinrichten() {
   var preisSlider = document.getElementById('preis-slider');
 
   for (var i = 0; i < filterChips.length; i++) {
-    filterChips[i].addEventListener('click', function () {
+    filterChips[i].addEventListener('click', function() {
       aktiverFilter = this.getAttribute('data-filter') || 'alle';
 
       if (sucheEingabe) {
@@ -339,7 +339,7 @@ function eventsEinrichten() {
   }
 
   if (sortAuswahl) {
-    sortAuswahl.addEventListener('change', function () {
+    sortAuswahl.addEventListener('change', function() {
       aktiverSort = this.value;
       produkteLaden();
     });
@@ -357,7 +357,7 @@ function eventsEinrichten() {
    Erst wenn die HTML-Seite geladen ist, werden Filter gelesen,
    Events verbunden und Produkte geladen.
    ─────────────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   filterAusUrlLesen();
   aktiveFilterklasseSetzen();
   eventsEinrichten();

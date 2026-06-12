@@ -45,7 +45,7 @@ Die Formular-Validierung erfolgt **ausschliesslich über JavaScript** (kein HTML
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // Name-Validierung (Buchstaben, Umlaute, Leerzeichen, Bindestriche)
-const REGEX_NAME = /^[A-Za-zÀ-öø-ÿÄÖÜäöüß\s'\-]{2,}$/;
+const REGEX_NAME = /^[\p{L}\s'\-]{2,}$/u;
 ```
 
 ---

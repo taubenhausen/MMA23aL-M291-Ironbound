@@ -5,14 +5,14 @@ declare(strict_types=1);
    shop-produkte.php — IRONBOUND
 
    Aufgabe dieser Datei:
-   - Produkte aus der Plesk-Datenbank lesen
+   - Produkte aus eurer bestehenden Plesk-Datenbank lesen
    - Filter, Suche, Sortierung und Limit verarbeiten
-   - Die Daten als JSON an shop.js und index.js zurückgeben
+   - Die Daten so umformen, dass shop.js und index.js nichts ändern müssen
 
    Wichtig:
-   Die echten Datenbank-Zugangsdaten stehen NICHT in dieser Datei.
-   Sie liegen auf Plesk ausserhalb des öffentlichen Website-Ordners:
-   Basisverzeichnis/private/db-config.php
+   Eure Tabelle Produkte hat KEINE Spalten wie aktiv, filter_tags,
+   skill_pct, digital_twin oder bestseller. Diese Werte werden hier
+   aus den vorhandenen Tabellen abgeleitet.
    ============================================================ */
 
 
@@ -25,23 +25,23 @@ header('Content-Type: application/json; charset=utf-8');
 
 
 /* ─────────────────────────────────────────────────────────────
-   2. Zentrale Datenbankverbindung laden
+   2. Private Datenbank-Konfiguration laden
    -------------------------------------------------------------
-   Diese PHP-Datei liegt öffentlich in:
+   Diese Datei liegt öffentlich in:
    /ironbound.mma23.bbzwinf.ch/php/shop-produkte.php
 
-   Die private Config liegt daneben im Basisverzeichnis:
+   Die Zugangsdaten liegen privat in:
    /private/db-config.php
 
-   Darum geht der Pfad zwei Ebenen hoch und dann in /private.
+   Deshalb gehen wir zwei Ebenen hoch und dann in /private.
    ─────────────────────────────────────────────────────────── */
 require_once __DIR__ . '/../../private/db-config.php';
 
 
 /* ─────────────────────────────────────────────────────────────
-   3. Kleine Hilfsfunktion für JSON-Antworten
+   3. Einheitliche JSON-Antwort zurückgeben
    -------------------------------------------------------------
-   So sind alle Antworten gleich aufgebaut.
+   So sehen Erfolg und Fehler immer gleich aus.
    ─────────────────────────────────────────────────────────── */
 function json_antwort(array $daten, int $statusCode = 200): void
 {
@@ -54,7 +54,8 @@ function json_antwort(array $daten, int $statusCode = 200): void
 /* ─────────────────────────────────────────────────────────────
    4. Nur GET erlauben
    -------------------------------------------------------------
-   Produkte werden nur gelesen. Deshalb ist GET die passende Methode.
+   Diese API liest nur Produkte. Speichern oder Löschen ist hier
+   bewusst nicht erlaubt.
    ─────────────────────────────────────────────────────────── */
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     json_antwort([
@@ -64,106 +65,283 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 
+/* ─────────────────────────────────────────────────────────────
+   5. Text klein schreiben
+   -------------------------------------------------------------
+   Die Funktion hilft uns beim Bauen von Filter-Tags. Falls mbstring
+   auf dem Server nicht aktiv ist, funktioniert strtolower als Ersatz.
+   ─────────────────────────────────────────────────────────── */
+function text_klein(string $text): string
+{
+    if (function_exists('mb_strtolower')) {
+        return mb_strtolower($text, 'UTF-8');
+    }
+
+    return strtolower($text);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   6. Prüfen, ob ein Text ein Wort enthält
+   -------------------------------------------------------------
+   Das ist lesbarer als viele verschachtelte strpos-Abfragen.
+   ─────────────────────────────────────────────────────────── */
+function enthaelt_eines_von(string $text, array $woerter): bool
+{
+    foreach ($woerter as $wort) {
+        if ($wort !== '' && strpos($text, $wort) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   7. Skill-Level für die Anzeige ableiten
+   -------------------------------------------------------------
+   In eurer Tabelle gibt es kein skill_level und kein skill_pct.
+   Damit die bestehenden Balken und Animationen trotzdem gleich
+   funktionieren, leiten wir diese Werte aus Kategorie/Text ab.
+   ─────────────────────────────────────────────────────────── */
+function skill_daten_ableiten(string $name, string $kategorie, string $beschreibung): array
+{
+    $text = text_klein($name . ' ' . $kategorie . ' ' . $beschreibung);
+
+    if (enthaelt_eines_von($text, ['profi', 'schusswaffe', 'schusswaffen', 'm4', 'gewehr', 'pistole'])) {
+        return ['level' => 'Profi', 'pct' => 100];
+    }
+
+    if (enthaelt_eines_von($text, ['fortgeschritten', 'messer', 'armbrust'])) {
+        return ['level' => 'Fortgeschritten', 'pct' => 65];
+    }
+
+    if (enthaelt_eines_von($text, ['bogen', 'bögen'])) {
+        return ['level' => 'Fortgeschritten', 'pct' => 60];
+    }
+
+    return ['level' => 'Einsteiger', 'pct' => 35];
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   8. Filter-Tags für JavaScript erzeugen
+   -------------------------------------------------------------
+   shop.js filtert Produkte mit filter_tags. Eure DB hat diese Spalte
+   nicht. Darum erzeugen wir die Tags aus Name, Kategorie, Beschreibung
+   und der Digital-Twin-Verknüpfung.
+   ─────────────────────────────────────────────────────────── */
+function filter_tags_bauen(string $name, string $kategorie, string $beschreibung, string $skillLevel, bool $digitalTwin): string
+{
+    $text = text_klein($name . ' ' . $kategorie . ' ' . $beschreibung);
+    $tags = [];
+
+    if (enthaelt_eines_von($text, ['schwert', 'schwerter', 'gladius'])) {
+        $tags[] = 'schwerter';
+    }
+
+    if (enthaelt_eines_von($text, ['schusswaffe', 'schusswaffen', 'm4', 'gewehr', 'pistole'])) {
+        $tags[] = 'schusswaffen';
+    }
+
+    if (enthaelt_eines_von($text, ['messer', 'dolch', 'klinge'])) {
+        $tags[] = 'messer';
+    }
+
+    if (enthaelt_eines_von($text, ['bogen', 'bögen', 'langbogen', 'armbrust'])) {
+        $tags[] = 'bogen';
+    }
+
+    if ($skillLevel === 'Einsteiger') {
+        $tags[] = 'einsteiger';
+    }
+
+    if ($skillLevel === 'Fortgeschritten') {
+        $tags[] = 'fortgeschritten';
+    }
+
+    if ($skillLevel === 'Profi') {
+        $tags[] = 'profi';
+    }
+
+    if ($digitalTwin) {
+        $tags[] = 'digital';
+    }
+
+    return implode(' ', array_values(array_unique($tags)));
+}
+
+
 try {
     /* ─────────────────────────────────────────────────────────
-       5. Verbindung zur Datenbank öffnen
+       9. Datenbankverbindung öffnen
        ---------------------------------------------------------
-       db_verbinden() kommt aus private/db-config.php.
+       db_verbinden() kommt aus Basisverzeichnis/private/db-config.php.
        ─────────────────────────────────────────────────────── */
     $pdo = db_verbinden();
 
 
     /* ─────────────────────────────────────────────────────────
-       6. Basis-Query vorbereiten
+       10. Basis-Query mit Digital-Twin-Daten
        ---------------------------------------------------------
-       SELECT * wird hier bewusst verwendet, weil eure Produktkarten
-       mehrere Spalten brauchen. Die Ausgabe wird danach normalisiert.
+       Produkte kommt aus eurer Tabelle Produkte.
+       Digital-Twin-Infos kommen aus Digitales_Produkt und Partner_Games.
 
-       WICHTIG: Falls eure Tabelle klein geschrieben ist, dann hier
-       Produkte durch produkte ersetzen.
+       Wichtig:
+       Wir holen NICHT die Spalte Bild direkt in JSON. Bilder als BLOB
+       wären für JSON zu gross und unübersichtlich. Stattdessen liefert
+       produkt-bild.php das Bild separat aus.
        ─────────────────────────────────────────────────────── */
-    $sql = 'SELECT * FROM Produkte WHERE aktiv = 1';
+    $sql = '
+        SELECT
+            p.id,
+            p.name,
+            p.kategorie,
+            p.preis,
+            p.hersteller,
+            p.lagerbestand,
+            p.erstellungsdatum,
+            p.Beschreibung,
+            CASE
+                WHEN p.Bild IS NOT NULL AND OCTET_LENGTH(p.Bild) > 0 THEN 1
+                ELSE 0
+            END AS hat_bild,
+            COALESCE(dg.digital_anzahl, 0) AS digital_anzahl,
+            COALESCE(dg.partner_games, "") AS partner_games
+        FROM Produkte p
+        LEFT JOIN (
+            SELECT
+                dp.produkt_id,
+                COUNT(pg.id) AS digital_anzahl,
+                GROUP_CONCAT(DISTINCT pg.name ORDER BY pg.name SEPARATOR ", ") AS partner_games
+            FROM Digitales_Produkt dp
+            INNER JOIN Partner_Games pg
+                ON pg.id = dp.game_id
+               AND pg.aktivstatus = 1
+            GROUP BY dp.produkt_id
+        ) dg ON dg.produkt_id = p.id
+        WHERE 1 = 1
+    ';
+
     $params = [];
 
 
     /* ─────────────────────────────────────────────────────────
-       7. Kategorie-Filter verarbeiten
+       11. Filter aus der URL verarbeiten
        ---------------------------------------------------------
-       Beispiele:
-       ?filter=schwerter
-       ?kat=schwerter  wird ebenfalls akzeptiert, weil eure Links
-       auf der Startseite aktuell kat verwenden.
+       Eure HTML-Chips nutzen Werte wie schwerter, schusswaffen,
+       messer, bogen, einsteiger und digital.
+
+       Da es keine filter_tags-Spalte gibt, übersetzen wir diese Filter
+       auf die vorhandenen Spalten.
        ─────────────────────────────────────────────────────── */
     $filter = trim((string)($_GET['filter'] ?? $_GET['kat'] ?? ''));
 
     if ($filter !== '' && $filter !== 'alle') {
-        $sql .= ' AND LOWER(filter_tags) LIKE :filter';
-        $params[':filter'] = '%' . mb_strtolower($filter, 'UTF-8') . '%';
+        switch ($filter) {
+            case 'digital':
+                $sql .= ' AND COALESCE(dg.digital_anzahl, 0) > 0';
+                break;
+
+            case 'schwerter':
+                $sql .= ' AND (LOWER(p.kategorie) LIKE :filter_schwerter OR LOWER(p.name) LIKE :filter_gladius)';
+                $params[':filter_schwerter'] = '%schwert%';
+                $params[':filter_gladius'] = '%gladius%';
+                break;
+
+            case 'schusswaffen':
+                $sql .= ' AND (
+                    LOWER(p.kategorie) LIKE :filter_schusswaffen
+                    OR LOWER(p.name) LIKE :filter_m4
+                    OR LOWER(p.name) LIKE :filter_gewehr
+                    OR LOWER(p.name) LIKE :filter_pistole
+                )';
+                $params[':filter_schusswaffen'] = '%schusswaff%';
+                $params[':filter_m4'] = '%m4%';
+                $params[':filter_gewehr'] = '%gewehr%';
+                $params[':filter_pistole'] = '%pistole%';
+                break;
+
+            case 'messer':
+                $sql .= ' AND (LOWER(p.kategorie) LIKE :filter_messer OR LOWER(p.name) LIKE :filter_messer)';
+                $params[':filter_messer'] = '%messer%';
+                break;
+
+            case 'bogen':
+                $sql .= ' AND (
+                    LOWER(p.kategorie) LIKE :filter_bogen
+                    OR LOWER(p.kategorie) LIKE :filter_boegen
+                    OR LOWER(p.name) LIKE :filter_bogen
+                    OR LOWER(p.name) LIKE :filter_armbrust
+                )';
+                $params[':filter_bogen'] = '%bogen%';
+                $params[':filter_boegen'] = '%bögen%';
+                $params[':filter_armbrust'] = '%armbrust%';
+                break;
+
+            case 'einsteiger':
+                $sql .= ' AND (
+                    LOWER(p.kategorie) LIKE :filter_einsteiger
+                    OR LOWER(p.Beschreibung) LIKE :filter_einsteiger
+                    OR LOWER(p.name) LIKE :filter_einsteiger
+                )';
+                $params[':filter_einsteiger'] = '%einsteiger%';
+                break;
+        }
     }
 
 
     /* ─────────────────────────────────────────────────────────
-       8. Textsuche verarbeiten
+       12. Suche verarbeiten
        ---------------------------------------------------------
-       Gesucht wird in Name, Kategorie und Filter-Tags.
+       Gesucht wird in den echten DB-Feldern, die ihr habt:
+       Name, Kategorie, Hersteller und Beschreibung.
        ─────────────────────────────────────────────────────── */
     $suche = trim((string)($_GET['suche'] ?? ''));
 
     if ($suche !== '') {
         $sql .= ' AND (
-            LOWER(name) LIKE :suche
-            OR LOWER(kategorie) LIKE :suche
-            OR LOWER(filter_tags) LIKE :suche
+            LOWER(p.name) LIKE :suche
+            OR LOWER(p.kategorie) LIKE :suche
+            OR LOWER(p.hersteller) LIKE :suche
+            OR LOWER(p.Beschreibung) LIKE :suche
         )';
-        $params[':suche'] = '%' . mb_strtolower($suche, 'UTF-8') . '%';
+        $params[':suche'] = '%' . text_klein($suche) . '%';
     }
 
 
     /* ─────────────────────────────────────────────────────────
-       9. Bestseller-Filter für die Startseite
+       13. Sortierung festlegen
        ---------------------------------------------------------
-       Optional möglich über:
-       ?bestseller=1
-       ─────────────────────────────────────────────────────── */
-    $bestseller = trim((string)($_GET['bestseller'] ?? ''));
-
-    if ($bestseller === '1') {
-        $sql .= ' AND bestseller = 1';
-    }
-
-
-    /* ─────────────────────────────────────────────────────────
-       10. Sortierung sicher auswählen
-       ---------------------------------------------------------
-       Die Sortierung wird nicht direkt aus der URL in SQL eingesetzt.
-       Stattdessen erlauben wir nur feste Werte.
+       Nur erlaubte Werte werden verwendet. Dadurch kann niemand über
+       die URL eigenen SQL-Code einschleusen.
        ─────────────────────────────────────────────────────── */
     $sort = trim((string)($_GET['sort'] ?? 'relevanz'));
 
     switch ($sort) {
         case 'preis-asc':
-            $sql .= ' ORDER BY preis ASC';
+            $sql .= ' ORDER BY p.preis ASC';
             break;
 
         case 'preis-desc':
-            $sql .= ' ORDER BY preis DESC';
+            $sql .= ' ORDER BY p.preis DESC';
             break;
 
         case 'neu':
-            $sql .= ' ORDER BY id DESC';
+            $sql .= ' ORDER BY p.erstellungsdatum DESC, p.id DESC';
             break;
 
         default:
-            $sql .= ' ORDER BY id ASC';
+            $sql .= ' ORDER BY p.id ASC';
             break;
     }
 
 
     /* ─────────────────────────────────────────────────────────
-       11. Optionales Limit verarbeiten
+       14. Optionales Limit verarbeiten
        ---------------------------------------------------------
-       index.js kann damit z.B. nur 3 Produkte laden.
-       Das Limit wird als Zahl geprüft und nie als Text in SQL übernommen.
+       index.js nutzt z.B. limit=3 für die Startseite.
        ─────────────────────────────────────────────────────── */
     $limit = filter_input(
         INPUT_GET,
@@ -172,7 +350,7 @@ try {
         [
             'options' => [
                 'min_range' => 1,
-                'max_range' => 50
+                'max_range' => 100
             ]
         ]
     );
@@ -183,61 +361,61 @@ try {
 
 
     /* ─────────────────────────────────────────────────────────
-       12. Query ausführen
+       15. Query ausführen
        ---------------------------------------------------------
-       Prepared Statements schützen die dynamischen Werte vor SQL-Injection.
+       Prepared Statements schützen alle dynamischen Werte.
        ─────────────────────────────────────────────────────── */
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $produkte = $stmt->fetchAll();
+    $dbProdukte = $stmt->fetchAll();
 
 
     /* ─────────────────────────────────────────────────────────
-       13. Produktdaten für JavaScript vereinheitlichen
+       16. Daten für JavaScript passend machen
        ---------------------------------------------------------
-       JS erwartet bestimmte Felder. Hier ergänzen wir sinnvolle
-       Standardwerte, falls ein Feld in der DB leer ist.
+       JS und CSS bleiben unverändert. Diese API liefert genau die
+       Felder, die eure bestehenden Produktkarten erwarten.
        ─────────────────────────────────────────────────────── */
-    foreach ($produkte as &$produkt) {
-        $id = (int)($produkt['id'] ?? 0);
-        $skillPct = (int)($produkt['skill_pct'] ?? 0);
+    $produkte = [];
 
-        $produkt['id'] = $id;
-        $produkt['nummer'] = $produkt['nummer'] ?? str_pad((string)$id, 3, '0', STR_PAD_LEFT);
-        $produkt['name'] = (string)($produkt['name'] ?? 'Unbekanntes Produkt');
-        $produkt['kategorie'] = (string)($produkt['kategorie'] ?? '');
-        $produkt['filter_tags'] = (string)($produkt['filter_tags'] ?? '');
-        $produkt['preis'] = (float)($produkt['preis'] ?? 0);
-        $produkt['skill_pct'] = $skillPct;
-        $produkt['digital_twin'] = (bool)($produkt['digital_twin'] ?? false);
-        $produkt['bestseller'] = (bool)($produkt['bestseller'] ?? false);
-        $produkt['aktiv'] = (bool)($produkt['aktiv'] ?? true);
+    foreach ($dbProdukte as $produkt) {
+        $id = (int)$produkt['id'];
+        $name = (string)($produkt['name'] ?? 'Unbekanntes Produkt');
+        $kategorieRoh = (string)($produkt['kategorie'] ?? '');
+        $beschreibung = (string)($produkt['Beschreibung'] ?? '');
+        $digitalTwin = ((int)($produkt['digital_anzahl'] ?? 0)) > 0;
+        $hatBild = ((int)($produkt['hat_bild'] ?? 0)) === 1;
 
-        /* JS nutzt bild. Falls die DB bild_url hat, wird es hier übernommen. */
-        if (!isset($produkt['bild']) && isset($produkt['bild_url'])) {
-            $produkt['bild'] = $produkt['bild_url'];
-        }
+        $skill = skill_daten_ableiten($name, $kategorieRoh, $beschreibung);
+        $skillLevel = $skill['level'];
+        $skillPct = $skill['pct'];
 
-        if (!isset($produkt['bild']) || trim((string)$produkt['bild']) === '') {
-            $produkt['bild'] = 'img/prod1-placeholder.svg';
-        }
-
-        /* Skill-Level wird aus skill_pct abgeleitet, falls kein Text in der DB steht. */
-        if (!isset($produkt['skill_level']) || trim((string)$produkt['skill_level']) === '') {
-            if ($skillPct >= 85) {
-                $produkt['skill_level'] = 'Profi';
-            } elseif ($skillPct >= 55) {
-                $produkt['skill_level'] = 'Fortgeschritten';
-            } else {
-                $produkt['skill_level'] = 'Einsteiger';
-            }
-        }
+        $produkte[] = [
+            'id' => $id,
+            'nummer' => str_pad((string)$id, 3, '0', STR_PAD_LEFT),
+            'name' => $name,
+            'kategorie' => trim($kategorieRoh . ' · ' . $skillLevel, ' ·'),
+            'kategorie_roh' => $kategorieRoh,
+            'preis' => (float)($produkt['preis'] ?? 0),
+            'hersteller' => (string)($produkt['hersteller'] ?? ''),
+            'lagerbestand' => (int)($produkt['lagerbestand'] ?? 0),
+            'erstellungsdatum' => (string)($produkt['erstellungsdatum'] ?? ''),
+            'beschreibung' => $beschreibung,
+            'skill_level' => $skillLevel,
+            'skill_pct' => $skillPct,
+            'digital_twin' => $digitalTwin,
+            'bestseller' => false,
+            'partner_games' => (string)($produkt['partner_games'] ?? ''),
+            'filter_tags' => filter_tags_bauen($name, $kategorieRoh, $beschreibung, $skillLevel, $digitalTwin),
+            'bild' => $hatBild
+                ? 'php/produkt-bild.php?id=' . $id
+                : 'img/prod' . (($id - 1) % 6 + 1) . '-placeholder.svg'
+        ];
     }
-    unset($produkt);
 
 
     /* ─────────────────────────────────────────────────────────
-       14. Erfolgreiche Antwort zurückgeben
+       17. Erfolgreiche Antwort zurückgeben
        ─────────────────────────────────────────────────────── */
     json_antwort([
         'status'   => 'ok',
@@ -245,7 +423,7 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    /* Der echte Fehler wird nur im Server-Log gespeichert. */
+    /* Der echte Fehler steht nur im Server-Log, nicht öffentlich im Browser. */
     error_log($e->getMessage());
 
     json_antwort([

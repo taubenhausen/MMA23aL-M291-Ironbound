@@ -305,43 +305,43 @@ if (promoFormular) {
       method: 'POST',
       body: formDatenBauen()
     })
-      .then(function (antwort) {
-        return antwort.json();
-      })
-      .then(function (daten) {
-        ladezustandSetzen(false);
+    .then(function(antwort) {
+      return antwort.json();
+    })
+    .then(function(daten) {
+      ladezustandSetzen(false);
 
-        if (daten.status === 'ok') {
+      if (daten.status === 'ok') {
+        if (erfolgMsg) {
+          erfolgMsg.style.display = 'block';
+        }
+
+        formularZuruecksetzen();
+
+        setTimeout(function() {
           if (erfolgMsg) {
-            erfolgMsg.style.display = 'block';
+            erfolgMsg.style.display = 'none';
           }
+        }, 5000);
 
-          formularZuruecksetzen();
+        return;
+      }
 
-          setTimeout(function () {
-            if (erfolgMsg) {
-              erfolgMsg.style.display = 'none';
-            }
-          }, 5000);
-
-          return;
+      if (daten.status === 'email_vorhanden') {
+        if (emailVorhandenMsg) {
+          emailVorhandenMsg.style.display = 'block';
         }
 
-        if (daten.status === 'email_vorhanden') {
-          if (emailVorhandenMsg) {
-            emailVorhandenMsg.style.display = 'block';
-          }
+        fehlerZeigen(FELDER.email, 'Diese E-Mail-Adresse ist bereits registriert.');
+        return;
+      }
 
-          fehlerZeigen(FELDER.email, 'Diese E-Mail-Adresse ist bereits registriert.');
-          return;
-        }
-
-        alert(daten.meldung || 'Fehler beim Speichern. Bitte versuche es erneut.');
-      })
-      .catch(function () {
-        ladezustandSetzen(false);
-        alert('Verbindungsfehler. Bitte versuche es erneut.');
-      });
+      alert(daten.meldung || 'Fehler beim Speichern. Bitte versuche es erneut.');
+    })
+    .catch(function() {
+      ladezustandSetzen(false);
+      alert('Verbindungsfehler. Bitte versuche es erneut.');
+    });
   }
 
 
@@ -351,12 +351,12 @@ if (promoFormular) {
      Wenn ein Feld rot ist und korrigiert wird, verschwindet der Fehler
      sofort. Das ist die bestehende Funktionalität, nur sauberer gebündelt.
      ───────────────────────────────────────────────────────── */
-  FELDER.vorname.addEventListener('input', function () { feldPruefen('vorname'); });
-  FELDER.nachname.addEventListener('input', function () { feldPruefen('nachname'); });
-  FELDER.email.addEventListener('input', function () { feldPruefen('email'); });
-  FELDER.plz.addEventListener('input', function () { feldPruefen('plz'); });
-  FELDER.interesse.addEventListener('change', function () { feldPruefen('interesse'); });
-  FELDER.agb.addEventListener('change', function () { feldPruefen('agb'); });
+  FELDER.vorname.addEventListener('input', function() { feldPruefen('vorname'); });
+  FELDER.nachname.addEventListener('input', function() { feldPruefen('nachname'); });
+  FELDER.email.addEventListener('input', function() { feldPruefen('email'); });
+  FELDER.plz.addEventListener('input', function() { feldPruefen('plz'); });
+  FELDER.interesse.addEventListener('change', function() { feldPruefen('interesse'); });
+  FELDER.agb.addEventListener('change', function() { feldPruefen('agb'); });
 
 
   /* ───────────────────────────────────────────────────────────
@@ -365,7 +365,7 @@ if (promoFormular) {
      Der Browser lädt die Seite nicht neu. Stattdessen prüft JS die
      Eingaben und sendet sie per fetch() an PHP.
      ───────────────────────────────────────────────────────── */
-  promoFormular.addEventListener('submit', function (event) {
+  promoFormular.addEventListener('submit', function(event) {
     event.preventDefault();
 
     meldungenZuruecksetzen();

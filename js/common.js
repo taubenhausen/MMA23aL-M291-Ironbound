@@ -27,7 +27,7 @@ window.IRONBOUND = window.IRONBOUND || {};
    Diese Funktion ersetzt Sonderzeichen, damit kein fremder HTML-Code
    aus der Datenbank ausgeführt werden kann.
    ─────────────────────────────────────────────────────────── */
-window.IRONBOUND.htmlEscapen = function (wert) {
+window.IRONBOUND.htmlEscapen = function(wert) {
   return String(wert ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -43,7 +43,7 @@ window.IRONBOUND.htmlEscapen = function (wert) {
    Aus 249 wird zum Beispiel: CHF 249.–
    So sehen Preise auf Startseite und Shop gleich aus.
    ─────────────────────────────────────────────────────────── */
-window.IRONBOUND.preisFormatieren = function (preis) {
+window.IRONBOUND.preisFormatieren = function(preis) {
   var zahl = Number(preis || 0);
   return 'CHF ' + zahl.toFixed(0) + '.–';
 };
@@ -56,7 +56,7 @@ window.IRONBOUND.preisFormatieren = function (preis) {
    nutzt aber bild. Diese Funktion macht daraus ein einheitliches
    Produktobjekt, damit die HTML-Ausgabe stabil bleibt.
    ─────────────────────────────────────────────────────────── */
-window.IRONBOUND.produktNormalisieren = function (produkt) {
+window.IRONBOUND.produktNormalisieren = function(produkt) {
   var id = Number(produkt.id || 0);
   var skillPct = Number(produkt.skill_pct || 0);
 
@@ -96,7 +96,7 @@ window.IRONBOUND.produktNormalisieren = function (produkt) {
    Fehler ausgelöst. index.js und shop.js entscheiden dann selbst,
    ob sie Fallback-Produkte anzeigen.
    ─────────────────────────────────────────────────────────── */
-window.IRONBOUND.produkteVonApiLaden = function (optionen) {
+window.IRONBOUND.produkteVonApiLaden = function(optionen) {
   optionen = optionen || {};
 
   var parameter = new URLSearchParams();
@@ -129,13 +129,13 @@ window.IRONBOUND.produkteVonApiLaden = function (optionen) {
   }
 
   return fetch(url)
-    .then(function (antwort) {
+    .then(function(antwort) {
       if (!antwort.ok) {
         throw new Error('API-Antwort war nicht erfolgreich.');
       }
       return antwort.json();
     })
-    .then(function (daten) {
+    .then(function(daten) {
       if (daten.status !== 'ok' || !Array.isArray(daten.produkte)) {
         throw new Error(daten.meldung || 'Ungültige API-Antwort.');
       }
@@ -151,7 +151,7 @@ window.IRONBOUND.produkteVonApiLaden = function (optionen) {
    Dadurch greifen wir erst auf Buttons und Navigation zu, wenn der
    Browser die Elemente wirklich geladen hat.
    ─────────────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
 
   /* Wichtige Elemente aus dem HTML holen. */
   var hamburgerBtn = document.getElementById('hamburger-btn');
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ── Mobile-Menü öffnen oder schliessen ───────────────────── */
-  hamburgerBtn.addEventListener('click', function (event) {
+  hamburgerBtn.addEventListener('click', function(event) {
     event.stopPropagation();
 
     navLinks.classList.toggle('offen');
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ── Klick ausserhalb der Navigation schliesst das Menü ───── */
-  document.addEventListener('click', function (event) {
+  document.addEventListener('click', function(event) {
     var klickAufButton = hamburgerBtn.contains(event.target);
     var klickAufNav = navLinks.contains(event.target);
 
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ── Bei Desktop-Breite wird das Mobile-Menü geschlossen ──── */
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', function() {
     if (window.innerWidth > 900) {
       navLinks.classList.remove('offen');
       hamburgerBtn.classList.remove('offen');
