@@ -150,17 +150,21 @@ function rasterLadeAnimation(anzeigen) {
 }
 
 
-/* ── HAUPTFUNKTION: Produkte von PHP-API laden ────────────────
-   Sendet GET-Request an shop-produkte.php mit optionalen
-   Parametern für Filter und Sortierung.
+/* ── HAUPTFUNKTION: Produkte laden ────────────────────────────
+   Zeigt Fallback-Produkte sofort an (kein Spinner-Flash).
+   Versucht danach die PHP-API; wenn verfügbar, werden die
+   DB-Daten nachgeladen und ersetzt.
    ─────────────────────────────────────────────────────────── */
 function produkteLaden(filter, sort) {
   filter = filter || 'alle';
   sort   = sort   || 'relevanz';
 
-  rasterLadeAnimation(true);
+  /* Sofort mit statischen Fallback-Daten rendern */
+  aktuelleProdukte = fallbackAnwenden(filter);
+  rasterRendern(aktuelleProdukte);
+  preisfilterAnwenden();
 
-  /* URL mit Parametern aufbauen */
+  /* Im Hintergrund PHP-API anfragen (nur auf Servern mit PHP/DB) */
   var url = 'php/shop-produkte.php?sort=' + encodeURIComponent(sort);
   if (filter !== 'alle') {
     url += '&filter=' + encodeURIComponent(filter);
@@ -171,23 +175,15 @@ function produkteLaden(filter, sort) {
       return antwort.json();
     })
     .then(function(daten) {
-      if (daten.status === 'ok') {
+      if (daten.status === 'ok' && daten.produkte.length > 0) {
+        /* DB-Daten vorhanden: Ansicht mit echten Daten aktualisieren */
         aktuelleProdukte = daten.produkte;
-        /* Zwischenspeichern für client-seitige Suche und Preisfilter. */
-        rasterRendern(aktuelleProdukte);
-        preisfilterAnwenden();
-      } else {
-        /* DB-Fehler: Fallback-Daten verwenden */
-        aktuelleProdukte = fallbackAnwenden(filter);
         rasterRendern(aktuelleProdukte);
         preisfilterAnwenden();
       }
     })
     .catch(function() {
-      /* Kein Server / PHP nicht verfügbar: Fallback-Daten verwenden */
-      aktuelleProdukte = fallbackAnwenden(filter);
-      rasterRendern(aktuelleProdukte);
-      preisfilterAnwenden();
+      /* PHP nicht erreichbar — Fallback bleibt sichtbar, kein Fehler */
     });
 }
 

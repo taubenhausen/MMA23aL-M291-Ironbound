@@ -368,81 +368,6 @@
 
 
   <!-- ============================================================
-       PROMOTIONEN — BILD-SLIDER
-       Interaktives Element: Klick auf Pfeile/Punkte wechselt Slide.
-       Autoplay: alle 4.5 Sekunden automatisch.
-       JS: slider.js
-  ============================================================ -->
-
-  <section class="promotionen">
-    <div class="container">
-
-      <span class="abschnitt-label">/ Aktionen</span>
-      <h2>Aktuelle Promotionen.</h2>
-
-      <div class="slider">
-      <!-- Container für alle Slides. position:relative damit Pfeile darin positioniert. -->
-
-        <div class="slide aktiv" id="slide-0">
-        <!-- class="aktiv" = display:block (sichtbar). Andere Slides: display:none. -->
-        <!-- id="slide-0" = JS findet diese Slide per getElementById('slide-0'). -->
-
-          <img src="img/promo1-placeholder.svg" alt="Promo 1">
-          <!-- Bild der Slide. filter:brightness(0.55) = abgedunkelt für Text-Lesbarkeit. -->
-
-          <div class="slide-info">
-          <!-- Text-Box über dem Bild. position:absolute unten. Gradient-Hintergrund. -->
-
-            <span class="slide-tag">Limited</span>
-            <!-- Kleines goldenes Label. -->
-
-            <div class="slide-titel">10% auf alle Schwerter</div>
-            <!-- Haupttext der Slide. -->
-
-          </div>
-        </div>
-
-        <div class="slide" id="slide-1">
-        <!-- Kein "aktiv" = display:none = unsichtbar beim Start. -->
-          <img src="img/promo2-placeholder.svg" alt="Promo 2">
-          <div class="slide-info">
-            <span class="slide-tag">Digital</span>
-            <div class="slide-titel">Code inklusive bei jedem Kauf</div>
-          </div>
-        </div>
-
-        <div class="slide" id="slide-2">
-          <img src="img/promo3-placeholder.svg" alt="Promo 3">
-          <div class="slide-info">
-            <span class="slide-tag">Neu</span>
-            <div class="slide-titel">Präzisionsmodelle 2025</div>
-          </div>
-        </div>
-
-        <button class="slider-pfeil slider-links" id="slider-zurueck">&#8592;</button>
-        <!-- Pfeil-Button links. &#8592; = HTML-Entity für ← . id = JS findet ihn. -->
-
-        <button class="slider-pfeil slider-rechts" id="slider-weiter">&#8594;</button>
-        <!-- Pfeil-Button rechts. &#8594; = HTML-Entity für → . -->
-
-        <div class="slider-punkte">
-        <!-- Punkte-Navigation unten mittig. -->
-
-          <button class="punkt aktiv" id="punkt-0"></button>
-          <!-- Erster Punkt aktiv (gold, breiter). id = JS synchronisiert mit Slide. -->
-
-          <button class="punkt" id="punkt-1"></button>
-          <button class="punkt" id="punkt-2"></button>
-
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- ============================================================
        FOOTER
        Identisch auf allen Seiten (index, shop, promotion).
        Disclaimer und Gruppenname laut Anforderung.
@@ -519,9 +444,6 @@
 
   <script src="js/common.js"></script>
   <!-- Navigation: Hamburger-Menü, Scroll-Schatten, aktiven Link erkennen. -->
-
-  <script src="js/slider.js"></script>
-  <!-- Bild-Slider: Autoplay, Pfeil-Klicks, Punkte-Klicks. -->
 
 </body>
 <!-- Ende des sichtbaren Inhalts. -->
