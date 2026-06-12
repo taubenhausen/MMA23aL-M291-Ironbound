@@ -16,11 +16,11 @@
 1. Repository erstellen: `ironbound`
 2. Alle Dateien pushen
 3. Settings → Pages → Branch: `main` → Save
-4. URL: `https://username.github.io/ironbound/`
+4. URL: `https://username.github.io/ironbound/](https://github.com/taubenhausen/MMA23aL-M291-Ironbound/`
 
 ## Deployment auf Plesk
 
-1. Dateien per FTP in `/httpdocs/` hochladen
+1. Dateien per FTP in `/ironbound.mma23.bbzwinf.ch` hochladen
 2. Oder Git-Deploy in Plesk unter «Git» konfigurieren
 3. Kein Build-Schritt nötig — reines HTML/CSS/JS
 
