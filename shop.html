@@ -57,13 +57,8 @@
   <section class="shop-suche">
     <div class="container">
       <div class="suche-wrap">
-        <input
-          type="text"
-          id="suche-eingabe"
-          placeholder="🔍  Suche nach Waffe, Kategorie, Epoche…"
-          class="suche-feld"
-        >
-        <button class="btn btn-primary" id="suche-btn">Suchen</button>
+        <input type="text" id="suche-eingabe" placeholder="🔍  Suche nach Waffe, Kategorie, Epoche…" class="suche-feld">
+        <button type="button" class="btn btn-primary" id="suche-btn">Suchen</button>
       </div>
     </div>
   </section>
@@ -75,13 +70,13 @@
   <section class="filter-leiste">
     <div class="container">
       <div class="filter-chips">
-        <button class="filter-chip aktiv" data-filter="alle">Alle</button>
-        <button class="filter-chip" data-filter="schwerter">Schwerter</button>
-        <button class="filter-chip" data-filter="schusswaffen">Schusswaffen</button>
-        <button class="filter-chip" data-filter="messer">Messer</button>
-        <button class="filter-chip" data-filter="bogen">Bögen</button>
-        <button class="filter-chip" data-filter="einsteiger">Einsteiger</button>
-        <button class="filter-chip" data-filter="digital">🎮 Digital Twin</button>
+        <button type="button" class="filter-chip aktiv" data-filter="alle">Alle</button>
+        <button type="button" class="filter-chip" data-filter="schwerter">Schwerter</button>
+        <button type="button" class="filter-chip" data-filter="schusswaffen">Schusswaffen</button>
+        <button type="button" class="filter-chip" data-filter="messer">Messer</button>
+        <button type="button" class="filter-chip" data-filter="bogen">Bögen</button>
+        <button type="button" class="filter-chip" data-filter="einsteiger">Einsteiger</button>
+        <button type="button" class="filter-chip" data-filter="digital">🎮 Digital Twin</button>
       </div>
     </div>
   </section>
@@ -176,8 +171,9 @@
   </footer>
 
 
-  <script src="js/common.js"></script>
-  <script src="js/shop.js"></script>
+  <script src="js/common.js" defer></script>
+  <script src="js/shop.js" defer></script>
 
 </body>
+
 </html>

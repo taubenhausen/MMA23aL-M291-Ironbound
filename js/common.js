@@ -1,150 +1,225 @@
 /* ============================================================
    common.js — IRONBOUND
-   Wird auf ALLEN drei Seiten eingebunden (index, shop, promotion).
-   Zuständig für:
-   1. Hamburger-Menü (öffnen / schliessen)
-   2. Klick ausserhalb schliesst Menü
-   3. Fenstergrösse-Änderung schliesst Menü
-   4. Header-Schatten beim Scrollen
-   5. Aktiven Nav-Link automatisch erkennen und markieren
+   Wird auf allen Seiten geladen.
+
+   Diese Datei enthält nur Funktionen, die mehrere Seiten brauchen:
+   1. Mobile-Navigation öffnen und schliessen
+   2. Header beim Scrollen markieren
+   3. Aktiven Navigationslink automatisch setzen
+   4. Gemeinsame Hilfsfunktionen für Produkte und API-Aufrufe
    ============================================================ */
 
 
-/* ── Elemente aus dem HTML holen ───────────────────────────────
-   getElementById: sucht Element mit dieser id.
-   Gibt das HTML-Element-Objekt zurück.
+/* ─────────────────────────────────────────────────────────────
+   1. Gemeinsamer Namensraum
+   -------------------------------------------------------------
+   Wir legen gemeinsame Funktionen in window.IRONBOUND ab.
+   Vorteil: index.js und shop.js können dieselben Funktionen nutzen,
+   ohne dass Code doppelt geschrieben werden muss.
    ─────────────────────────────────────────────────────────── */
-var hamburgerBtn = document.getElementById('hamburger-btn');
-/* Das button-Element mit id="hamburger-btn". */
-
-var navLinks = document.getElementById('nav-links');
-/* Das nav-Element mit id="nav-links". */
-
-var siteHeader = document.getElementById('site-header');
-/* Das header-Element mit id="site-header". */
+window.IRONBOUND = window.IRONBOUND || {};
 
 
-/* ── 1. HAMBURGER-MENÜ: öffnen / schliessen ───────────────────
-   addEventListener('click', function): führt die Funktion
-   jedes Mal aus wenn auf hamburgerBtn geklickt wird.
+/* ─────────────────────────────────────────────────────────────
+   2. Texte sicher in HTML einsetzen
+   -------------------------------------------------------------
+   Daten aus der Datenbank werden nie direkt als HTML eingesetzt.
+   Diese Funktion ersetzt Sonderzeichen, damit kein fremder HTML-Code
+   aus der Datenbank ausgeführt werden kann.
    ─────────────────────────────────────────────────────────── */
-hamburgerBtn.addEventListener('click', function() {
+window.IRONBOUND.htmlEscapen = function (wert) {
+  return String(wert ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+};
 
-  var istOffen = navLinks.classList.contains('offen');
-  /* classList.contains('offen'): gibt true zurück wenn Klasse vorhanden, sonst false. */
 
-  if (istOffen) {
-    /* Menü ist offen → schliessen. */
-    navLinks.classList.remove('offen');
-    /* classList.remove: entfernt CSS-Klasse vom Element. */
-    hamburgerBtn.classList.remove('offen');
-    /* Hamburger zurück zu drei Strichen (kein X mehr). */
-  } else {
-    /* Menü ist zu → öffnen. */
-    navLinks.classList.add('offen');
-    /* classList.add: fügt CSS-Klasse hinzu → .nav-links.offen wird sichtbar. */
-    hamburgerBtn.classList.add('offen');
-    /* Hamburger animiert zu X (CSS regelt die Animation). */
+/* ─────────────────────────────────────────────────────────────
+   3. Preis einheitlich formatieren
+   -------------------------------------------------------------
+   Aus 249 wird zum Beispiel: CHF 249.–
+   So sehen Preise auf Startseite und Shop gleich aus.
+   ─────────────────────────────────────────────────────────── */
+window.IRONBOUND.preisFormatieren = function (preis) {
+  var zahl = Number(preis || 0);
+  return 'CHF ' + zahl.toFixed(0) + '.–';
+};
+
+
+/* ─────────────────────────────────────────────────────────────
+   4. Produktdaten vereinheitlichen
+   -------------------------------------------------------------
+   Die Datenbank kann z.B. bild_url liefern, die alte JS-Struktur
+   nutzt aber bild. Diese Funktion macht daraus ein einheitliches
+   Produktobjekt, damit die HTML-Ausgabe stabil bleibt.
+   ─────────────────────────────────────────────────────────── */
+window.IRONBOUND.produktNormalisieren = function (produkt) {
+  var id = Number(produkt.id || 0);
+  var skillPct = Number(produkt.skill_pct || 0);
+
+  /* Skill-Level ableiten, falls die Datenbank keinen Text liefert. */
+  var skillLevel = produkt.skill_level;
+  if (!skillLevel) {
+    if (skillPct >= 85) {
+      skillLevel = 'Profi';
+    } else if (skillPct >= 55) {
+      skillLevel = 'Fortgeschritten';
+    } else {
+      skillLevel = 'Einsteiger';
+    }
+  }
+
+  return {
+    id: id,
+    nummer: produkt.nummer || String(id).padStart(3, '0'),
+    name: produkt.name || 'Unbekanntes Produkt',
+    kategorie: produkt.kategorie || '',
+    filter_tags: String(produkt.filter_tags || '').toLowerCase(),
+    preis: Number(produkt.preis || 0),
+    skill_level: skillLevel,
+    skill_pct: skillPct,
+    digital_twin: produkt.digital_twin === true || produkt.digital_twin === 1 || produkt.digital_twin === '1',
+    bestseller: produkt.bestseller === true || produkt.bestseller === 1 || produkt.bestseller === '1',
+    bild: produkt.bild || produkt.bild_url || 'img/prod1-placeholder.svg'
+  };
+};
+
+
+/* ─────────────────────────────────────────────────────────────
+   5. Produkte von der PHP-API laden
+   -------------------------------------------------------------
+   Diese Funktion baut die URL zur PHP-Datei und gibt ein Array mit
+   Produkten zurück. Wenn die API nicht erreichbar ist, wird ein
+   Fehler ausgelöst. index.js und shop.js entscheiden dann selbst,
+   ob sie Fallback-Produkte anzeigen.
+   ─────────────────────────────────────────────────────────── */
+window.IRONBOUND.produkteVonApiLaden = function (optionen) {
+  optionen = optionen || {};
+
+  var parameter = new URLSearchParams();
+
+  if (optionen.filter && optionen.filter !== 'alle') {
+    parameter.set('filter', optionen.filter);
+  }
+
+  if (optionen.suche) {
+    parameter.set('suche', optionen.suche);
+  }
+
+  if (optionen.sort) {
+    parameter.set('sort', optionen.sort);
+  }
+
+  if (optionen.limit) {
+    parameter.set('limit', optionen.limit);
+  }
+
+  if (optionen.bestseller) {
+    parameter.set('bestseller', '1');
+  }
+
+  /* Relativer Pfad: funktioniert in Plesk auch dann, wenn die Seite in einem Unterordner liegt. */
+  var url = 'php/shop-produkte.php';
+  var query = parameter.toString();
+  if (query !== '') {
+    url = url + '?' + query;
+  }
+
+  return fetch(url)
+    .then(function (antwort) {
+      if (!antwort.ok) {
+        throw new Error('API-Antwort war nicht erfolgreich.');
+      }
+      return antwort.json();
+    })
+    .then(function (daten) {
+      if (daten.status !== 'ok' || !Array.isArray(daten.produkte)) {
+        throw new Error(daten.meldung || 'Ungültige API-Antwort.');
+      }
+
+      return daten.produkte.map(window.IRONBOUND.produktNormalisieren);
+    });
+};
+
+
+/* ─────────────────────────────────────────────────────────────
+   6. Start, sobald die HTML-Seite bereit ist
+   -------------------------------------------------------------
+   Dadurch greifen wir erst auf Buttons und Navigation zu, wenn der
+   Browser die Elemente wirklich geladen hat.
+   ─────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* Wichtige Elemente aus dem HTML holen. */
+  var hamburgerBtn = document.getElementById('hamburger-btn');
+  var navLinks = document.getElementById('nav-links');
+  var siteHeader = document.getElementById('site-header');
+
+  /* Falls eine Seite ausnahmsweise keine Navigation hat, bricht die Datei sauber ab. */
+  if (!hamburgerBtn || !navLinks || !siteHeader) {
+    return;
+  }
+
+
+  /* ── Mobile-Menü öffnen oder schliessen ───────────────────── */
+  hamburgerBtn.addEventListener('click', function (event) {
+    event.stopPropagation();
+
+    navLinks.classList.toggle('offen');
+    hamburgerBtn.classList.toggle('offen');
+  });
+
+
+  /* ── Klick ausserhalb der Navigation schliesst das Menü ───── */
+  document.addEventListener('click', function (event) {
+    var klickAufButton = hamburgerBtn.contains(event.target);
+    var klickAufNav = navLinks.contains(event.target);
+
+    if (!klickAufButton && !klickAufNav) {
+      navLinks.classList.remove('offen');
+      hamburgerBtn.classList.remove('offen');
+    }
+  });
+
+
+  /* ── Bei Desktop-Breite wird das Mobile-Menü geschlossen ──── */
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 900) {
+      navLinks.classList.remove('offen');
+      hamburgerBtn.classList.remove('offen');
+    }
+  });
+
+
+  /* ── Header bekommt beim Scrollen einen Schatten ──────────── */
+  function headerStatusAktualisieren() {
+    if (window.scrollY > 50) {
+      siteHeader.classList.add('gescrollt');
+    } else {
+      siteHeader.classList.remove('gescrollt');
+    }
+  }
+
+  window.addEventListener('scroll', headerStatusAktualisieren);
+  headerStatusAktualisieren();
+
+
+  /* ── Aktiven Link in der Navigation automatisch setzen ────── */
+  var aktuelleSeite = window.location.pathname.split('/').pop() || 'index.html';
+  var alleNavLinks = document.querySelectorAll('.nav-link');
+
+  for (var i = 0; i < alleNavLinks.length; i++) {
+    var link = alleNavLinks[i];
+    var linkZiel = link.getAttribute('href').split('#')[0];
+
+    link.classList.remove('aktiv');
+
+    if (linkZiel === aktuelleSeite) {
+      link.classList.add('aktiv');
+    }
   }
 
 });
-
-
-/* ── 2. KLICK AUSSERHALB: Menü schliessen ─────────────────────
-   Listener auf dem gesamten Dokument.
-   Jeder Klick irgendwo auf der Seite löst dies aus.
-   ─────────────────────────────────────────────────────────── */
-document.addEventListener('click', function(event) {
-  /* event = das Klick-Event-Objekt. */
-  /* event.target = das Element das geklickt wurde. */
-
-  var klickAufButton = hamburgerBtn.contains(event.target);
-  /* .contains(): gibt true zurück wenn event.target innerhalb von hamburgerBtn ist. */
-
-  var klickAufNav = navLinks.contains(event.target);
-  /* Prüft ob der Klick innerhalb der Navigation war. */
-
-  if (!klickAufButton && !klickAufNav) {
-    /* ! = logisches NICHT. Klick war weder auf Button noch auf Nav. */
-    navLinks.classList.remove('offen');
-    hamburgerBtn.classList.remove('offen');
-    /* Menü schliessen. */
-  }
-
-});
-
-
-/* ── 3. FENSTERGRÖSSE: Menü auf Desktop schliessen ────────────
-   Wenn User Fenster vergrössert: Menü automatisch schliessen.
-   ─────────────────────────────────────────────────────────── */
-window.addEventListener('resize', function() {
-  /* resize = Event wenn Fenstergrösse geändert wird. */
-
-  if (window.innerWidth > 900) {
-    /* window.innerWidth = aktuelle Fensterbreite in Pixeln. */
-    /* > 900: Desktop-Breite → Hamburger nicht mehr nötig. */
-    navLinks.classList.remove('offen');
-    hamburgerBtn.classList.remove('offen');
-  }
-
-});
-
-
-/* ── 4. SCROLL: Schatten beim Header hinzufügen ───────────────
-   Wenn gescrollt: Header bekommt Schatten (visuell tieferliegend).
-   ─────────────────────────────────────────────────────────── */
-window.addEventListener('scroll', function() {
-  /* scroll = Event bei jeder Scroll-Bewegung. */
-
-  if (window.scrollY > 50) {
-    /* window.scrollY = wie viele Pixel nach unten gescrollt wurde. */
-    /* > 50: mehr als 50px gescrollt → Schatten. */
-    siteHeader.classList.add('gescrollt');
-    /* .site-header.gescrollt hat box-shadow in common.css. */
-  } else {
-    siteHeader.classList.remove('gescrollt');
-    /* Ganz oben → kein Schatten. */
-  }
-
-});
-
-
-/* ── 5. AKTIVEN NAV-LINK ERKENNEN ─────────────────────────────
-   Vergleicht die aktuelle URL mit den href-Attributen der Links.
-   Setzt automatisch die Klasse "aktiv" auf den richtigen Link.
-   ─────────────────────────────────────────────────────────── */
-
-var aktuelleSeite = window.location.pathname.split('/').pop();
-/* window.location.pathname = z.B. "/ironbound/shop.html" */
-/* .split('/') = Array aus den Teilen: ["", "ironbound", "shop.html"] */
-/* .pop() = letztes Element: "shop.html" */
-
-var alleNavLinks = document.querySelectorAll('.nav-link');
-/* querySelectorAll: findet ALLE Elemente mit dieser CSS-Klasse. */
-/* Gibt NodeList zurück (wie ein Array). */
-
-for (var i = 0; i < alleNavLinks.length; i++) {
-  /* for-Schleife: geht jeden Link durch. i = Index (0, 1, 2, 3). */
-
-  var link = alleNavLinks[i];
-  /* Aktueller Link. alleNavLinks[0] = erster Link usw. */
-
-  var linkZiel = link.getAttribute('href').split('#')[0];
-  /* getAttribute('href'): liest das href-Attribut aus dem HTML. */
-  /* .split('#')[0]: Anker ignorieren. "promotion.html#digital-twin" → "promotion.html" */
-
-  link.classList.remove('aktiv');
-  /* Erst alle aktiv-Klassen entfernen (sauber starten). */
-
-  if (linkZiel === aktuelleSeite) {
-    /* === = genau gleich (Wert und Typ). */
-    link.classList.add('aktiv');
-    /* Dieser Link ist die aktuelle Seite → aktiv markieren. */
-  }
-
-  /* Sonderfall: Startseite kann "" oder "index.html" sein. */
-  if ((aktuelleSeite === '' || aktuelleSeite === 'index.html') && linkZiel === 'index.html') {
-    link.classList.add('aktiv');
-  }
-
-}
