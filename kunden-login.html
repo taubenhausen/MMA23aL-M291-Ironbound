@@ -96,7 +96,10 @@
 
             <div class="form-gruppe">
               <label for="k-passwort">Passwort *</label>
-              <input type="password" id="k-passwort" name="passwort" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
+              <div class="passwort-feld-wrap">
+                <input type="password" id="k-passwort" name="passwort" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
+                <button type="button" class="passwort-toggle" data-target="k-passwort" aria-label="Passwort anzeigen">👁</button>
+              </div>
               <span class="fehler-text" id="fehler-k-passwort"></span>
             </div>
 
@@ -132,7 +135,10 @@
 
             <div class="form-gruppe">
               <label for="login-passwort">Passwort *</label>
-              <input type="password" id="login-passwort" name="passwort" placeholder="Dein Passwort" autocomplete="current-password">
+              <div class="passwort-feld-wrap">
+                <input type="password" id="login-passwort" name="passwort" placeholder="Dein Passwort" autocomplete="current-password">
+                <button type="button" class="passwort-toggle" data-target="login-passwort" aria-label="Passwort anzeigen">👁</button>
+              </div>
               <span class="fehler-text" id="fehler-login-passwort"></span>
             </div>
 

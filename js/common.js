@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   for (var i = 0; i < alleNavLinks.length; i++) {
     var link = alleNavLinks[i];
-    var linkZiel = link.getAttribute('href').split('#')[0];
+    var href = link.getAttribute('href') || '';
+    var linkZiel = href.split('#')[0];
 
     link.classList.remove('aktiv');
 
@@ -254,33 +255,101 @@ window.IRONBOUND.warenkorbAnzahlAktualisieren = function() {
    ------------------------------------------------------------ */
 window.IRONBOUND.kundenStatusAktualisieren = function() {
   var kundenLink = document.getElementById('kunden-nav-link');
-  if (!kundenLink) return Promise.resolve();
+  var kundenMenu = document.getElementById('kunden-konto-menu');
 
   return fetch('php/kunden-login.php?action=status')
     .then(function(antwort) { return antwort.json(); })
     .then(function(daten) {
       if (daten.status === 'ok' && daten.eingeloggt && daten.kunde) {
-        kundenLink.textContent = daten.kunde.name || 'Mein Konto';
-        kundenLink.href = '#';
-        kundenLink.title = 'Klicken zum Ausloggen';
-
-        kundenLink.onclick = function(event) {
-          event.preventDefault();
-          fetch('php/kunden-login.php?action=logout')
-            .then(function() {
-              window.location.reload();
-            });
-        };
+        window.IRONBOUND.kundenMenuAnzeigen(daten.kunde.name || 'Mein Konto');
       } else {
-        kundenLink.textContent = 'Kunden-Login';
-        kundenLink.href = 'kunden-login.html';
-        kundenLink.onclick = null;
+        window.IRONBOUND.kundenLoginLinkAnzeigen();
       }
     })
     .catch(function() {
-      kundenLink.textContent = 'Kunden-Login';
-      kundenLink.href = 'kunden-login.html';
+      window.IRONBOUND.kundenLoginLinkAnzeigen();
     });
+};
+
+/* ------------------------------------------------------------
+   Kundenname als Hover-Menü anzeigen
+   ------------------------------------------------------------
+   Der Name selber löst keine Aktion aus. Nur der Button im
+   aufgeklappten Menü meldet den Kunden ab.
+   ------------------------------------------------------------ */
+window.IRONBOUND.kundenMenuAnzeigen = function(kundenName) {
+  var vorhandenesMenu = document.getElementById('kunden-konto-menu');
+
+  if (vorhandenesMenu) {
+    var nameElement = vorhandenesMenu.querySelector('.kunden-name-text');
+    if (nameElement) {
+      nameElement.textContent = kundenName;
+    }
+    return;
+  }
+
+  var kundenLink = document.getElementById('kunden-nav-link');
+  if (!kundenLink || !kundenLink.parentNode) return;
+
+  var menu = document.createElement('div');
+  menu.className = 'nav-konto-menu';
+  menu.id = 'kunden-konto-menu';
+
+  var nameSpan = document.createElement('span');
+  nameSpan.className = 'nav-link kunden-name-text';
+  nameSpan.textContent = kundenName;
+
+  var dropdown = document.createElement('div');
+  dropdown.className = 'konto-dropdown';
+
+  var logoutBtn = document.createElement('button');
+  logoutBtn.type = 'button';
+  logoutBtn.className = 'konto-logout-btn';
+  logoutBtn.textContent = 'Ausloggen';
+
+  logoutBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    fetch('php/kunden-login.php?action=logout')
+      .then(function() {
+        window.location.reload();
+      });
+  });
+
+  dropdown.appendChild(logoutBtn);
+  menu.appendChild(nameSpan);
+  menu.appendChild(dropdown);
+
+  kundenLink.replaceWith(menu);
+};
+
+/* ------------------------------------------------------------
+   Normalen Kunden-Login-Link anzeigen
+   ------------------------------------------------------------
+   Diese Funktion wird genutzt, wenn kein Kunde eingeloggt ist
+   oder wenn der Status-Aufruf nicht funktioniert.
+   ------------------------------------------------------------ */
+window.IRONBOUND.kundenLoginLinkAnzeigen = function() {
+  var kundenMenu = document.getElementById('kunden-konto-menu');
+
+  if (kundenMenu && kundenMenu.parentNode) {
+    var link = document.createElement('a');
+    link.href = 'kunden-login.html';
+    link.className = 'nav-link';
+    link.id = 'kunden-nav-link';
+    link.textContent = 'Kunden-Login';
+
+    kundenMenu.replaceWith(link);
+    return;
+  }
+
+  var kundenLink = document.getElementById('kunden-nav-link');
+  if (!kundenLink) return;
+
+  kundenLink.textContent = 'Kunden-Login';
+  kundenLink.href = 'kunden-login.html';
+  kundenLink.onclick = null;
 };
 
 /* ------------------------------------------------------------

@@ -247,10 +247,37 @@ function loginAbsenden(event) {
     });
 }
 
+
+/* ------------------------------------------------------------
+   Passwort anzeigen / verstecken
+   ------------------------------------------------------------
+   Die Passwortfelder bleiben optisch normale Formularfelder.
+   Mit dem Augen-Button kann der Inhalt kurz sichtbar gemacht
+   und wieder verdeckt werden.
+   ------------------------------------------------------------ */
+function passwortToggleEinrichten() {
+  var buttons = document.querySelectorAll('.passwort-toggle');
+
+  buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      var zielId = button.getAttribute('data-target');
+      var input = feld(zielId);
+      if (!input) return;
+
+      var istVerdeckt = input.type === 'password';
+      input.type = istVerdeckt ? 'text' : 'password';
+      button.textContent = istVerdeckt ? '🙈' : '👁';
+      button.setAttribute('aria-label', istVerdeckt ? 'Passwort verstecken' : 'Passwort anzeigen');
+    });
+  });
+}
+
 /* ------------------------------------------------------------
    Start: Events verbinden
    ------------------------------------------------------------ */
 document.addEventListener('DOMContentLoaded', function() {
+  passwortToggleEinrichten();
+
   var registrierenForm = feld('kunden-registrieren-form');
   var loginForm = feld('kunden-login-form');
 
