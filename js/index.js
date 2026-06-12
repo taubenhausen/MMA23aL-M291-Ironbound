@@ -76,18 +76,18 @@ function indexProduktkarteHtml(produkt) {
 
   return (
     '<div class="produktkarte">' +
-    '<div class="produkt-bild">' +
-    '<img src="' + htmlEscapen(p.bild) + '" alt="' + htmlEscapen(p.name) + '">' +
-    badge +
-    '</div>' +
-    '<div class="produkt-info">' +
-    '<div class="produkt-kategorie">' + htmlEscapen(p.kategorie) + '</div>' +
-    '<div class="produkt-name">' + htmlEscapen(p.name) + '</div>' +
-    '<div class="produkt-fuss">' +
-    '<span class="produkt-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
-    '<a href="shop.html" class="btn btn-klein">Details</a>' +
-    '</div>' +
-    '</div>' +
+      '<div class="produkt-bild">' +
+        '<img src="' + htmlEscapen(p.bild) + '" alt="' + htmlEscapen(p.name) + '">' +
+        badge +
+      '</div>' +
+      '<div class="produkt-info">' +
+        '<div class="produkt-kategorie">' + htmlEscapen(p.kategorie) + '</div>' +
+        '<div class="produkt-name">' + htmlEscapen(p.name) + '</div>' +
+        '<div class="produkt-fuss">' +
+          '<span class="produkt-preis">' + window.IRONBOUND.preisFormatieren(p.preis) + '</span>' +
+          '<a href="shop.html" class="btn btn-klein">Details</a>' +
+        '</div>' +
+      '</div>' +
     '</div>'
   );
 }
@@ -130,14 +130,14 @@ function indexProdukteLaden() {
     bestseller: false,
     sort: 'neu'
   })
-    .then(function (produkte) {
-      if (produkte.length > 0) {
-        indexProdukteRendern(produkte);
-      }
-    })
-    .catch(function () {
-      /* Kein Server oder DB-Fehler: Fallback bleibt sichtbar. */
-    });
+  .then(function(produkte) {
+    if (produkte.length > 0) {
+      indexProdukteRendern(produkte);
+    }
+  })
+  .catch(function() {
+    /* Kein Server oder DB-Fehler: Fallback bleibt sichtbar. */
+  });
 }
 
 

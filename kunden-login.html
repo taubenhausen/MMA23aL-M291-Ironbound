@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kunden-Login – IRONBOUND</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/kunden-login.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       HEADER — identisch auf allen Seiten
+  ============================================================ -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+
+      <a href="index.html" class="logo">IRONBOUND</a>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="shop.html" class="nav-link">Arsenal</a>
+        <a href="digital-twin.html" class="nav-link">Digital Twin</a>
+        <a href="kunden-login.html" class="nav-link aktiv" id="kunden-nav-link">Kunden-Login</a>
+        <a href="#" class="nav-link" id="warenkorb-nav-link">Inventar (<span id="warenkorb-anzahl">0</span>)</a>
+      </nav>
+
+      <button class="hamburger-btn" id="hamburger-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       BANNER
+  ============================================================ -->
+  <section class="promo-banner">
+    <div class="promo-banner-bg"></div>
+    <div class="container promo-banner-inhalt">
+      <p class="abschnitt-label">/ Kundenbereich</p>
+      <h1 class="promo-titel pulsieren">Dein Ironbound-Zugang.</h1>
+      <p class="promo-untertitel">
+        Registriere dich oder logge dich ein, damit dein Inventar direkt in der Datenbank gespeichert wird.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       REGISTRIERUNG + LOGIN
+  ============================================================ -->
+  <section class="promo-main" id="kunden-login">
+    <div class="container">
+
+      <div class="promo-zwei-spalten">
+
+        <!-- LINKE SEITE: Registrierung ──────────────────────── -->
+        <div class="promo-formular-bereich">
+
+          <span class="abschnitt-label">/ Registrierung</span>
+          <h2>Konto erstellen.</h2>
+
+          <form id="kunden-registrieren-form" novalidate>
+
+            <div class="form-zeile">
+              <div class="form-gruppe">
+                <label for="k-vorname">Vorname *</label>
+                <input type="text" id="k-vorname" name="vorname" placeholder="Max">
+                <span class="fehler-text" id="fehler-k-vorname"></span>
+              </div>
+
+              <div class="form-gruppe">
+                <label for="k-nachname">Nachname *</label>
+                <input type="text" id="k-nachname" name="nachname" placeholder="Mustermann">
+                <span class="fehler-text" id="fehler-k-nachname"></span>
+              </div>
+            </div>
+
+            <div class="form-gruppe">
+              <label for="k-email">E-Mail *</label>
+              <input type="text" id="k-email" name="email" placeholder="max@example.ch">
+              <span class="fehler-text" id="fehler-k-email"></span>
+            </div>
+
+            <div class="form-gruppe">
+              <label for="k-telefonnummer">Telefonnummer *</label>
+              <input type="text" id="k-telefonnummer" name="telefonnummer" placeholder="079 123 45 67">
+              <span class="fehler-text" id="fehler-k-telefonnummer"></span>
+            </div>
+
+            <div class="form-gruppe">
+              <label for="k-passwort">Passwort *</label>
+              <div class="passwort-feld-wrap">
+                <input type="password" id="k-passwort" name="passwort" placeholder="Mindestens 8 Zeichen" autocomplete="new-password">
+                <button type="button" class="passwort-toggle" data-target="k-passwort" aria-label="Passwort anzeigen">👁</button>
+              </div>
+              <span class="fehler-text" id="fehler-k-passwort"></span>
+            </div>
+
+            <div class="form-gruppe">
+              <label class="agb-label">
+                <input type="checkbox" id="k-agb" name="agb">
+                <span>Ich bestätige, mindestens 18 Jahre alt zu sein und akzeptiere die
+                  <a href="#" class="text-gold">AGB</a>. *
+                </span>
+              </label>
+              <span class="fehler-text" id="fehler-k-agb"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-voll" id="registrieren-submit-btn">
+              Registrieren
+            </button>
+
+          </form>
+        </div>
+
+        <!-- RECHTE SEITE: Login ─────────────────────────────── -->
+        <div class="promo-formular-bereich">
+
+          <span class="abschnitt-label">/ Login</span>
+          <h2>Einloggen.</h2>
+
+          <form id="kunden-login-form" novalidate>
+            <div class="form-gruppe">
+              <label for="login-email">E-Mail *</label>
+              <input type="text" id="login-email" name="email" placeholder="max@example.ch">
+              <span class="fehler-text" id="fehler-login-email"></span>
+            </div>
+
+            <div class="form-gruppe">
+              <label for="login-passwort">Passwort *</label>
+              <div class="passwort-feld-wrap">
+                <input type="password" id="login-passwort" name="passwort" placeholder="Dein Passwort" autocomplete="current-password">
+                <button type="button" class="passwort-toggle" data-target="login-passwort" aria-label="Passwort anzeigen">👁</button>
+              </div>
+              <span class="fehler-text" id="fehler-login-passwort"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-voll" id="login-submit-btn">
+              Einloggen
+            </button>
+          </form>
+
+          <div class="spinner-wrap" id="spinner-kunden-login">
+            <div class="spinner"></div>
+            <p style="margin-top:8px;font-size:0.85rem;color:var(--farbe-text-grau)">Wird gespeichert…</p>
+          </div>
+
+          <div class="erfolg-meldung" id="kunden-erfolg"></div>
+          <div class="fehler-meldung-db" id="fehler-email-vorhanden"></div>
+          <div class="fehler-meldung-db" id="kunden-fehler"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER — identisch auf allen Seiten
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="footer-raster">
+
+        <div class="footer-logo-bereich">
+          <strong>IRONBOUND</strong>
+          <p>Die Spitze der Waffenkunst. Historische Waffen mit digitalem Gegenstück.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Instagram">IG</a>
+            <a href="#" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="X / Twitter">X</a>
+          </div>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Shop</strong>
+          <a href="shop.html">Arsenal</a>
+          <a href="digital-twin.html">Digital Twin</a>
+          <a href="kunden-login.html">Kunden-Login</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Info</strong>
+          <a href="#">Über uns</a>
+          <a href="#">Versand</a>
+          <a href="#">Kontakt</a>
+        </div>
+
+        <div class="footer-spalte">
+          <strong>Rechtliches</strong>
+          <a href="#">Datenschutz</a>
+          <a href="#">AGB</a>
+          <a href="#">18+ Verifikation</a>
+        </div>
+
+      </div>
+
+      <p class="footer-disclaimer">
+        ⚠ Das ist ein Schulprojekt und keine reale Website. | Gruppe: Jan, Enea, Tina, Sofija
+      </p>
+
+      <p class="footer-copyright">
+        © 2025 IRONBOUND — Alle Rechte vorbehalten.
+      </p>
+
+    </div>
+  </footer>
+
+
+  <script src="js/common.js" defer></script>
+  <script src="js/kunden-login.js" defer></script>
+
+</body>
+</html>
