@@ -2,14 +2,11 @@
    shop.js — IRONBOUND Arsenal-Seite
    Interaktive Elemente:
    - Live-Suche: keyup filtert Produkte in Echtzeit
-   - Filter-Chips: Klick zeigt/versteckt Produktkarten
-   - Preis-Slider: zeigt aktuellen Wert
    ============================================================ */
 
 
-// ── FILTER-CHIPS ────────────────────────────────────────────────
+// ── LIVE-SUCHE ──────────────────────────────────────────────────
 
-var filterChips = document.querySelectorAll('.filter-chip');
 var alleKarten = document.querySelectorAll('.inventar-karte');
 var ergebnisAnzahl = document.getElementById('ergebnis-anzahl');
 var keineTrefferMsg = document.getElementById('keine-treffer');
@@ -35,42 +32,6 @@ function anzeigenAktualisieren() {
   }
 }
 
-for (var i = 0; i < filterChips.length; i++) {
-  filterChips[i].addEventListener('click', function() {
-
-    // Alle Chips deaktivieren
-    for (var j = 0; j < filterChips.length; j++) {
-      filterChips[j].classList.remove('aktiv');
-    }
-
-    // Geklickten Chip aktivieren
-    this.classList.add('aktiv');
-
-    var filter = this.getAttribute('data-filter');
-
-    // Karten ein-/ausblenden
-    for (var k = 0; k < alleKarten.length; k++) {
-      var karte = alleKarten[k];
-      var tags = karte.getAttribute('data-filter');
-
-      if (filter === 'alle') {
-        karte.classList.remove('versteckt');
-      } else {
-        if (tags.indexOf(filter) !== -1) {
-          karte.classList.remove('versteckt');
-        } else {
-          karte.classList.add('versteckt');
-        }
-      }
-    }
-
-    anzeigenAktualisieren();
-  });
-}
-
-
-// ── LIVE-SUCHE ──────────────────────────────────────────────────
-
 var sucheEingabe = document.getElementById('suche-eingabe');
 var sucheBtn = document.getElementById('suche-btn');
 
@@ -93,12 +54,6 @@ function sucheAusfuehren() {
     }
   }
 
-  // Filter-Chips zurücksetzen auf "Alle"
-  for (var j = 0; j < filterChips.length; j++) {
-    filterChips[j].classList.remove('aktiv');
-  }
-  document.querySelector('[data-filter="alle"]').classList.add('aktiv');
-
   anzeigenAktualisieren();
 }
 
@@ -109,13 +64,3 @@ sucheEingabe.addEventListener('keyup', sucheAusfuehren);
 sucheBtn.addEventListener('click', sucheAusfuehren);
 
 
-// ── PREIS-SLIDER ────────────────────────────────────────────────
-
-var preisSlider = document.getElementById('preis-slider');
-var preisWert = document.getElementById('preis-wert');
-
-if (preisSlider) {
-  preisSlider.addEventListener('input', function() {
-    preisWert.textContent = this.value;
-  });
-}

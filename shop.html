@@ -71,80 +71,9 @@
 
 
   <!-- ============================================================
-       FILTER-CHIPS (Interaktives Element ④)
-  ============================================================ -->
-  <section class="filter-leiste">
-    <div class="container">
-      <div class="filter-chips">
-        <button class="filter-chip aktiv" data-filter="alle">Alle</button>
-        <button class="filter-chip" data-filter="schwerter">Schwerter</button>
-        <button class="filter-chip" data-filter="schusswaffen">Schusswaffen</button>
-        <button class="filter-chip" data-filter="messer">Messer</button>
-        <button class="filter-chip" data-filter="bogen">Bögen</button>
-        <button class="filter-chip" data-filter="einsteiger">Einsteiger</button>
-        <button class="filter-chip" data-filter="digital">🎮 Digital Twin</button>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============================================================
-       SHOP LAYOUT: Sidebar + Produktraster
+       SHOP LAYOUT: Produktraster
   ============================================================ -->
   <div class="shop-layout container">
-
-    <!-- SIDEBAR mit Filtern -->
-    <aside class="sidebar" id="sidebar">
-
-      <div class="sidebar-sektion">
-        <div class="sidebar-titel">Kategorie</div>
-        <label class="checkbox-label">
-          <input type="checkbox" checked> <span>Schusswaffen</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" checked> <span>Schwerter</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> <span>Messer</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> <span>Bögen</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> <span>Stangenwaffen</span>
-        </label>
-      </div>
-
-      <div class="sidebar-sektion">
-        <div class="sidebar-titel">Preis (CHF)</div>
-        <input type="range" min="0" max="1000" value="600" class="preis-slider" id="preis-slider">
-        <div class="preis-anzeige">
-          <span>0</span>
-          <span id="preis-wert">600</span>
-        </div>
-      </div>
-
-      <div class="sidebar-sektion">
-        <div class="sidebar-titel">Skill-Level</div>
-        <label class="checkbox-label">
-          <input type="checkbox" checked> <span>Einsteiger</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" checked> <span>Fortgeschritten</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox"> <span>Profi</span>
-        </label>
-      </div>
-
-      <div class="sidebar-sektion">
-        <div class="sidebar-titel">Digital Twin</div>
-        <label class="checkbox-label">
-          <input type="checkbox"> <span>Nur mit Twin 🎮</span>
-        </label>
-      </div>
-
-    </aside>
 
     <!-- PRODUKTBEREICH -->
     <div class="produkt-bereich">
@@ -153,7 +82,6 @@
       <div class="produkt-topbar">
         <span class="ergebnis-anzahl" id="ergebnis-anzahl">6 Produkte im Inventar</span>
         <select class="sort-auswahl" id="sort-auswahl">
-          <option value="relevanz">Relevanz</option>
           <option value="preis-asc">Preis aufsteigend</option>
           <option value="preis-desc">Preis absteigend</option>
           <option value="neu">Neuheiten</option>
